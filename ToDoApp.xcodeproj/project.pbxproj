@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,14 @@
 		E851C0DA26AEE0BF003D9CA3 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */; };
 		E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
+		FD26B03726B050F5009F056C /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B03626B050F5009F056C /* ScrollView.swift */; };
+		FD26B04026B05438009F056C /* DeclarativeLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B03F26B05438009F056C /* DeclarativeLayout */; };
+		FD26B04F26B05781009F056C /* DeclarativeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B04E26B05781009F056C /* DeclarativeUI */; };
+		FD26B05926B05C7B009F056C /* FloatingTextfield in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B05826B05C7B009F056C /* FloatingTextfield */; };
+		FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B05E26B0627A009F056C /* BaseVC.swift */; };
+		FDD947F626B063E100E4FA1C /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD947F526B063E100E4FA1C /* Configuration.swift */; };
+		FDD947FF26B06B8400E4FA1C /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD947FE26B06B8400E4FA1C /* UIDevice+Extensions.swift */; };
+		FDD9480526B075ED00E4FA1C /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +97,11 @@
 		E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewController.swift; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		FD26B03626B050F5009F056C /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
+		FD26B05E26B0627A009F056C /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
+		FDD947F526B063E100E4FA1C /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		FDD947FE26B06B8400E4FA1C /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
+		FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +109,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD26B04026B05438009F056C /* DeclarativeLayout in Frameworks */,
+				FD26B05926B05C7B009F056C /* FloatingTextfield in Frameworks */,
+				FD26B04F26B05781009F056C /* DeclarativeUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +155,11 @@
 		E8027F1726AC66F80071E506 /* ToDoApp */ = {
 			isa = PBXGroup;
 			children = (
+				FDD9480326B075E100E4FA1C /* ViewModel */,
+				FDD947FD26B06B7500E4FA1C /* Extensions */,
+				FDD947F426B063D400E4FA1C /* Application */,
+				FD26B05D26B06262009F056C /* Base */,
+				FD26B03526B050E8009F056C /* Views */,
 				E851C0BA26AEE0A8003D9CA3 /* Fonts */,
 				E8D2FBE626B02905006D0936 /* Cells */,
 				E8027F5526ACB2320071E506 /* ViewControllers */,
@@ -175,7 +196,6 @@
 			children = (
 				E8027F5626ACB24F0071E506 /* HomeViewController.swift */,
 				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
-				E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -212,6 +232,47 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		FD26B03526B050E8009F056C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */,
+				FD26B03626B050F5009F056C /* ScrollView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FD26B05D26B06262009F056C /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				FD26B05E26B0627A009F056C /* BaseVC.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		FDD947F426B063D400E4FA1C /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				FDD947F526B063E100E4FA1C /* Configuration.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		FDD947FD26B06B7500E4FA1C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FDD947FE26B06B8400E4FA1C /* UIDevice+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		FDD9480326B075E100E4FA1C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -228,6 +289,11 @@
 			dependencies = (
 			);
 			name = ToDoApp;
+			packageProductDependencies = (
+				FD26B03F26B05438009F056C /* DeclarativeLayout */,
+				FD26B04E26B05781009F056C /* DeclarativeUI */,
+				FD26B05826B05C7B009F056C /* FloatingTextfield */,
+			);
 			productName = ToDoApp;
 			productReference = E8027F1526AC66F80071E506 /* ToDoApp.app */;
 			productType = "com.apple.product-type.application";
@@ -299,6 +365,11 @@
 				Base,
 			);
 			mainGroup = E8027F0C26AC66F80071E506;
+			packageReferences = (
+				FD26B03E26B05438009F056C /* XCRemoteSwiftPackageReference "DeclarativeLayout" */,
+				FD26B04D26B05781009F056C /* XCRemoteSwiftPackageReference "DeclarativeUI" */,
+				FD26B05726B05C7B009F056C /* XCRemoteSwiftPackageReference "FloatingTextfield" */,
+			);
 			productRefGroup = E8027F1626AC66F80071E506 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -362,9 +433,14 @@
 				E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */,
 				E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */,
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
+				FDD947FF26B06B8400E4FA1C /* UIDevice+Extensions.swift in Sources */,
 				E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */,
 				E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */,
+				FDD9480526B075ED00E4FA1C /* HomeViewModel.swift in Sources */,
 				E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */,
+				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
+				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,
+				FDD947F626B063E100E4FA1C /* Configuration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +767,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FD26B03E26B05438009F056C /* XCRemoteSwiftPackageReference "DeclarativeLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aybekckaya/DeclarativeLayout.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		FD26B04D26B05781009F056C /* XCRemoteSwiftPackageReference "DeclarativeUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aybekckaya/DeclarativeUI.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		FD26B05726B05C7B009F056C /* XCRemoteSwiftPackageReference "FloatingTextfield" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aybekckaya/FloatingTextfield.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FD26B03F26B05438009F056C /* DeclarativeLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FD26B03E26B05438009F056C /* XCRemoteSwiftPackageReference "DeclarativeLayout" */;
+			productName = DeclarativeLayout;
+		};
+		FD26B04E26B05781009F056C /* DeclarativeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FD26B04D26B05781009F056C /* XCRemoteSwiftPackageReference "DeclarativeUI" */;
+			productName = DeclarativeUI;
+		};
+		FD26B05826B05C7B009F056C /* FloatingTextfield */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FD26B05726B05C7B009F056C /* XCRemoteSwiftPackageReference "FloatingTextfield" */;
+			productName = FloatingTextfield;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		E8027F2126AC66F80071E506 /* ToDoApp.xcdatamodeld */ = {

@@ -7,43 +7,12 @@
 
 import Foundation
 import UIKit
+import Combine
 
-class HomeViewController : UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
-
-    
-    var keyWindow : UIWindow {UIApplication.shared.windows.first(where: { $0.isKeyWindow })!}
-    
-    var filteredText : String = ""
-    
-    private let viewStatus : UIView = {
-        let vw = UIView(frame: .zero)
-        vw.translatesAutoresizingMaskIntoConstraints = false
-        vw.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
-        return vw
-    }()
-    
-    private let taskView : UIView = {
-        let tv = UIView(frame: .zero)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1)
-        return tv
-    }()
-    
-    private let taskLabel : UILabel  = {
-        let tl = UILabel(frame: .zero)
-        tl.translatesAutoresizingMaskIntoConstraints = false
-        tl.text = "Tasks"
-        tl.font = UIFont(name: "Roboto-Bold" , size: 20 )
-        tl.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        return tl
-    }()
-    
-    private let addBtn : UIButton = {
-        let ab = UIButton(frame: .zero)
-        ab.translatesAutoresizingMaskIntoConstraints = false
-        ab.setImage(UIImage(named: "AddIcon"), for: .normal)
-        return ab
-    }()
+class HomeViewController : BaseVC {
+    private let viewModel: HomeViewModel = HomeViewModel()
+  
+    private var cancellables = Set<AnyCancellable>()
     
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
@@ -52,9 +21,10 @@ class HomeViewController : UIViewController, UITextFieldDelegate, UITableViewDel
         return sw
     }()
     
-    private let searchText : UITextField = {
+    private let searchTextField : UITextField = {
         let st = UITextField(frame: .zero)
         st.translatesAutoresizingMaskIntoConstraints = false
+        st.returnKeyType = .search
         st.backgroundColor = .white
         st.layer.cornerRadius = 8
         st.placeholder = "Search Task"
@@ -91,77 +61,45 @@ class HomeViewController : UIViewController, UITextFieldDelegate, UITableViewDel
         return tv
     }()
     
-    
+    deinit {
+        self.cancellables.forEach { $0.cancel() }
+    }
+}
+
+// MARK: - LifeCycle
+extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIApplication.shared.windows.forEach { (window) in
-            print("\(window), is key window \(window.isKeyWindow)")
-        }
-        print(keyWindow)
-        
-        keyWindow.addSubview(viewStatus)
-        viewStatus.topAnchor.constraint(equalTo: keyWindow.topAnchor, constant: 0).isActive = true
-        viewStatus.leadingAnchor.constraint(equalTo: keyWindow.leadingAnchor, constant: 0).isActive = true
-        viewStatus.trailingAnchor.constraint(equalTo: keyWindow.trailingAnchor, constant: 0).isActive = true
-        viewStatus.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         setUpUI()
-        searchText.delegate = self
-        
-        
+        addListeners()
+    }
 }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text{
-            filteredText(text+string)
-        }
-        return true
-    }
-    
-    func filteredText (_ query :String){
-        print("\(query)")
-    }
-    
+
+// MARK: - Set Up UI
+extension HomeViewController {
     private func setUpUI() {
-        self.view.addSubview(taskView)
-        taskView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        taskView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 0).isActive = true
-        taskView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        taskView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        taskView.addSubview(taskLabel)
-        taskLabel.centerXAnchor.constraint(equalTo: taskView.centerXAnchor, constant: 0).isActive = true
-        taskLabel.topAnchor.constraint(equalTo: taskView.topAnchor, constant: 25).isActive = true
-        taskLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        taskLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
-        
-        taskView.addSubview(addBtn)
-        addBtn.trailingAnchor.constraint(equalTo: taskView.trailingAnchor, constant: -16).isActive = true
-        addBtn.topAnchor.constraint(equalTo: taskView.topAnchor, constant: 58).isActive = true
-        addBtn.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        addBtn.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        addBtn.addTarget(nil, action: #selector(addNewTasks), for: UIControl.Event.touchUpInside)
-        
+       
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         self.view.addSubview(searchView)
-        searchView.topAnchor.constraint(equalTo: taskView.bottomAnchor, constant: 0).isActive = true
-        searchView.leadingAnchor.constraint(equalTo: taskView.leadingAnchor,constant: 0).isActive = true
-        searchView.trailingAnchor.constraint(equalTo: taskView.trailingAnchor, constant: 0).isActive = true
+        searchView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: C.navigationBarHeight + C.statusBarHeight).isActive = true
+        searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 0).isActive = true
+        searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         searchView.heightAnchor.constraint(equalToConstant: 76).isActive = true
         
-        searchView.addSubview(searchText)
-        searchText.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        searchText.trailingAnchor.constraint(equalTo: searchView.trailingAnchor, constant: -16).isActive = true
-        searchText.leadingAnchor.constraint(equalTo: searchView.leadingAnchor, constant: 16).isActive = true
-        searchText.centerYAnchor.constraint(equalTo: searchView.centerYAnchor, constant: 0).isActive = true
-        searchText.centerXAnchor.constraint(equalTo: searchView.centerXAnchor, constant: 0).isActive = true
+        searchView.addSubview(searchTextField)
+        searchTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        searchTextField.trailingAnchor.constraint(equalTo: searchView.trailingAnchor, constant: -16).isActive = true
+        searchTextField.leadingAnchor.constraint(equalTo: searchView.leadingAnchor, constant: 16).isActive = true
+        searchTextField.centerYAnchor.constraint(equalTo: searchView.centerYAnchor, constant: 0).isActive = true
+        searchTextField.centerXAnchor.constraint(equalTo: searchView.centerXAnchor, constant: 0).isActive = true
         
-        searchText.addSubview(searchBtn)
-        searchBtn.centerYAnchor.constraint(equalTo: searchText.centerYAnchor,constant: 0).isActive = true
-        searchBtn.trailingAnchor.constraint(equalTo: searchText.trailingAnchor, constant: -12).isActive = true
+        searchTextField.addSubview(searchBtn)
+        searchBtn.centerYAnchor.constraint(equalTo: searchTextField.centerYAnchor,constant: 0).isActive = true
+        searchBtn.trailingAnchor.constraint(equalTo: searchTextField.trailingAnchor, constant: -12).isActive = true
         searchBtn.heightAnchor.constraint(equalToConstant: 30).isActive = true
         searchBtn.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
@@ -180,14 +118,37 @@ class HomeViewController : UIViewController, UITextFieldDelegate, UITableViewDel
         eventTableView.register(TaskCell.self, forCellReuseIdentifier: "TaskCell")
         eventTableView.dataSource = self
         eventTableView.delegate = self
+        
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchTextDidChange), for: .editingChanged)
     }
+}
 
-    @objc func addNewTasks() {
-        let newViewController = NewTaskViewController()
-        self.navigationController?.pushViewController(newViewController, animated: true)
+// MARK: - Actions
+extension HomeViewController {
+    override func baseVCAddOnTap() {
+        routeToNewTasks()
     }
     
-    
+    @objc private func searchTextDidChange() {
+        self.viewModel.updateSearchText(self.searchTextField.text ?? "")
+    }
+}
+
+// MARK: - Listeners
+extension HomeViewController {
+    private func addListeners() {
+        let listenerSearchText = self.viewModel.searchText
+            .receive(on: DispatchQueue.main)
+        
+        listenerSearchText.sink { str in
+            print("Current Str: \(str)")
+        }.store(in: &cancellables)
+    }
+}
+
+// MARK: - TableView Delegate / Datasource
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
@@ -199,5 +160,26 @@ class HomeViewController : UIViewController, UITextFieldDelegate, UITableViewDel
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+}
+
+// MARK: - TextfieldDelegate
+extension HomeViewController: UITextFieldDelegate {
+    
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return true
+    }
+}
+
+// MARK: - Route
+extension HomeViewController {
+    private func routeToNewTasks() {
+        let newViewController = NewTaskViewController()
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
