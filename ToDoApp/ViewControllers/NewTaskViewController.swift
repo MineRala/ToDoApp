@@ -7,38 +7,16 @@
 
 import Foundation
 import UIKit
+import DeclarativeLayout
+import DeclarativeUI
+import FloatingTextfield
 
-class NewTaskViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate{
+class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
-    private let newTaskView : UIView = {
-        let ntv = UIView(frame: .zero)
-        ntv.translatesAutoresizingMaskIntoConstraints = false
-        ntv.backgroundColor = #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1)
-        return ntv
-    }()
+
+    private var scrollViewAddTask: ScrollView!
     
-    private let taskLabel : UILabel  = {
-        let tl = UILabel(frame: .zero)
-        tl.translatesAutoresizingMaskIntoConstraints = false
-        tl.text = "New Task"
-        tl.font = UIFont(name: "Roboto-Bold" , size: 20 )
-        tl.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        return tl
-    }()
-    
-    private let backBtn : UIButton = {
-        let bb = UIButton(frame: .zero)
-        bb.translatesAutoresizingMaskIntoConstraints = false
-        bb.setImage(UIImage(named: "BackIcon"), for: .normal)
-        return bb
-    }()
-    
-    private let tableViewNewTask: UITableView = {
-        let tv = UITableView(frame: .zero, style: .plain)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .blue
-        return tv
-    }()
+    private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
@@ -58,39 +36,6 @@ class NewTaskViewController: UIViewController ,UITableViewDelegate,UITableViewDa
     }
     
     func setUpUI() {
-        self.view.addSubview(newTaskView)
-        newTaskView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        newTaskView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 0).isActive = true
-        newTaskView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        newTaskView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        newTaskView.addSubview(taskLabel)
-        taskLabel.centerXAnchor.constraint(equalTo: newTaskView.centerXAnchor, constant: 0).isActive = true
-        taskLabel.topAnchor.constraint(equalTo: newTaskView.topAnchor, constant: 25).isActive = true
-        taskLabel.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        taskLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
-        
-        newTaskView.addSubview(backBtn)
-        backBtn.leadingAnchor.constraint(equalTo: newTaskView.leadingAnchor, constant: 16).isActive = true
-        backBtn.topAnchor.constraint(equalTo: newTaskView.topAnchor, constant: 58).isActive = true
-        backBtn.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        backBtn.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        backBtn.addTarget(nil, action: #selector(backBtnPressed), for: UIControl.Event.touchUpInside)
-        
-        
-        self.view.addSubview(tableViewNewTask)
-        
-        tableViewNewTask.topAnchor.constraint(equalTo: newTaskView.bottomAnchor, constant: 12).isActive = true
-        tableViewNewTask.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
-        tableViewNewTask.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
-        tableViewNewTask.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        
-        tableViewNewTask.register(NewTaskCell.self, forCellReuseIdentifier: "NewTaskCell")
-        tableViewNewTask.dataSource = self
-        tableViewNewTask.delegate = self
-        tableViewNewTask.separatorStyle = .none
-        
-        self.tableViewNewTask.reloadData()
         
         self.view.addSubview(addBtn)
       
@@ -99,32 +44,74 @@ class NewTaskViewController: UIViewController ,UITableViewDelegate,UITableViewDa
         addBtn.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
         addBtn.heightAnchor.constraint(equalToConstant: self.view.frame.width/7).isActive = true
         addBtn.addTarget(nil, action: #selector(addBtnPressed), for: UIControl.Event.touchUpInside)
+        
+        self.scrollViewAddTask = ScrollView(dataSource: self)
+        self.scrollViewAddTask.backgroundColor = .clear
+        self.scrollViewAddTask.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.scrollViewAddTask)
+        
+        self.scrollViewAddTask
+            .topAnchor.constraint(equalTo: self.view.topAnchor, constant: C.navigationBarHeight + C.statusBarHeight)
+            .isActive = true
+        self.scrollViewAddTask.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        self.scrollViewAddTask.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        self.scrollViewAddTask.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        
+        self.scrollViewAddTask.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-        //UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
-    }
-    
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-           tableView.deselectRow(at: indexPath, animated: true)
-       }
+  
+    func scrollViewElements(_ scrollView: ScrollView, cell: ScrollViewCell) {
+        cell.contentView.addSubview(stackView)
+        stackView.leadingAnchor(margin: 8).trailingAnchor(margin: 8).topAnchor(margin: 32).bottomAnchor(margin: 32)
+        
+        let textfieldDefaultHeight: CGFloat = 44
+        
+        let defaultColor = UIColor.lightGray
+        let editingColor = UIColor.black
+        
+        let taskNameFLTextfield = FloatingTextfield
+            .floatingTextField()
+            .textInsets(dx: 2, dy: 0)
+            .defaultBottomLineColor(defaultColor)
+            .editingBottomLineColor(editingColor)
+            .defaultTitleColor(defaultColor)
+            .editingTitleColor(editingColor)
+            .title("Task Name")
+        stackView.addArrangedSubview(taskNameFLTextfield)
+        taskNameFLTextfield.heightAnchor(textfieldDefaultHeight)
+        
+        let categoryFLTextfield = FloatingTextfield
+            .floatingTextField()
+            .textInsets(dx: 2, dy: 0)
+            .defaultBottomLineColor(defaultColor)
+            .editingBottomLineColor(editingColor)
+            .defaultTitleColor(defaultColor)
+            .editingTitleColor(editingColor)
+            .title("Category")
+        stackView.addArrangedSubview(categoryFLTextfield)
+        categoryFLTextfield.heightAnchor(textfieldDefaultHeight)
        
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableViewNewTask.dequeueReusableCell(withIdentifier: "NewTaskCell",for: indexPath)as? NewTaskCell{
-           cell.selectionStyle = .none
-          //  print(indexPath.row)
-//            let textField: UITextField = cell.textField
-//            textField.delegate = self
-            return cell
-        }
+//        let textfieldTaskName = UITextField
+//            .textfield()
+//            .borderStyle(.roundedRect)
+//        stackView.addArrangedSubview(textfieldTaskName)
+//        textfieldTaskName.heightAnchor(textfieldDefaultHeight)
+//
+//        let textfieldDateTime = UITextField
+//            .textfield()
+//            .borderStyle(.roundedRect)
+//        stackView.addArrangedSubview(textfieldDateTime)
+//        textfieldDateTime.heightAnchor(textfieldDefaultHeight)
+//
+//        let textfieldCategory = UITextField
+//            .textfield()
+//            .borderStyle(.roundedRect)
+//        stackView.addArrangedSubview(textfieldCategory)
+//        textfieldCategory.heightAnchor(textfieldDefaultHeight)
+        
        
-        return UITableViewCell()
+        
     }
     
     @objc func backBtnPressed() {

@@ -30,7 +30,7 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.text = "Meeting with client"
+        tn.text = "Arkadaşlar ile Eskişehir'de buluşma"
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tn.translatesAutoresizingMaskIntoConstraints = false
         tn.font = UIFont(name: "Roboto-Regular", size: 20)
