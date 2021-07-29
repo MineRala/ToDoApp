@@ -15,6 +15,8 @@
 		E8027F3326AC67020071E506 /* ToDoAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F3226AC67020071E506 /* ToDoAppTests.swift */; };
 		E8027F3E26AC67020071E506 /* ToDoAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F3D26AC67020071E506 /* ToDoAppUITests.swift */; };
 		E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F5626ACB24F0071E506 /* HomeViewController.swift */; };
+		E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */; };
+		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
 		E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */; };
 		E851C0CB26AEE0BF003D9CA3 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */; };
 		E851C0CC26AEE0BF003D9CA3 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */; };
@@ -38,6 +40,7 @@
 		E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */; };
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
+		E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */; };
 		FD26B03726B050F5009F056C /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B03626B050F5009F056C /* ScrollView.swift */; };
 		FD26B04026B05438009F056C /* DeclarativeLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B03F26B05438009F056C /* DeclarativeLayout */; };
 		FD26B04F26B05781009F056C /* DeclarativeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B04E26B05781009F056C /* DeclarativeUI */; };
@@ -80,6 +83,8 @@
 		E8027F3D26AC67020071E506 /* ToDoAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoAppUITests.swift; sourceTree = "<group>"; };
 		E8027F3F26AC67020071E506 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E8027F5626ACB24F0071E506 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
 		E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -103,6 +108,7 @@
 		E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
 		FD26B03626B050F5009F056C /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		FD26B05E26B0627A009F056C /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		FDD947F526B063E100E4FA1C /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -234,6 +240,8 @@
 			children = (
 				E8027F5626ACB24F0071E506 /* HomeViewController.swift */,
 				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
+				E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */,
+				E8074C4426B2F48C00030963 /* SelectDateViewController.swift */,
 			);
 			path = ParentViewControllers;
 			sourceTree = "<group>";
@@ -286,6 +294,7 @@
 			children = (
 				FDD947FE26B06B8400E4FA1C /* UIDevice+Extensions.swift */,
 				E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */,
+				E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -458,12 +467,15 @@
 				E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */,
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
 				E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */,
+				E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */,
 				FDD947FF26B06B8400E4FA1C /* UIDevice+Extensions.swift in Sources */,
+				E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */,
 				E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */,
 				E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */,
 				FDD9480526B075ED00E4FA1C /* HomeViewModel.swift in Sources */,
 				E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */,
 				E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */,
+				E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */,
 				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
 				E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */,
 				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,

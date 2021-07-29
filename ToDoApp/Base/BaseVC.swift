@@ -11,11 +11,15 @@ import UIKit
 enum ViewControllerType: String {
     case home = "HomeViewController"
     case newTask = "NewTaskViewController"
+    case taskDetails = "TaskDetailsViewController"
+    case selectDate = "SelectDateViewController"
     
     var title: String {
         switch self {
             case .home: return "Tasks"
             case .newTask: return "New Task"
+            case .taskDetails: return "Task Details"
+            case .selectDate: return "Select Date"
         }
     }
     
@@ -27,6 +31,10 @@ enum ViewControllerType: String {
             return nil
         case .newTask:
             return #imageLiteral(resourceName: "BackIcon")
+        case .taskDetails:
+            return #imageLiteral(resourceName: "BackIcon")
+        case .selectDate:
+            return #imageLiteral(resourceName: "BackIcon")
         }
     }
     
@@ -35,6 +43,10 @@ enum ViewControllerType: String {
         case .home:
             return #imageLiteral(resourceName: "AddIcon")
         case .newTask:
+            return nil
+        case .taskDetails:
+            return nil
+        case .selectDate:
             return nil
         }
     }

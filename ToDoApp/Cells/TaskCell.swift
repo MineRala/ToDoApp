@@ -15,12 +15,12 @@ class TaskCell: UITableViewCell {
     private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
     
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
-
     
     private let hourLabel : UILabel = {
        let hl = UILabel()
         hl.text = "10:00"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
         hl.font = UIFont(name: "Roboto-Medium", size: 18)
         return hl
@@ -30,6 +30,7 @@ class TaskCell: UITableViewCell {
        let hl = UILabel()
         hl.text = "AM"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
         hl.font = UIFont(name: "Roboto-Bold", size: 16)
         return hl
@@ -37,7 +38,7 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.text = "Arkadaşlar ile Eskişehir'de buluşmak için sabırsızlanıyorum. "
+        tn.text = "Arkadaşlar ile Eskişehir'de buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tn.lineBreakMode = NSLineBreakMode.byTruncatingHead
         tn.numberOfLines = 0
@@ -78,12 +79,13 @@ extension TaskCell {
         hourInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         hourInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         hourInfo.widthAnchor.constraint(equalToConstant: 60).isActive = true
-       
-       // hourPeriodLabel.leadingAnchor.constraint(equalTo: hourInfo..leadingAnchor, constant: 36).isActive = true
+        hourInfo.backgroundColor = .green
+        hourPeriodLabel.backgroundColor = .red
         
         contentView.addSubview(taskInfo)
         taskInfo.addArrangedSubview(taskName)
         taskInfo.addArrangedSubview(taskCatagory)
+
     
         taskInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         taskInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true

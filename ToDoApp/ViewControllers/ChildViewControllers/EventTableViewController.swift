@@ -56,6 +56,51 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      let vc = TaskDetailsViewController()
+      self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView,
+                       trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let trash = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completionHandler) in
+            guard let self = self else{
+                completionHandler(false)
+                return
+            }
+            self.handleTrash(indexPath: indexPath)
+            completionHandler(true)
+            
+        }
+        trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
+        trash.image = #imageLiteral(resourceName: "DeleteIcon")
+        let configuration = UISwipeActionsConfiguration(actions: [trash])
+        return configuration
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let done = UIContextualAction(style: .normal,title: nil) { [weak self] (action, view, completionHandler) in
+            guard let self = self else{
+                completionHandler(false)
+                return
+            }
+            self.handleDone(indexPath: indexPath)
+            completionHandler(true)
+        }
+        done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
+        done.image = #imageLiteral(resourceName: "DoneIcon")
+        let configuration = UISwipeActionsConfiguration(actions: [done])
+        return configuration
+    }
+    
+    private func handleTrash(indexPath: IndexPath) {
+      print("Trash")
+    }
+    
+    private func handleDone(indexPath: IndexPath){
+        print("Done")
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
     }
