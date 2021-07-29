@@ -7,11 +7,12 @@
 
 import Foundation
 import  UIKit
+import DeclarativeUI
+import DeclarativeLayout
 
-class TaskDetailsViewController : BaseVC {
+class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
    
-    private let stackBottom = UIStackView.stackView(alignment: .fill, distribution: .fillEqually, spacing: 8, axis: .horizontal)
-    
+    private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -24,7 +25,7 @@ class TaskDetailsViewController : BaseVC {
         let vd = UIView(frame: .zero)
         vd.translatesAutoresizingMaskIntoConstraints = false
         vd.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        vd.layer.cornerRadius = 10
+        vd.layer.cornerRadius = 4
         vd.taskDetailsShadow()
         return vd
     }()
@@ -50,8 +51,7 @@ class TaskDetailsViewController : BaseVC {
     private let textViewDescription : UITextView = {
         let tvd = UITextView(frame: .zero)
         tvd.translatesAutoresizingMaskIntoConstraints = false
-        tvd.text = "Have to meet him because i want to show him my latest app design in person.  Also need to ask for advice on these:  - style - interaction - copy .Have to meet him because i want to show him my latest app design in person.  Also need to ask for advice on these:  - style - interaction - copy.Have to meet him because i want to show him my latest app design in person.  Also need to ask for advice on these:  - style - interaction - copy.Have to meet him because i want to show him my latest app design in person.  Also need to ask for advice on these:  - style - interaction - copy."
-        tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 0.75)
         tvd.font = UIFont(name: "Roboto-Regular", size: 16)
         tvd.isEditable = false
         tvd.isScrollEnabled = true
@@ -87,15 +87,16 @@ class TaskDetailsViewController : BaseVC {
         return vfb
     }()
     
+    private var textViewHeightConstraint: NSLayoutConstraint!
+    private var viewDetailHeightConstriant: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         setUpUI()
     }
     
     
     private func setUpUI() {
-        
         self.view.addSubview(viewContinue)
         viewContinue.topAnchor(margin: C.navigationBarHeight + C.statusBarHeight)
             .leadingAnchor(margin: 0)
@@ -105,7 +106,9 @@ class TaskDetailsViewController : BaseVC {
         self.view.addSubview(viewDetail)
         viewDetail.topAnchor.constraint(equalTo: viewContinue.topAnchor, constant: 16).isActive = true
         viewDetail.leadingAnchor(margin: 20).trailingAnchor(margin: 20)
-        viewDetail.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.4).isActive = true
+        //viewDetail.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.4).isActive = true
+        viewDetailHeightConstriant = viewDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
+        viewDetailHeightConstriant.isActive = true
         
         self.viewDetail.addSubview(labelTaskName)
         labelTaskName.topAnchor.constraint(equalTo: viewDetail.topAnchor, constant: 36).isActive = true
@@ -126,27 +129,74 @@ class TaskDetailsViewController : BaseVC {
         textViewDescription.leadingAnchor.constraint(equalTo: viewDetail.leadingAnchor, constant: 16).isActive = true
         textViewDescription.trailingAnchor.constraint(equalTo: viewDetail.trailingAnchor, constant: -16).isActive = true
         textViewDescription.bottomAnchor.constraint(equalTo: viewDetail.bottomAnchor, constant: -16).isActive = true
-
+    
+        textViewHeightConstraint = textViewDescription.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
+        textViewHeightConstraint.isActive = true
         
-        self.view.addSubview(stackBottom)
+        self.view.addSubview(viewBottom)
+        viewBottom.leadingAnchor(margin: 0).trailingAnchor(margin: 0).bottomAnchor(margin: 0).heightAnchor(view.frame.width/6)
         
-        stackBottom.backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
-        stackBottom.taskDetailsShadow()
+        let stackBottom = UIStackView.stackView(alignment: .fill, distribution: .fillEqually, spacing: 0, axis: .horizontal)
+        viewBottom.addSubview(stackBottom)
+        stackBottom.heightAnchor(60).leadingAnchor(margin: 0).trailingAnchor(margin: 0).topAnchor(margin: 0)
         
-        stackBottom.addArrangedSubview(buttonDelete)
-        stackBottom.addArrangedSubview(buttonEdit)
-        stackBottom.addArrangedSubview(buttonDone)
+        viewBottom.taskDetailsShadow()
         
-        stackBottom.leadingAnchor(margin: 0)
-            .trailingAnchor(margin: 0)
-            .heightAnchor(view.frame.width/7)
+        let deleteButtonContainer = UIView.view().backgroundColor(.clear)
+        let editButtonContainer = UIView.view().backgroundColor(.clear)
+        let doneButtonContainer = UIView.view().backgroundColor(.clear)
         
-        stackBottom.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        deleteButtonContainer.addSubview(buttonDelete)
+        editButtonContainer.addSubview(buttonEdit)
+        doneButtonContainer.addSubview(buttonDone)
+        
+        stackBottom.addArrangedSubview(deleteButtonContainer)
+        stackBottom.addArrangedSubview(editButtonContainer)
+        stackBottom.addArrangedSubview(doneButtonContainer)
+        
+        let btnSize = CGSize(width: 21, height: 21)
+        buttonDelete.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
+        buttonDone.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
+        buttonEdit.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
+        
+       
+        
+        
+//        stackBottom.addArrangedSubview(buttonDelete)
+//        stackBottom.addArrangedSubview(buttonEdit)
+//        stackBottom.addArrangedSubview(buttonDone)
+        
         
         
         buttonDelete.addTarget(nil, action: #selector(deleteButtonTapped), for: UIControl.Event.touchUpInside)
         buttonEdit.addTarget(nil, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
         buttonDone.addTarget(nil, action: #selector(doneButtonTapped), for: UIControl.Event.touchUpInside)
+    
+        textViewDescription.layoutManager.delegate = self
+        
+        textViewDescription.textContainerInset = UIEdgeInsets.fill(with: -4)
+        
+        textViewDescription.text = """
+        Have to meet him because i want to show him my latest app design in person.
+        
+        Also need to ask for advice on these:
+
+        - style
+        - copy
+        - interaction
+        """
+        
+        print(textViewDescription)
+        textViewDescription.sizeToFit()
+        let sizeTv = textViewDescription.sizeThatFits(CGSize(width: viewDetail.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        print(textViewDescription)
+        print(sizeTv)
+        textViewDescription.isScrollEnabled = false
+        
+    }
+    
+    func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
+        return 8
     }
     
     @objc func deleteButtonTapped() {

@@ -38,9 +38,9 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.text = "Arkadaşlar ile Eskişehir'de buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
+        tn.text = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
-        tn.lineBreakMode = NSLineBreakMode.byTruncatingHead
+        tn.lineBreakMode = .byWordWrapping
         tn.numberOfLines = 0
         tn.translatesAutoresizingMaskIntoConstraints = false
         tn.font = UIFont(name: "Roboto-Regular", size: 20)
@@ -76,11 +76,10 @@ extension TaskCell {
         hourInfo.addArrangedSubview(hourPeriodLabel)
         
         hourInfo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
-        hourInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-        hourInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        hourInfo.centerYAnchor(margin: 0)
         hourInfo.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        hourInfo.backgroundColor = .green
-        hourPeriodLabel.backgroundColor = .red
+        hourInfo.backgroundColor = .clear
+        hourPeriodLabel.backgroundColor = .clear
         
         contentView.addSubview(taskInfo)
         taskInfo.addArrangedSubview(taskName)

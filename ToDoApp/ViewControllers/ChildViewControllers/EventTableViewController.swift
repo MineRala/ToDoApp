@@ -74,6 +74,11 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
         }
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
         trash.image = #imageLiteral(resourceName: "DeleteIcon")
+        
+//        trash.image = UIGraphicsImageRenderer(size: CGSize(width: 25.5, height: 29.5)).image { _ in
+//            #imageLiteral(resourceName: "DeleteIcon").draw(in: CGRect(x: 0, y: 0, width: 25.5, height: 29.5))
+//        }
+        
         let configuration = UISwipeActionsConfiguration(actions: [trash])
         return configuration
     }
@@ -88,7 +93,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
-        done.image = #imageLiteral(resourceName: "DoneIcon")
+        done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
+            #imageLiteral(resourceName: "DoneIcon").draw(in: CGRect(x: 0, y: 0, width: 24, height: 31))
+        }
+    
         let configuration = UISwipeActionsConfiguration(actions: [done])
         return configuration
     }
