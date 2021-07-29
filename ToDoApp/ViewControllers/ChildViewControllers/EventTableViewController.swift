@@ -56,6 +56,11 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      let vc = TaskDetailsViewController()
+      self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
     }

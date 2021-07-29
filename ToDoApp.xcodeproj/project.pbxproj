@@ -38,6 +38,7 @@
 		E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */; };
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
+		E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */; };
 		FD26B03726B050F5009F056C /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B03626B050F5009F056C /* ScrollView.swift */; };
 		FD26B04026B05438009F056C /* DeclarativeLayout in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B03F26B05438009F056C /* DeclarativeLayout */; };
 		FD26B04F26B05781009F056C /* DeclarativeUI in Frameworks */ = {isa = PBXBuildFile; productRef = FD26B04E26B05781009F056C /* DeclarativeUI */; };
@@ -103,6 +104,7 @@
 		E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
 		FD26B03626B050F5009F056C /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		FD26B05E26B0627A009F056C /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		FDD947F526B063E100E4FA1C /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				E8027F5626ACB24F0071E506 /* HomeViewController.swift */,
 				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
+				E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */,
 			);
 			path = ParentViewControllers;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
 				E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */,
 				FDD947FF26B06B8400E4FA1C /* UIDevice+Extensions.swift in Sources */,
+				E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */,
 				E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */,
 				E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */,
 				FDD9480526B075ED00E4FA1C /* HomeViewModel.swift in Sources */,
