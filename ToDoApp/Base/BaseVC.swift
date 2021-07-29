@@ -19,6 +19,8 @@ enum ViewControllerType: String {
         }
     }
     
+
+    
     var leftButtonImage: UIImage? {
         switch self {
         case .home:
@@ -37,8 +39,10 @@ enum ViewControllerType: String {
         }
     }
     
+    
+    
 }
-
+//MARK: - Public
 class BaseVC: UIViewController {
     private var type: ViewControllerType = .home
 
@@ -50,7 +54,10 @@ class BaseVC: UIViewController {
         vw.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
         return vw
     }()
-    
+}
+
+//MARK: - Life cycle
+extension BaseVC{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateUI()
@@ -68,7 +75,8 @@ extension BaseVC {
         view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         self.customNavigationBar = CustomNavigationBar(delegate: self)
         self.view.addSubview(self.customNavigationBar)
-        self.customNavigationBar.leadingAnchor(margin: 0).topAnchor(margin: C.statusBarHeight).trailingAnchor(margin: 0).heightAnchor(C.navigationBarHeight)
+        self.customNavigationBar.leadingAnchor(margin: 0).topAnchor(margin: C.statusBarHeight).trailingAnchor(margin: 0)
+        self.customNavigationBar.heightAnchor.constraint(equalToConstant: C.navigationBarHeight).isActive = true
         
         KeyWindow.addSubview(viewStatus)
         viewStatus.topAnchor.constraint(equalTo: KeyWindow.topAnchor, constant: 0).isActive = true
@@ -87,7 +95,6 @@ extension BaseVC: CustomNavigationBarDelegate {
     func customNavigationBarDidTappedRightButton(_ navigationBar: CustomNavigationBar) {
         switch self.type {
             case .home:
-               
                 baseVCAddOnTap()
             default:
                 break
@@ -96,7 +103,19 @@ extension BaseVC: CustomNavigationBarDelegate {
     
     @objc func baseVCAddOnTap() { }
 }
+//MARK: - Hide Keyboard
+extension BaseVC{
+func hideKeyboardWhenTappedAround() {
+    let tap = UITapGestureRecognizer(target: self, action: #selector(BaseVC.dismissKeyboard))
+    tap.cancelsTouchesInView = false
+    view.addGestureRecognizer(tap)
+}
 
+@objc func dismissKeyboard() {
+    view.endEditing(true)
+}
+}
+//MARK: - Update UI
 extension BaseVC {
     private func updateUI() {
         let className = String(describing: Swift.type(of: self))
@@ -104,5 +123,6 @@ extension BaseVC {
         self.customNavigationBar.setTitle(self.type.title)
         self.customNavigationBar.setLeftButtonImage(self.type.leftButtonImage)
         self.customNavigationBar.setRightButtonImage(self.type.rightButtonImage)
+       
     }
 }

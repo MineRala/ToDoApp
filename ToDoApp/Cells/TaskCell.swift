@@ -7,8 +7,15 @@
 
 import Foundation
 import UIKit
+import  DeclarativeUI
+import  DeclarativeLayout
 
 class TaskCell: UITableViewCell {
+    
+    private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
+    
+    private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
+
     
     private let hourLabel : UILabel = {
        let hl = UILabel()
@@ -30,8 +37,10 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.text = "Arkadaşlar ile Eskişehir'de buluşma"
+        tn.text = "Arkadaşlar ile Eskişehir'de buluşmak için sabırsızlanıyorum. "
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        tn.lineBreakMode = NSLineBreakMode.byTruncatingHead
+        tn.numberOfLines = 0
         tn.translatesAutoresizingMaskIntoConstraints = false
         tn.font = UIFont(name: "Roboto-Regular", size: 20)
         return tn
@@ -46,7 +55,6 @@ class TaskCell: UITableViewCell {
         return tc
     }()
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpUI()
@@ -55,26 +63,35 @@ class TaskCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+//MARK: - Set Up UI
+extension TaskCell {
     func setUpUI(){
-        addSubview(hourLabel)
-        hourLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20).isActive = true
-        hourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
-        hourLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        self.contentView.backgroundColor = .clear
         
-        addSubview(hourPeriodLabel)
-        hourPeriodLabel.topAnchor.constraint(equalTo: hourLabel.bottomAnchor, constant: 4).isActive = true
-        hourPeriodLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 32).isActive = true
-        hourPeriodLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        contentView.addSubview(hourInfo)
+        hourInfo.addArrangedSubview(hourLabel)
+        hourInfo.addArrangedSubview(hourPeriodLabel)
         
-        addSubview(taskName)
-        taskName.leadingAnchor.constraint(equalTo: hourLabel.trailingAnchor, constant: 30).isActive = true
-        taskName.topAnchor.constraint(equalTo: hourLabel.topAnchor, constant: 0).isActive = true
-        taskName.heightAnchor.constraint(equalToConstant: 20 ).isActive = true
+        hourInfo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
+        hourInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
+        hourInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        hourInfo.widthAnchor.constraint(equalToConstant: 60).isActive = true
+       
+       // hourPeriodLabel.leadingAnchor.constraint(equalTo: hourInfo..leadingAnchor, constant: 36).isActive = true
         
-        addSubview(taskCatagory)
-        taskCatagory.leadingAnchor.constraint(equalTo: hourPeriodLabel.trailingAnchor, constant: 40).isActive = true
-        taskCatagory.topAnchor.constraint(equalTo: hourPeriodLabel.topAnchor, constant: 0).isActive = true
-        taskCatagory.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        contentView.addSubview(taskInfo)
+        taskInfo.addArrangedSubview(taskName)
+        taskInfo.addArrangedSubview(taskCatagory)
+    
+        taskInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
+        taskInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        taskInfo.leadingAnchor.constraint(equalTo: hourInfo.trailingAnchor, constant: 0).isActive = true
+        taskInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
+       
     }
 }
+    
+
+

@@ -24,6 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         navController.isNavigationBarHidden = true
         self.window?.rootViewController = navController
         self.window?.makeKeyAndVisible()
+        let statusBarSize = ws.statusBarManager!.statusBarFrame
+        print("Status bar frame: \(statusBarSize)")
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

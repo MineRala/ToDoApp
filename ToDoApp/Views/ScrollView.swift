@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+//MARK: - ScrollView Cell
 class ScrollViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,6 +24,7 @@ class ScrollViewCell: UITableViewCell {
     }
 }
 
+//MARK: ScrollView Protocol
 protocol ScrollViewDataSource {
     func scrollViewElements(_ scrollView: ScrollView, cell: ScrollViewCell)
 }
@@ -38,15 +40,12 @@ class ScrollView: UITableView {
         setUpUI()
     }
     
-//    override init(frame: CGRect, style: UITableView.Style) {
-//        super.init(frame: frame, style: style)
-//        setUpUI()
-//    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+//MARK: - Set Up UI
+extension ScrollView {
     private func setUpUI() {
         self.separatorStyle = .none
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -55,10 +54,9 @@ class ScrollView: UITableView {
         self.dataSource = self
         self.reloadData()
     }
-    
-  
 }
 
+//MARK: - TableView Delegate / DataSource
 extension ScrollView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension

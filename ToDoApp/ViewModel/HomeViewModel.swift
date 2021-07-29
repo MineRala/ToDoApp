@@ -22,10 +22,8 @@ class Task {
 class HomeViewModel {
     private(set) var searchText = CurrentValueSubject<String, Never>("")
     private(set) var arrTasks = CurrentValueSubject<[Task], Never>([])
-    private let debouncer = Debouncer(timeInterval: 0.3)
-    
-    
-    
+    private let debouncer = Debouncer(timeInterval: 0.3) // bekleme
+
     func updateSearchText(_ text: String) {
         debouncer.ping()
         debouncer.tick {

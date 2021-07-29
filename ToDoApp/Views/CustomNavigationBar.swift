@@ -13,7 +13,6 @@ import DeclarativeLayout
 protocol CustomNavigationBarDelegate {
     func customNavigationBarDidTappedLeftButton(_ navigationBar: CustomNavigationBar)
     func customNavigationBarDidTappedRightButton(_ navigationBar: CustomNavigationBar)
-
 }
 
 // MARK: - Skeleton
@@ -48,7 +47,7 @@ class CustomNavigationBar: UIView {
 extension CustomNavigationBar {
     private func setUpUI() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1)
+        self.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
         
         self.addSubview(self.lblTitle)
         self.lblTitle
