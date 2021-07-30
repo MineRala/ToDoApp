@@ -60,7 +60,7 @@ class SelectDateViewController : BaseVC{
         self.itemContainerView.addSubview(timeView)
         self.itemContainerView.addSubview(selectButton)
         
-        timeView.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 36).isActive = true
+        timeView.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 24).isActive = true
         timeView.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 24).isActive = true
         timeView.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: -24).isActive = true
         
@@ -69,10 +69,8 @@ class SelectDateViewController : BaseVC{
         selectButton.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 0).isActive = true
         selectButton.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: 0).isActive = true
         selectButton.heightAnchor(view.frame.width/5)
-       
-       // selectButton.heightAnchor(view.frame.width/7)
         
-        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -16).isActive = true 
+        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true 
        
     }
     

@@ -17,4 +17,5 @@ extension UIView {
         self.layer.shouldRasterize = true
         self.layer.masksToBounds = false
     }
+    
 }

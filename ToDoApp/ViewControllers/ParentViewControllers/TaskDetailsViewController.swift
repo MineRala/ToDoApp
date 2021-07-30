@@ -35,7 +35,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         ltn.translatesAutoresizingMaskIntoConstraints = false
         ltn.text = "Meet Joshoep"
         ltn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
-        ltn.font = UIFont(name: "Roboto-Medium", size: 20)
+        ltn.font = UIFont(name: C.Font.medium.rawValue, size: 20)
         return ltn
     }()
     
@@ -44,7 +44,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         ld.translatesAutoresizingMaskIntoConstraints = false
         ld.text = "27 Feb, 2018 | 04:00 PM"
         ld.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
-        ld.font = UIFont(name: "Roboto-Regular", size: 16)
+        ld.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         return ld
     }()
     
@@ -52,7 +52,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         let tvd = UITextView(frame: .zero)
         tvd.translatesAutoresizingMaskIntoConstraints = false
         tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 0.75)
-        tvd.font = UIFont(name: "Roboto-Regular", size: 16)
+        tvd.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         tvd.isEditable = false
         tvd.isScrollEnabled = true
         return tvd
@@ -63,7 +63,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
         bd.setImage(UIImage(named: "TrashIcon"), for: .normal)
-       // bd.frame.size = CGSize(width: 4, height: 4)
         return bd
     }()
     
@@ -80,12 +79,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return bd
     }()
     
-    private let viewForButton : UIView = {
-        let vfb = UIView(frame: .zero)
-        vfb.translatesAutoresizingMaskIntoConstraints = false
-        vfb.backgroundColor = .orange
-        return vfb
-    }()
+ 
     
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
@@ -153,20 +147,11 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         stackBottom.addArrangedSubview(deleteButtonContainer)
         stackBottom.addArrangedSubview(editButtonContainer)
         stackBottom.addArrangedSubview(doneButtonContainer)
-        
-        let btnSize = CGSize(width: 21, height: 21)
+
         buttonDelete.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
         buttonDone.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
         buttonEdit.alignToCenter(margins: .zero).dimensions(CGSize(width: 20, height: 24))
-        
-       
-        
-        
-//        stackBottom.addArrangedSubview(buttonDelete)
-//        stackBottom.addArrangedSubview(buttonEdit)
-//        stackBottom.addArrangedSubview(buttonDone)
-        
-        
+
         
         buttonDelete.addTarget(nil, action: #selector(deleteButtonTapped), for: UIControl.Event.touchUpInside)
         buttonEdit.addTarget(nil, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)

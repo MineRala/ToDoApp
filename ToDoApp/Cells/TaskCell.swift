@@ -18,41 +18,41 @@ class TaskCell: UITableViewCell {
     
     private let hourLabel : UILabel = {
        let hl = UILabel()
-        hl.text = "10:00"
+        //hl.text = "10:00"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
-        hl.font = UIFont(name: "Roboto-Medium", size: 18)
+        hl.font = UIFont(name: C.Font.medium.rawValue, size: 18)
         return hl
     }()
     
     private let hourPeriodLabel : UILabel = {
        let hl = UILabel()
-        hl.text = "AM"
+      //  hl.text = "AM"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
-        hl.font = UIFont(name: "Roboto-Bold", size: 16)
+        hl.font = UIFont(name: C.Font.bold.rawValue, size: 16)
         return hl
     }()
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.text = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
+       // tn.text = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tn.lineBreakMode = .byWordWrapping
         tn.numberOfLines = 0
         tn.translatesAutoresizingMaskIntoConstraints = false
-        tn.font = UIFont(name: "Roboto-Regular", size: 20)
+        tn.font = UIFont(name: C.Font.regular.rawValue, size: 20)
         return tn
     }()
     
     private let taskCatagory : UILabel = {
         let tc = UILabel()
-        tc.text = "Official"
+      //  tc.text = "Official"
         tc.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tc.translatesAutoresizingMaskIntoConstraints = false
-        tc.font = UIFont(name: "Roboto-Light", size: 12)
+        tc.font = UIFont(name: C.Font.light.rawValue, size: 12)
         return tc
     }()
     
@@ -90,7 +90,15 @@ extension TaskCell {
         taskInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         taskInfo.leadingAnchor.constraint(equalTo: hourInfo.trailingAnchor, constant: 0).isActive = true
         taskInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
-       
+    }
+    
+    
+    func updateCell(model:Model) {
+        hourLabel.text = model.hourLabel
+        hourPeriodLabel.text = model.hourPeriodLabel
+        taskName.text = model.taskName
+        taskCatagory.text = model.taskCatagory
+        self.layoutIfNeeded()
     }
 }
     

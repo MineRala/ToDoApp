@@ -10,6 +10,9 @@ import UIKit
 
 class EventTableViewController : UIViewController{
 
+    private var arrModel: [Model] = []
+    
+    
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
         etv.translatesAutoresizingMaskIntoConstraints = false
@@ -37,18 +40,25 @@ extension EventTableViewController{
         eventTableView.register(TaskCell.self, forCellReuseIdentifier: "TaskCell")
         eventTableView.dataSource = self
         eventTableView.delegate = self
+        
+        
+        arrModel = Model.all()
         eventTableView.reloadData()
+        
+        
     }
 }
 
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return arrModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
+        let model  = arrModel[indexPath.row]
+        cell.updateCell(model:  model)
         return cell
     }
     
@@ -75,10 +85,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
         trash.image = #imageLiteral(resourceName: "DeleteIcon")
         
-//        trash.image = UIGraphicsImageRenderer(size: CGSize(width: 25.5, height: 29.5)).image { _ in
-//            #imageLiteral(resourceName: "DeleteIcon").draw(in: CGRect(x: 0, y: 0, width: 25.5, height: 29.5))
-//        }
-        
         let configuration = UISwipeActionsConfiguration(actions: [trash])
         return configuration
     }
@@ -90,6 +96,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
             self.handleDone(indexPath: indexPath)
+           
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
@@ -103,11 +110,17 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func handleTrash(indexPath: IndexPath) {
       print("Trash")
+        self.arrModel.remove(at: indexPath.row)
+        self.eventTableView.reloadData()
+
     }
     
     private func handleDone(indexPath: IndexPath){
-        print("Done")
+        print("Done") 
+        self.eventTableView.cellForRow(at: indexPath)?.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        self.eventTableView.reloadData()
     }
+
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         

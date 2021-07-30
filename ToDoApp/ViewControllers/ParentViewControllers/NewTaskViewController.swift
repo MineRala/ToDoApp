@@ -21,7 +21,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         ab.translatesAutoresizingMaskIntoConstraints = false
         ab.setTitle("ADD", for: .normal)
         ab.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
-        ab.titleLabel?.font = UIFont(name: "Roboto-Medium", size: 20)
+        ab.titleLabel?.font = UIFont(name: C.Font.medium.rawValue, size: 20)
         ab.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
         ab.tintColor = .white
         return ab
@@ -59,7 +59,7 @@ extension NewTaskViewController {
         addBtn.bottomAnchor(margin: 0)
             .leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
-            .heightAnchor(view.frame.width/7)
+            .heightAnchor(view.frame.width/5)
 
         addBtn.addTarget(nil, action: #selector(addBtnPressed), for: UIControl.Event.touchUpInside)
         
