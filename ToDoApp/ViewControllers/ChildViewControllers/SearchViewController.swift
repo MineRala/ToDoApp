@@ -7,12 +7,11 @@
 
 import Foundation
 import UIKit
-
-
+import Combine
 
 class SearchViewController : UIViewController {
 
-    private let viewModel: HomeViewModel = HomeViewModel()
+  
 
 //    private let searchView : UIView = {
 //        let sw = UIView(frame: .zero)
@@ -42,6 +41,8 @@ class SearchViewController : UIViewController {
         return sb
     }()
     
+    private(set) var shouldShowCalendarViewContainer = CurrentValueSubject<Bool, Never>(true)
+
 }
 //MARK: - Lifecycle
 extension SearchViewController {
@@ -90,21 +91,19 @@ extension SearchViewController : UITextFieldDelegate{
   
     @objc private func searchTextDidChange(){
         
-        self.viewModel.updateSearchText(self.searchTextField.text ?? "")
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        
+        NSLog("Did Begin")
+        self.shouldShowCalendarViewContainer.send(false)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
+        NSLog("Did End")
+        self.shouldShowCalendarViewContainer.send(true)
     }
     
     @objc private func searchTextDidBegin() {
-    
-        delegate?.changeHight(true)
-        print("bbb")
        
     }
 }
