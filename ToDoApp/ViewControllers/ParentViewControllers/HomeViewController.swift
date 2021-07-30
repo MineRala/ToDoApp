@@ -11,18 +11,12 @@ import Combine
 import DeclarativeUI
 import DeclarativeLayout
 
-protocol CalendarAddedWithHeight {
-    var homeViewController : HomeViewController? { get set }
-    func changeHight(_ isTextField: Bool)
-}
-
 class HomeViewController : BaseVC {
     
     private let viewModel: HomeViewModel = HomeViewModel()
     private var cancellables = Set<AnyCancellable>()  // cancellable değişkeni oluşturduk,elemanları hafızadan atmak için.
    
-    var calendarConstraint: NSLayoutConstraint?                                               
-    var delegate: CalendarAddedWithHeight? = nil
+    private var calendarHeightConstraint: NSLayoutConstraint?
     
     private let searchVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1))
     private let calendarVCContainer = UIView.view().backgroundColor(.blue)
@@ -32,6 +26,7 @@ class HomeViewController : BaseVC {
     private let calendarVC : CalendarViewController = CalendarViewController()
     private let eventVC : EventTableViewController = EventTableViewController()
 
+    private let calendarViewHeightRatio: CGFloat = 35/100
     
     private let itemsContainerView : UIView = {
         let icv = UIView(frame: .zero)
@@ -49,17 +44,23 @@ class HomeViewController : BaseVC {
 extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
         addListeners()
-        
-       
     }
     
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        NSLog("Did Layout: \(itemsContainerView.frame)")
+        if calendarHeightConstraint == nil {
+            calendarHeightConstraint = calendarVCContainer.heightAnchor.constraint(equalToConstant: self.itemsContainerView.frame.size.height * calendarViewHeightRatio)
+            calendarHeightConstraint!.isActive = true
+        }
+    }
 }
 
 // MARK: - Set Up UI
@@ -75,6 +76,7 @@ extension HomeViewController {
             .trailingAnchor(margin: 0)
             .heightAnchor(76)
         
+       
         self.addChildViewController(childController: searchVC, onView: searchVCContainer)
         
         self.view.addSubview(itemsContainerView)
@@ -84,13 +86,9 @@ extension HomeViewController {
         itemsContainerView.topAnchor.constraint(equalTo: searchVCContainer.bottomAnchor, constant: 0).isActive = true
         
         self.itemsContainerView.addSubview(calendarVCContainer)
-        calendarConstraint = NSLayoutConstraint(item: calendarVCContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
 
-        calendarVCContainer.addConstraint(calendarConstraint!)
-        calendarConstraint?.constant = CGFloat(500)
-        
         calendarVCContainer.topAnchor(margin: 0).trailingAnchor(margin: 0).leadingAnchor(margin: 0)
-//        calendarVCContainer.heightAnchor.constraint(equalTo: itemsContainerView.heightAnchor, multiplier: 35/100).isActive = true
+        
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
         self.itemsContainerView.addSubview(eventVCContainer)
@@ -101,6 +99,34 @@ extension HomeViewController {
         eventVCContainer.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         
         self.addChildViewController(childController: eventVC, onView: eventVCContainer)
+      
+        let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
+
+     }
+    
+//    private func changeConstraint() {
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+//            self.calendarHeightConstraint.constant = 0
+//            self.view.layoutIfNeeded()
+//        } completion: { _ in
+//
+//        }
+//    }
+}
+
+extension HomeViewController {
+    private func changeCalendarViewHeightConstraint(to value: CGFloat) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.calendarHeightConstraint!.constant = value
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+          
+        }
     }
 }
 
@@ -111,25 +137,17 @@ extension HomeViewController {
     }
 }
 
-// MARK: - Listeners
+// MARK: - Listeners (Combine)
 extension HomeViewController {
     private func addListeners() {
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        self.view.addGestureRecognizer(tap)
-        
-        let listenerSearchText = self.viewModel.searchText
-            .receive(on: DispatchQueue.main) //Main treate aldık.
-        
-        listenerSearchText.sink { str in // sink ile dinledik.
-            print("Current Str: \(str)")
-        }.store(in: &cancellables)// cancellables ile hafızadan çıkardık.
-        
+        self.searchVC.shouldShowCalendarViewContainer
+            .receive(on: DispatchQueue.main)
+            .sink { shouldShow in
+                shouldShow ?
+                    self.changeCalendarViewHeightConstraint(to:  self.itemsContainerView.frame.size.height * self.calendarViewHeightRatio) :
+                    self.changeCalendarViewHeightConstraint(to: 0)
+        }.store(in: &cancellables)
     }
-    @objc func hideKeyboard() {
-        self.view.endEditing(true)
-
-     }
 }
 
 // MARK: - TextfieldDelegate
@@ -143,7 +161,6 @@ extension HomeViewController: UITextFieldDelegate {
 // MARK: - Route
 extension HomeViewController  {
    
-    
     private func routeToNewTasks() {
         let newViewController = NewTaskViewController()
         self.navigationController?.pushViewController(newViewController, animated: true)
