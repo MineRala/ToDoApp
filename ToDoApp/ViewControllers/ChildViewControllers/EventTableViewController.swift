@@ -52,7 +52,13 @@ extension EventTableViewController {
 
 
 // MARK: - TableView Delegate / Datasource
-extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
+extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
+    
+    func taskCellDidSelected(_ cell: TaskCell, model: Model) {
+        let vc = TaskDetailsViewController(model: model) 
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrModel.count
     }
@@ -60,7 +66,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
         let model = arrModel[indexPath.row]
-        cell.updateCell(model:  model)
+        cell.updateCell(model: model, delegate: self)
         return cell
     }
     
@@ -68,10 +74,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-      let vc = TaskDetailsViewController()
-      self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//      let vc = TaskDetailsViewController()
+//      self.navigationController?.pushViewController(vc, animated: true)
+//    }
 
     func tableView(_ tableView: UITableView,
                        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

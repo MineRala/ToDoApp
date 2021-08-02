@@ -10,13 +10,19 @@ import UIKit
 import DeclarativeUI
 import DeclarativeLayout
 
+protocol TaskCellDelegate {
+    func taskCellDidSelected(_ cell: TaskCell, model: Model)
+}
+
 class TaskCell: UITableViewCell {
     
     private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
     
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
     
-    var tapGesture: UIGestureRecognizer?
+    private var tap: UITapGestureRecognizer!
+    private var model: Model!
+    private var delegate: TaskCellDelegate?
     
     let attrStrikethroughStyle = [ NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue) ]
 
@@ -58,6 +64,7 @@ class TaskCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        print("cell init")
         setUpUI()
     }
     
@@ -90,10 +97,21 @@ extension TaskCell {
         taskInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         taskInfo.leadingAnchor.constraint(equalTo: hourInfo.trailingAnchor, constant: 0).isActive = true
         taskInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
+    
+        self.selectionStyle = .none
+        tap = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped))
+        
+        self.addGestureRecognizer(tap)
+        
+        print(self.gestureRecognizers)
+        print("avslighdkfj")
     }
     
     
-    func updateCell(model:Model) {
+    func updateCell(model: Model, delegate: TaskCellDelegate) {
+        print("cell update")
+        self.model = model
+        self.delegate = delegate
         
         if model.isTaskCompleted {
             hourLabel.attributedText = NSAttributedString(string: model.hourLabel, attributes:  attrStrikethroughStyle)
@@ -108,6 +126,10 @@ extension TaskCell {
             taskCatagory.attributedText = NSAttributedString(string: model.taskCatagory)
         }
         self.layoutIfNeeded()
+    }
+    
+    @objc func tableViewCellTapped() {
+        self.delegate?.taskCellDidSelected(self, model: model)
     }
 }
     

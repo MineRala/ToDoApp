@@ -18,6 +18,16 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     var model : Model?
     
+    private var pageMode: NewAndEditVCState = .newTask
+    
+    private func getMode(_ model: Model?) -> NewAndEditVCState {
+        if model == nil {
+            return .newTask
+        } else {
+            return .editTask
+        }
+    }
+    
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
@@ -38,9 +48,9 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        self.updateTaskTitle(string: model == nil ? "New Task" : "Edit Task")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.updateTaskTitle(string: pageMode.navigationBarTitle)
     }
 }
 
@@ -48,6 +58,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
 extension NewTaskViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.pageMode = getMode(model)
         setUpUI()
         self.hideKeyboardWhenTappedAround()
     }
@@ -57,7 +68,7 @@ extension NewTaskViewController {
 extension NewTaskViewController {
     func setUpUI() {
         view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
-       self.scrollViewAddTask = ScrollView(dataSource: self)
+        self.scrollViewAddTask = ScrollView(dataSource: self)
         self.scrollViewAddTask.backgroundColor = .clear
         self.scrollViewAddTask.translatesAutoresizingMaskIntoConstraints = false
         
@@ -75,6 +86,8 @@ extension NewTaskViewController {
             .leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
             .heightAnchor(view.frame.width/5)
+            
+        self.addBtn.setTitle(pageMode.confirmButtonTitle, for: .normal)
 
         addBtn.addTarget(nil, action: #selector(addBtnPressed), for: UIControl.Event.touchUpInside)
         
@@ -168,11 +181,6 @@ extension NewTaskViewController {
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-        if model != nil {
-            self.addBtn.setTitle("Save", for: .normal)
-        } else {
-            self.addBtn.setTitle("Add", for: .normal)
-        }
     }
 }
   

@@ -44,7 +44,6 @@ class SelectDateViewController : BaseVC{
 extension SelectDateViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setUpUI()
     }
 }

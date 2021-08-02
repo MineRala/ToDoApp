@@ -17,4 +17,13 @@ enum NewAndEditVCState{
             return "Edit Task"
         }
     }
+    
+    var confirmButtonTitle: String {
+        switch self {
+        case .newTask:
+            return "Add"
+        case .editTask:
+            return "Save"
+        }
+    }
 }

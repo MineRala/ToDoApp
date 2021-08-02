@@ -16,6 +16,8 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
+    private var model: Model!
+    
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
         vc.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +81,15 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         bd.setImage(UIImage(named: "CheckIcon"), for: .normal)
         return bd
     }()
+    
+    init(model: Model) {
+        super.init(nibName: nil, bundle: nil)
+        self.model = model
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 //MARK: - Lifecycle
