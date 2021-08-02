@@ -108,15 +108,6 @@ extension HomeViewController {
         self.view.endEditing(true)
 
      }
-    
-//    private func changeConstraint() {
-//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
-//            self.calendarHeightConstraint.constant = 0
-//            self.view.layoutIfNeeded()
-//        } completion: { _ in
-//
-//        }
-//    }
 }
 
 extension HomeViewController {

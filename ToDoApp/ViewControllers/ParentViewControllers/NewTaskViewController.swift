@@ -11,11 +11,20 @@ import DeclarativeLayout
 import DeclarativeUI
 import FloatingTextfield
 
+
+enum NewAndEditVCState{
+    case new
+    case edit
+}
+
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
 
+    var state = NewAndEditVCState.new
+    
+    
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
@@ -64,6 +73,7 @@ extension NewTaskViewController {
         addBtn.addTarget(nil, action: #selector(addBtnPressed), for: UIControl.Event.touchUpInside)
         
         scrollViewAddTask.bottomAnchor(margin: 0)
+        
     }
 }
    
@@ -151,6 +161,14 @@ extension NewTaskViewController {
             .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
+        
+        if self.state == .edit{
+            self.addBtn.setTitle("Save", for: .normal)
+            
+        }else{
+            self.addBtn.setTitle("Add", for: .normal)
+        }
+        
     }
 }
   

@@ -12,10 +12,11 @@ class EventTableViewController : UIViewController{
 
     private var arrModel: [Model] = []
     
-    
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
         etv.translatesAutoresizingMaskIntoConstraints = false
+        etv.allowsSelection = true
+        etv.isUserInteractionEnabled = true
         return etv
     }()
 }
@@ -41,10 +42,8 @@ extension EventTableViewController{
         eventTableView.dataSource = self
         eventTableView.delegate = self
         
-        
         arrModel = Model.all()
         eventTableView.reloadData()
-        
         
     }
 }
@@ -70,7 +69,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
       let vc = TaskDetailsViewController()
       self.navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func tableView(_ tableView: UITableView,
                        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let trash = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completionHandler) in
@@ -80,7 +79,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
             }
             self.handleTrash(indexPath: indexPath)
             completionHandler(true)
-            
         }
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
         trash.image = #imageLiteral(resourceName: "DeleteIcon")
@@ -96,33 +94,56 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
                 return
             }
             self.handleDone(indexPath: indexPath)
-           
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
-        done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
-            #imageLiteral(resourceName: "DoneIcon").draw(in: CGRect(x: 0, y: 0, width: 24, height: 31))
+        
+        if arrModel[indexPath.row].isTaskCompleted {
+            done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
+                #imageLiteral(resourceName: "undo").draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
+            }
+        } else {
+            done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
+                #imageLiteral(resourceName: "DoneIcon").draw(in: CGRect(x: 0, y: 0, width: 24, height: 31))
+            }
         }
-    
+        
         let configuration = UISwipeActionsConfiguration(actions: [done])
         return configuration
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+}
+
+//MARK: - Actions
+extension EventTableViewController {
     private func handleTrash(indexPath: IndexPath) {
       print("Trash")
-        self.arrModel.remove(at: indexPath.row)
-        self.eventTableView.reloadData()
-
+        showAlert("Are you sure you want to delete the task? ", deletion: {
+            self.arrModel.remove(at: indexPath.row)
+            self.eventTableView.reloadData()
+        })
     }
     
     private func handleDone(indexPath: IndexPath){
-        print("Done") 
-        self.eventTableView.cellForRow(at: indexPath)?.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        print("Done")
+        arrModel[indexPath.row].isTaskCompleted = !arrModel[indexPath.row].isTaskCompleted
         self.eventTableView.reloadData()
     }
+}
 
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+//MARK: - Alert
+extension EventTableViewController {
+    func showAlert(_ message: String, deletion: @escaping () -> Void) {
+        let dialogMessage = UIAlertController(title: "Deletion Confirmation", message: message, preferredStyle: .alert)
+        dialogMessage.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+            deletion()
+        }))
+        dialogMessage.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+           print("cancel is tapped.")
+        }))
+        self.present(dialogMessage, animated: true, completion: {})
     }
 }

@@ -13,6 +13,8 @@ import DeclarativeLayout
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
    
     private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+    private var textViewHeightConstraint: NSLayoutConstraint!
+    private var viewDetailHeightConstriant: NSLayoutConstraint!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -58,7 +60,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return tvd
     }()
 
-    
     private let buttonDelete : UIButton = {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
@@ -78,18 +79,19 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         bd.setImage(UIImage(named: "CheckIcon"), for: .normal)
         return bd
     }()
-    
- 
-    
-    private var textViewHeightConstraint: NSLayoutConstraint!
-    private var viewDetailHeightConstriant: NSLayoutConstraint!
-    
+}
+
+//MARK: - Lifecycle
+extension TaskDetailsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
     }
     
+}
     
+//MARK: - Set Up UI
+extension TaskDetailsViewController{
     private func setUpUI() {
         self.view.addSubview(viewContinue)
         viewContinue.topAnchor(margin: C.navigationBarHeight + C.statusBarHeight)
@@ -180,6 +182,10 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         
     }
     
+}
+
+//MARK: - Actions
+extension TaskDetailsViewController{
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
         return 8
     }
@@ -187,11 +193,16 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     @objc func deleteButtonTapped() {
         self.navigationController?.popViewController(animated: true)
     }
+    
     @objc func editButtonTapped() {
-        let vc = SelectDateViewController()
+        let vc = NewTaskViewController()
+        vc.state = .edit
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     @objc func doneButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
+        let vc = HomeViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
+    

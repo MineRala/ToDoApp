@@ -7,18 +7,19 @@
 
 import Foundation
 import UIKit
-import  DeclarativeUI
-import  DeclarativeLayout
+import DeclarativeUI
+import DeclarativeLayout
 
 class TaskCell: UITableViewCell {
     
     private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
     
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
-    
+   
+    let attrStrikethroughStyle = [ NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue) ]
+
     private let hourLabel : UILabel = {
        let hl = UILabel()
-        //hl.text = "10:00"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +29,6 @@ class TaskCell: UITableViewCell {
     
     private let hourPeriodLabel : UILabel = {
        let hl = UILabel()
-      //  hl.text = "AM"
         hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +38,6 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-       // tn.text = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
         tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tn.lineBreakMode = .byWordWrapping
         tn.numberOfLines = 0
@@ -49,7 +48,6 @@ class TaskCell: UITableViewCell {
     
     private let taskCatagory : UILabel = {
         let tc = UILabel()
-      //  tc.text = "Official"
         tc.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         tc.translatesAutoresizingMaskIntoConstraints = false
         tc.font = UIFont(name: C.Font.light.rawValue, size: 12)
@@ -94,10 +92,19 @@ extension TaskCell {
     
     
     func updateCell(model:Model) {
-        hourLabel.text = model.hourLabel
-        hourPeriodLabel.text = model.hourPeriodLabel
-        taskName.text = model.taskName
-        taskCatagory.text = model.taskCatagory
+        
+        if model.isTaskCompleted {
+            hourLabel.attributedText = NSAttributedString(string: model.hourLabel, attributes:  attrStrikethroughStyle)
+            hourPeriodLabel.attributedText = NSAttributedString(string: model.hourPeriodLabel, attributes: attrStrikethroughStyle)
+            taskName.attributedText = NSAttributedString(string: model.taskName, attributes: attrStrikethroughStyle)
+            taskCatagory.attributedText = NSAttributedString(string: model.taskCatagory, attributes: attrStrikethroughStyle)
+        }else{
+            
+            hourLabel.attributedText = NSAttributedString(string: model.hourLabel)
+            hourPeriodLabel.attributedText = NSAttributedString(string: model.hourPeriodLabel)
+            taskName.attributedText = NSAttributedString(string: model.taskName)
+            taskCatagory.attributedText = NSAttributedString(string: model.taskCatagory)
+        }
         self.layoutIfNeeded()
     }
 }

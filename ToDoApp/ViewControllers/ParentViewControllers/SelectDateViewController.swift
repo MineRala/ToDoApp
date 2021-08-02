@@ -7,13 +7,14 @@
 
 import Foundation
 import UIKit
+import DeclarativeUI
+import DeclarativeLayout
 
 class SelectDateViewController : BaseVC{
     
     private let calendarVCContainer = UIView.view().backgroundColor(.blue)
     private let calendarVC : CalendarViewController = CalendarViewController()
-    
-    
+        
     private let timeView: UIView = {
         let tv = UIView(frame: .zero)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -37,13 +38,19 @@ class SelectDateViewController : BaseVC{
         sb.titleLabel?.font = C.Font.medium.font(21)
         return sb
     }()
-    
+}
+
+//MARK: - Lifecycle
+extension SelectDateViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpUI()
     }
+}
     
+//MARK: - Set Up UI
+extension SelectDateViewController{
     private func setUpUI(){
         self.view.addSubview(itemContainerView)
         itemContainerView.leadingAnchor(margin: 0)
@@ -53,7 +60,8 @@ class SelectDateViewController : BaseVC{
         
         self.itemContainerView.addSubview(calendarVCContainer)
         
-        calendarVCContainer.topAnchor(margin: 0).trailingAnchor(margin: 0).leadingAnchor(margin: 0)
+        calendarVCContainer.topAnchor(margin: 0).trailingAnchor(margin: 0)
+            .leadingAnchor(margin: 0)
         calendarVCContainer.heightAnchor.constraint(equalTo: itemContainerView.heightAnchor, multiplier: 40/100).isActive = true
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
  
@@ -64,14 +72,15 @@ class SelectDateViewController : BaseVC{
         timeView.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 24).isActive = true
         timeView.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: -24).isActive = true
         
-        //selectButton.topAnchor.constraint(equalTo: timeView.bottomAnchor, constant: 0).isActive = true
         selectButton.bottomAnchor.constraint(equalTo: itemContainerView.bottomAnchor, constant: 0).isActive = true
         selectButton.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 0).isActive = true
         selectButton.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: 0).isActive = true
         selectButton.heightAnchor(view.frame.width/5)
         
-        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true 
+        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true
        
     }
-    
 }
+   
+    
+

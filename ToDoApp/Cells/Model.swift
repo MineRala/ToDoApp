@@ -15,6 +15,7 @@ class Model {
     var hourPeriodLabel: String = ""
     var taskName: String = ""
     var taskCatagory: String = ""
+    var isTaskCompleted :  Bool = false
    
     
     static func all() -> [Model] {
@@ -28,8 +29,6 @@ class Model {
         info.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
         info.taskCatagory = "Official"
         arrInfo.append(info)
-     
-        
         return arrInfo
     }
 }
