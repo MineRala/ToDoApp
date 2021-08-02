@@ -8,4 +8,13 @@
 enum NewAndEditVCState{
     case newTask
     case editTask
+    
+    var navigationBarTitle: String {
+        switch self {
+        case .newTask:
+            return "New Task"
+        case .editTask:
+            return "Edit Task"
+        }
+    }
 }

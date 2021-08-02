@@ -15,9 +15,9 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
-
-    var state : NewAndEditVCState?
-
+    
+    var model : Model?
+    
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
@@ -28,13 +28,26 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         ab.tintColor = .white
         return ab
     }()
+    
+    init(model: Model? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        self.model = model
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        self.updateTaskTitle(string: model == nil ? "New Task" : "Edit Task")
+    }
 }
 
 //MARK: - Lifecycle
 extension NewTaskViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         setUpUI()
         self.hideKeyboardWhenTappedAround()
     }
@@ -43,6 +56,7 @@ extension NewTaskViewController {
 //MARK: - Set Up UI
 extension NewTaskViewController {
     func setUpUI() {
+        view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
        self.scrollViewAddTask = ScrollView(dataSource: self)
         self.scrollViewAddTask.backgroundColor = .clear
         self.scrollViewAddTask.translatesAutoresizingMaskIntoConstraints = false
@@ -154,15 +168,11 @@ extension NewTaskViewController {
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-        if state != nil {
-            if self.state == .editTask{
-                self.addBtn.setTitle("Save", for: .normal)
-                
-            }else{
-                self.addBtn.setTitle("Add", for: .normal)
-            }
+        if model != nil {
+            self.addBtn.setTitle("Save", for: .normal)
+        } else {
+            self.addBtn.setTitle("Add", for: .normal)
         }
-        
     }
 }
   

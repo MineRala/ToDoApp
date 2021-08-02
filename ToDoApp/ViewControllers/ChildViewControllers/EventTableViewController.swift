@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class EventTableViewController : UIViewController{
+class EventTableViewController : UIViewController {
 
     private var arrModel: [Model] = []
     
@@ -29,7 +29,7 @@ extension EventTableViewController {
     }
 }
 //MARK: - Set Up UI
-extension EventTableViewController{
+extension EventTableViewController {
     func setUpUI(){
         eventTableView.backgroundColor = .clear
         self.view.addSubview(eventTableView)
@@ -46,7 +46,10 @@ extension EventTableViewController{
         eventTableView.reloadData()
         
     }
+    
+
 }
+
 
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
@@ -56,7 +59,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
-        let model  = arrModel[indexPath.row]
+        let model = arrModel[indexPath.row]
         cell.updateCell(model:  model)
         return cell
     }

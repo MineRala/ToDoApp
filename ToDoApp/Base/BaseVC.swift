@@ -138,4 +138,8 @@ extension BaseVC {
         self.customNavigationBar.setRightButtonImage(self.type.rightButtonImage)
        
     }
+    
+    func updateTaskTitle(string title: String) {
+        self.customNavigationBar.setTitle(title)
+    }
 }

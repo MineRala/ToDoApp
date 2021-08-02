@@ -15,7 +15,9 @@ class TaskCell: UITableViewCell {
     private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
     
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
-   
+    
+    var tapGesture: UIGestureRecognizer?
+    
     let attrStrikethroughStyle = [ NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue) ]
 
     private let hourLabel : UILabel = {
