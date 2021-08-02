@@ -10,7 +10,7 @@ import UIKit
 
 class EventTableViewController : UIViewController {
 
-    private var arrModel: [Model] = []
+    private var arrModel: [TaskModel] = []
     
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -42,7 +42,7 @@ extension EventTableViewController {
         eventTableView.dataSource = self
         eventTableView.delegate = self
         
-        arrModel = Model.all()
+        arrModel = TaskModel.all()
         eventTableView.reloadData()
         
     }
@@ -54,7 +54,7 @@ extension EventTableViewController {
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
-    func taskCellDidSelected(_ cell: TaskCell, model: Model) {
+    func taskCellDidSelected(_ cell: TaskCell, model: TaskModel) {
         let vc = TaskDetailsViewController(model: model) 
         self.navigationController?.pushViewController(vc, animated: true)
     }

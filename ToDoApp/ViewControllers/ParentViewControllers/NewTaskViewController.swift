@@ -16,11 +16,11 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
-    var model : Model?
+    var model : TaskModel?
     
     private var pageMode: NewAndEditVCState = .newTask
     
-    private func getMode(_ model: Model?) -> NewAndEditVCState {
+    private func getMode(_ model: TaskModel?) -> NewAndEditVCState {
         if model == nil {
             return .newTask
         } else {
@@ -39,7 +39,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         return ab
     }()
     
-    init(model: Model? = nil) {
+    init(model: TaskModel? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
     }

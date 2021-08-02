@@ -18,7 +18,7 @@
 		E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F5626ACB24F0071E506 /* HomeViewController.swift */; };
 		E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */; };
 		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
-		E81F49E126B3DC3B00EAF637 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81F49E026B3DC3B00EAF637 /* Model.swift */; };
+		E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81F49E026B3DC3B00EAF637 /* TaskModel.swift */; };
 		E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */; };
 		E851C0CB26AEE0BF003D9CA3 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */; };
 		E851C0CC26AEE0BF003D9CA3 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */; };
@@ -88,7 +88,7 @@
 		E8027F5626ACB24F0071E506 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
-		E81F49E026B3DC3B00EAF637 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		E81F49E026B3DC3B00EAF637 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -265,7 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				E8D2FBE726B02917006D0936 /* TaskCell.swift */,
-				E81F49E026B3DC3B00EAF637 /* Model.swift */,
+				E81F49E026B3DC3B00EAF637 /* TaskModel.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -491,7 +491,7 @@
 				E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */,
 				E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */,
 				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
-				E81F49E126B3DC3B00EAF637 /* Model.swift in Sources */,
+				E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */,
 				A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */,
 				E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */,
 				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,

@@ -16,7 +16,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
-    private var model: Model!
+    private var model: TaskModel!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -82,7 +82,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return bd
     }()
     
-    init(model: Model) {
+    init(model: TaskModel) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
     }
@@ -206,7 +206,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController(model: Model())
+        let vc = NewTaskViewController(model: TaskModel())
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

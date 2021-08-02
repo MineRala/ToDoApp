@@ -11,7 +11,7 @@ import DeclarativeUI
 import DeclarativeLayout
 
 protocol TaskCellDelegate {
-    func taskCellDidSelected(_ cell: TaskCell, model: Model)
+    func taskCellDidSelected(_ cell: TaskCell, model: TaskModel)
 }
 
 class TaskCell: UITableViewCell {
@@ -21,7 +21,7 @@ class TaskCell: UITableViewCell {
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
     
     private var tap: UITapGestureRecognizer!
-    private var model: Model!
+    private var model: TaskModel!
     private var delegate: TaskCellDelegate?
     
     let attrStrikethroughStyle = [ NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue) ]
@@ -108,7 +108,7 @@ extension TaskCell {
     }
     
     
-    func updateCell(model: Model, delegate: TaskCellDelegate) {
+    func updateCell(model: TaskModel, delegate: TaskCellDelegate) {
         print("cell update")
         self.model = model
         self.delegate = delegate

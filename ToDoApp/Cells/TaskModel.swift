@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class Model {
+class TaskModel {
     
    
     var hourLabel: String = ""
@@ -18,13 +18,13 @@ class Model {
     var isTaskCompleted :  Bool = false
    
     
-    static func all() -> [Model] {
+    static func all() -> [TaskModel] {
         
-        var arrInfo: [Model] = []
-        var info: Model
+        var arrInfo: [TaskModel] = []
+        var info: TaskModel
         
         for i in 0..<100 {
-            info = Model()
+            info = TaskModel()
             info.hourLabel = "10:00"
             info.hourPeriodLabel = "AM"
             info.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
