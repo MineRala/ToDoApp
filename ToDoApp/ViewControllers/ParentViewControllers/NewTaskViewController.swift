@@ -11,12 +11,6 @@ import DeclarativeLayout
 import DeclarativeUI
 import FloatingTextfield
 
-
-enum NewAndEditVCState{
-    case newTask
-    case editTask
-}
-
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!

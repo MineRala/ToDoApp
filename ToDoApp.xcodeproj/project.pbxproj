@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114683326B844E0002263B3 /* NewAndEditVCState.swift */; };
 		E8027F1926AC66F80071E506 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1826AC66F80071E506 /* AppDelegate.swift */; };
 		E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1A26AC66F80071E506 /* SceneDelegate.swift */; };
 		E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8027F2126AC66F80071E506 /* ToDoApp.xcdatamodeld */; };
@@ -70,6 +71,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A114683326B844E0002263B3 /* NewAndEditVCState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAndEditVCState.swift; sourceTree = "<group>"; };
 		E8027F1526AC66F80071E506 /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8027F1826AC66F80071E506 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E8027F1A26AC66F80071E506 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
 				E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */,
 				E8074C4426B2F48C00030963 /* SelectDateViewController.swift */,
+				A114683326B844E0002263B3 /* NewAndEditVCState.swift */,
 			);
 			path = ParentViewControllers;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */,
 				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
 				E81F49E126B3DC3B00EAF637 /* Model.swift in Sources */,
+				A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */,
 				E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */,
 				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,
 				E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */,
