@@ -196,7 +196,7 @@ extension TaskDetailsViewController{
     
     @objc func editButtonTapped() {
         let vc = NewTaskViewController()
-        vc.state = .edit
+        vc.state = .editTask
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

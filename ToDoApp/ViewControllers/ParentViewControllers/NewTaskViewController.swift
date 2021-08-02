@@ -13,8 +13,8 @@ import FloatingTextfield
 
 
 enum NewAndEditVCState{
-    case new
-    case edit
+    case newTask
+    case editTask
 }
 
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
@@ -22,7 +22,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
 
-    var state = NewAndEditVCState.new
+    var state = NewAndEditVCState.newTask
     
     
     private let addBtn: UIButton = {
@@ -162,7 +162,7 @@ extension NewTaskViewController {
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-        if self.state == .edit{
+        if self.state == .editTask{
             self.addBtn.setTitle("Save", for: .normal)
             
         }else{
@@ -175,6 +175,9 @@ extension NewTaskViewController {
 //MARK: - Action
 extension NewTaskViewController {
         @objc func addBtnPressed() {
+            if self.state == .editTask{
+                self.navigationController?.popViewController(animated: true)
+            }
             self.navigationController?.popViewController(animated: true)
         }
 }
