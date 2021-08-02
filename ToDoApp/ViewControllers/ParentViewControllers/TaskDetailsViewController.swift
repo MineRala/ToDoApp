@@ -113,29 +113,26 @@ extension TaskDetailsViewController{
         self.view.addSubview(viewDetail)
         viewDetail.topAnchor.constraint(equalTo: viewContinue.topAnchor, constant: 16).isActive = true
         viewDetail.leadingAnchor(margin: 20).trailingAnchor(margin: 20)
-        //viewDetail.heightAnchor.constraint(equalToConstant: self.view.frame.height * 0.4).isActive = true
         viewDetailHeightConstriant = viewDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
         viewDetailHeightConstriant.isActive = true
         
         self.viewDetail.addSubview(labelTaskName)
-        labelTaskName.topAnchor.constraint(equalTo: viewDetail.topAnchor, constant: 36).isActive = true
-        labelTaskName.leadingAnchor.constraint(equalTo: viewDetail.leadingAnchor, constant: 16).isActive = true
-        labelTaskName.trailingAnchor.constraint(equalTo: viewDetail.trailingAnchor, constant: -16).isActive = true
-        labelTaskName.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
-        
+        labelTaskName.topAnchor(margin: 36)
+            .leadingAnchor(margin: 16)
+            .trailingAnchor(margin: 16)
+            .heightAnchor(24)
+
         self.viewDetail.addSubview(labelDate)
         labelDate.topAnchor.constraint(equalTo: labelTaskName.bottomAnchor, constant: 16).isActive = true
-        labelDate.leadingAnchor.constraint(equalTo: viewDetail.leadingAnchor, constant: 16).isActive = true
-        labelDate.trailingAnchor.constraint(equalTo: viewDetail.trailingAnchor, constant: -16).isActive = true
-        labelDate.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
-        
+        labelDate.leadingAnchor(margin: 16)
+            .trailingAnchor(margin: 16)
+            .heightAnchor(24)
+  
         self.viewDetail.addSubview(textViewDescription)
         textViewDescription.topAnchor.constraint(equalTo: labelDate.bottomAnchor, constant: 16).isActive = true
-        textViewDescription.leadingAnchor.constraint(equalTo: viewDetail.leadingAnchor, constant: 16).isActive = true
-        textViewDescription.trailingAnchor.constraint(equalTo: viewDetail.trailingAnchor, constant: -16).isActive = true
-        textViewDescription.bottomAnchor.constraint(equalTo: viewDetail.bottomAnchor, constant: -16).isActive = true
+        textViewDescription.leadingAnchor(margin: 16)
+            .trailingAnchor(margin: 16)
+            .bottomAnchor(margin: 16)
     
         textViewHeightConstraint = textViewDescription.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
         textViewHeightConstraint.isActive = true
@@ -211,7 +208,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func doneButtonTapped() {
-        let vc = HomeViewController()
+        let vc = SelectDateViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

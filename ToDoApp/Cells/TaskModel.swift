@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 
 class TaskModel {
-    
-   
     var hourLabel: String = ""
     var hourPeriodLabel: String = ""
     var taskName: String = ""

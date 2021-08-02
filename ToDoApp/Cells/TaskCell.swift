@@ -82,9 +82,10 @@ extension TaskCell {
         hourInfo.addArrangedSubview(hourLabel)
         hourInfo.addArrangedSubview(hourPeriodLabel)
         
-        hourInfo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
-        hourInfo.centerYAnchor(margin: 0)
-        hourInfo.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        hourInfo.leadingAnchor(margin: 8)
+            .centerYAnchor(margin: 0)
+            .widthAnchor(60)
+
         hourInfo.backgroundColor = .clear
         hourPeriodLabel.backgroundColor = .clear
         
@@ -92,19 +93,15 @@ extension TaskCell {
         taskInfo.addArrangedSubview(taskName)
         taskInfo.addArrangedSubview(taskCatagory)
 
-    
-        taskInfo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
-        taskInfo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
+        taskInfo.topAnchor(margin: 8)
+            .bottomAnchor(margin: 8)
+            .trailingAnchor(margin: 8)
         taskInfo.leadingAnchor.constraint(equalTo: hourInfo.trailingAnchor, constant: 0).isActive = true
-        taskInfo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
-    
+   
         self.selectionStyle = .none
         tap = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped))
         
         self.addGestureRecognizer(tap)
-        
-        print(self.gestureRecognizers)
-        print("avslighdkfj")
     }
     
     

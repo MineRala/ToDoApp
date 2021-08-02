@@ -59,8 +59,10 @@ extension SelectDateViewController{
         
         self.itemContainerView.addSubview(calendarVCContainer)
         
-        calendarVCContainer.topAnchor(margin: 0).trailingAnchor(margin: 0)
+        calendarVCContainer.topAnchor(margin: 0)
+            .trailingAnchor(margin: 0)
             .leadingAnchor(margin: 0)
+        
         calendarVCContainer.heightAnchor.constraint(equalTo: itemContainerView.heightAnchor, multiplier: 40/100).isActive = true
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
  
@@ -68,16 +70,24 @@ extension SelectDateViewController{
         self.itemContainerView.addSubview(selectButton)
         
         timeView.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 24).isActive = true
-        timeView.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 24).isActive = true
-        timeView.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: -24).isActive = true
+        timeView.leadingAnchor(margin: 24)
+            .trailingAnchor(margin: 24)
+
         
-        selectButton.bottomAnchor.constraint(equalTo: itemContainerView.bottomAnchor, constant: 0).isActive = true
-        selectButton.leadingAnchor.constraint(equalTo: itemContainerView.leadingAnchor, constant: 0).isActive = true
-        selectButton.trailingAnchor.constraint(equalTo: itemContainerView.trailingAnchor, constant: 0).isActive = true
-        selectButton.heightAnchor(view.frame.width/5)
+        selectButton.bottomAnchor(margin: 0)
+            .leadingAnchor(margin: 0)
+            .trailingAnchor(margin: 0)
+            .heightAnchor(view.frame.width/5)
         
+
         timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true
+        
+        selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
        
+    }
+    
+    @objc func selectButtonTapped(){
+        navigationController?.popViewController(animated: true)
     }
 }
    
