@@ -16,9 +16,8 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
 
-    var state = NewAndEditVCState.newTask
-    
-    
+    var state : NewAndEditVCState?
+
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
@@ -40,8 +39,7 @@ extension NewTaskViewController {
         self.hideKeyboardWhenTappedAround()
     }
 }
-   
-   
+      
 //MARK: - Set Up UI
 extension NewTaskViewController {
     func setUpUI() {
@@ -156,11 +154,13 @@ extension NewTaskViewController {
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-        if self.state == .editTask{
-            self.addBtn.setTitle("Save", for: .normal)
-            
-        }else{
-            self.addBtn.setTitle("Add", for: .normal)
+        if state != nil {
+            if self.state == .editTask{
+                self.addBtn.setTitle("Save", for: .normal)
+                
+            }else{
+                self.addBtn.setTitle("Add", for: .normal)
+            }
         }
         
     }
@@ -169,9 +169,6 @@ extension NewTaskViewController {
 //MARK: - Action
 extension NewTaskViewController {
         @objc func addBtnPressed() {
-            if self.state == .editTask{
-                self.navigationController?.popViewController(animated: true)
-            }
             self.navigationController?.popViewController(animated: true)
         }
 }

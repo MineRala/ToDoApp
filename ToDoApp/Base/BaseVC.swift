@@ -14,6 +14,7 @@ enum ViewControllerType: String {
     case taskDetails = "TaskDetailsViewController"
     case selectDate = "SelectDateViewController"
     
+    
     var title: String {
         switch self {
             case .home: return "Tasks"

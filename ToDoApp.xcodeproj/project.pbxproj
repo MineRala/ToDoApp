@@ -171,6 +171,7 @@
 		E8027F1726AC66F80071E506 /* ToDoApp */ = {
 			isa = PBXGroup;
 			children = (
+				E8EA25A626B8462900450E53 /* Enums */,
 				E851C0BA26AEE0A8003D9CA3 /* Fonts */,
 				FDD9480326B075E100E4FA1C /* ViewModel */,
 				FDD947FD26B06B7500E4FA1C /* Extensions */,
@@ -246,7 +247,6 @@
 				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
 				E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */,
 				E8074C4426B2F48C00030963 /* SelectDateViewController.swift */,
-				A114683326B844E0002263B3 /* NewAndEditVCState.swift */,
 			);
 			path = ParentViewControllers;
 			sourceTree = "<group>";
@@ -268,6 +268,14 @@
 				E81F49E026B3DC3B00EAF637 /* Model.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		E8EA25A626B8462900450E53 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				A114683326B844E0002263B3 /* NewAndEditVCState.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		FD26B03526B050E8009F056C /* Views */ = {
