@@ -21,7 +21,7 @@ class TaskModel {
         var arrInfo: [TaskModel] = []
         var info: TaskModel
         
-        for i in 0..<100 {
+        for _ in 0..<100 {
             info = TaskModel()
             info.hourLabel = "10:00"
             info.hourPeriodLabel = "AM"

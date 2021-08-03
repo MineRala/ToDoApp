@@ -25,7 +25,7 @@ class HomeViewController : BaseVC {
     private let searchVC : SearchViewController = SearchViewController()
     private let calendarVC : CalendarViewController = CalendarViewController()
     private let eventVC : EventTableViewController = EventTableViewController()
-
+    
     private let calendarViewHeightRatio: CGFloat = 35/100
     
     private let itemsContainerView : UIView = {
@@ -131,7 +131,7 @@ extension HomeViewController {
 // MARK: - Listeners (Combine)
 extension HomeViewController {
     private func addListeners() {
-        self.searchVC.shouldShowCalendarViewContainer
+        self.searchVC.isSearchTextFieldInEditingMode
             .receive(on: DispatchQueue.main)
             .sink { shouldShow in
                 shouldShow ?

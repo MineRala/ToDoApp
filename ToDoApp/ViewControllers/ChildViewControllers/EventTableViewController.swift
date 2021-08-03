@@ -28,6 +28,7 @@ extension EventTableViewController {
         setUpUI()
     }
 }
+
 //MARK: - Set Up UI
 extension EventTableViewController {
     func setUpUI(){
@@ -44,12 +45,8 @@ extension EventTableViewController {
         
         arrModel = TaskModel.all()
         eventTableView.reloadData()
-        
     }
-    
-
 }
-
 
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {

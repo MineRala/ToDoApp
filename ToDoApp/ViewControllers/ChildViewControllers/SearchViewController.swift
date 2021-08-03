@@ -12,8 +12,12 @@ import DeclarativeUI
 import DeclarativeLayout
 
 class SearchViewController : UIViewController {
-    private(set) var shouldShowCalendarViewContainer = CurrentValueSubject<Bool, Never>(true)
+    private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
     private(set) var buttonImage = CurrentValueSubject<UIImage, Never>(#imageLiteral(resourceName: "SearchIcon"))
+    
+    private var cancellables = Set<AnyCancellable>()
+    private var cancelBtnWidthConstraint: NSLayoutConstraint?
+    private var searchBtnWidthConstraint: NSLayoutConstraint?
     
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
@@ -44,8 +48,20 @@ class SearchViewController : UIViewController {
         sb.isEnabled = false
         return sb
     }()
-
+    
+    private let cancelBtn : UIButton = {
+        let cb = UIButton(frame: .zero)
+        cb.translatesAutoresizingMaskIntoConstraints = false
+        cb.setTitle("Cancel", for: .normal)
+        cb.addTarget(self, action: #selector(cancelBtnTapped), for: .touchUpInside)
+        return cb
+    }()
+    
+    deinit {
+        self.cancellables.forEach { $0.cancel() }
+    }
 }
+
 //MARK: - Lifecycle
 extension SearchViewController {
     
@@ -53,6 +69,24 @@ extension SearchViewController {
         super.viewDidLoad()
         setUpUI()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addListeners()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if cancelBtnWidthConstraint == nil {
+            cancelBtnWidthConstraint = cancelBtn.widthAnchor.constraint(equalToConstant: 75)
+            cancelBtnWidthConstraint!.isActive = true
+        }
+        if searchBtnWidthConstraint == nil {
+            searchBtnWidthConstraint = searchBtn.widthAnchor.constraint(equalToConstant: 30)
+            searchBtnWidthConstraint!.isActive = true
+        }
+    }
+    
 }
    
 //MARK: - Set Up UI
@@ -62,11 +96,17 @@ extension SearchViewController{
         self.view.addSubview(searchView)
         searchView.leadingAnchor(margin: 16).centerYAnchor(margin: 0)
             .heightAnchor(50)
-            .trailingAnchor(margin: 12)
-
+        
+        self.view.addSubview(cancelBtn)
+        searchView.trailingAnchor.constraint(equalTo: self.cancelBtn.leadingAnchor, constant: -8).isActive = true
+        
         self.searchView.addSubview(searchTextField)
         self.searchView.addSubview(searchBtn)
-
+        
+        
+        cancelBtn.centerYAnchor(margin: 0)
+            .trailingAnchor(margin: 12)
+        
         searchTextField.leadingAnchor(margin: 0)
             .centerYAnchor(margin: 0)
             .heightAnchor(50)
@@ -76,10 +116,37 @@ extension SearchViewController{
         searchBtn.centerYAnchor(margin: 0)
             .trailingAnchor(margin: 3)
             .heightAnchor(30)
-            .widthAnchor(30)
         
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(searchTextDidChange), for: .editingChanged)
+    }
+}
+
+extension SearchViewController {
+    
+    private func changeConstraint(viewConstraint constaint: NSLayoutConstraint?, to value: CGFloat) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            constaint!.constant = value
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+          
+        }
+    }
+}
+
+// MARK: - Listeners (Combine)
+extension SearchViewController {
+    private func addListeners() {
+        self.isSearchTextFieldInEditingMode
+            .receive(on: DispatchQueue.main)
+            .sink { isSearchTextFieldEditingMode in
+                isSearchTextFieldEditingMode ?
+                    self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0) :
+                    self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
+                isSearchTextFieldEditingMode ?
+                    self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30) :
+                    self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
+        }.store(in: &cancellables)
     }
 }
 
@@ -92,13 +159,19 @@ extension SearchViewController : UITextFieldDelegate{
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         NSLog("Did Begin")
-        self.shouldShowCalendarViewContainer.send(false)
+        self.isSearchTextFieldInEditingMode.send(false)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         NSLog("Did End")
-        self.shouldShowCalendarViewContainer.send(true)       
+        self.isSearchTextFieldInEditingMode.send(true)
     }
     
+    @objc private func cancelBtnTapped() {
+        NSLog("Cancel Button Tapped")
+        self.searchTextField.text = ""
+        self.searchTextField.endEditing(true)
+        self.isSearchTextFieldInEditingMode.send(true)
+    }
 }
    
