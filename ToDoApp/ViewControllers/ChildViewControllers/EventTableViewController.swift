@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class EventTableViewController : UIViewController {
+  
 
     private var arrModel: [TaskModel] = []
     
@@ -52,7 +53,8 @@ extension EventTableViewController {
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
     func taskCellDidSelected(_ cell: TaskCell, model: TaskModel) {
-        let vc = TaskDetailsViewController(model: model) 
+        let vc = TaskDetailsViewController(model: model, indexPath: cell.getIndexPath())
+        vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -63,18 +65,13 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
         let model = arrModel[indexPath.row]
-        cell.updateCell(model: model, delegate: self)
+        cell.updateCell(model: model, delegate: self, indexPath: indexPath)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//      let vc = TaskDetailsViewController()
-//      self.navigationController?.pushViewController(vc, animated: true)
-//    }
 
     func tableView(_ tableView: UITableView,
                        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -123,11 +120,26 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
 }
 
+
+// MARK: -  Task Cell Delete Delegate
+extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
+    func taskCellDeleted( indexPath : IndexPath) {
+        arrModel.remove(at: indexPath.row)
+        eventTableView.reloadData()
+    }
+    
+    func taskCellDoneTapped(indexPath: IndexPath) {
+       handleDone(indexPath: indexPath)
+    }
+    
+}
+
+
 //MARK: - Actions
 extension EventTableViewController {
     private func handleTrash(indexPath: IndexPath) {
       print("Trash")
-        showAlert("Are you sure you want to delete the task? ", deletion: {
+        Alerts().showAlertDelete(controller: self, "Are you sure you want to delete the task? ", deletion: {
             self.arrModel.remove(at: indexPath.row)
             self.eventTableView.reloadData()
         })
@@ -140,16 +152,4 @@ extension EventTableViewController {
     }
 }
 
-//MARK: - Alert
-extension EventTableViewController {
-    func showAlert(_ message: String, deletion: @escaping () -> Void) {
-        let dialogMessage = UIAlertController(title: "Deletion Confirmation", message: message, preferredStyle: .alert)
-        dialogMessage.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
-            deletion()
-        }))
-        dialogMessage.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
-           print("cancel is tapped.")
-        }))
-        self.present(dialogMessage, animated: true, completion: {})
-    }
-}
+

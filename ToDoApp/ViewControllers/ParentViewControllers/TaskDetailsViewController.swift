@@ -10,6 +10,11 @@ import  UIKit
 import DeclarativeUI
 import DeclarativeLayout
 
+protocol TaskCellDeleteAndDoneDelegate {
+    func taskCellDeleted(indexPath : IndexPath)
+    func taskCellDoneTapped(indexPath : IndexPath)
+}
+
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
    
     private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
@@ -17,6 +22,8 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
     private var model: TaskModel!
+    var delegate: TaskCellDeleteAndDoneDelegate?
+    private var indexPath: IndexPath!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -82,9 +89,10 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return bd
     }()
     
-    init(model: TaskModel) {
+    init(model: TaskModel, indexPath: IndexPath) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
+        self.indexPath = indexPath
     }
     
     required init?(coder: NSCoder) {
@@ -97,6 +105,13 @@ extension TaskDetailsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if model.isTaskCompleted {
+            self.buttonDone.setImage(UIImage(named: "undoGray"), for: .normal)
+        }
     }
     
 }
@@ -199,7 +214,10 @@ extension TaskDetailsViewController{
     }
     
     @objc func deleteButtonTapped() {
-        self.navigationController?.popViewController(animated: true)
+        Alerts().showAlertDelete(controller: self, "Are you sure you want to delete the task? ") {
+            self.delegate?.taskCellDeleted(indexPath: self.indexPath)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func editButtonTapped() {
@@ -208,8 +226,8 @@ extension TaskDetailsViewController{
     }
     
     @objc func doneButtonTapped() {
-        let vc = SelectDateViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.delegate?.taskCellDoneTapped(indexPath: self.indexPath)
+        self.navigationController?.popViewController(animated: true)
     }
 }
     

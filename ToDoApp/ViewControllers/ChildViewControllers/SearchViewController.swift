@@ -12,8 +12,8 @@ import DeclarativeUI
 import DeclarativeLayout
 
 class SearchViewController : UIViewController {
-    private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
     
+    private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
     private var searchBtnWidthConstraint: NSLayoutConstraint?
@@ -54,7 +54,6 @@ class SearchViewController : UIViewController {
         cb.setTitle("Cancel", for: .normal)
         cb.setTitleColor(.white, for: .normal)
         cb.titleFont(UIFont(name: C.Font.bold.rawValue, size: 16)!)
-        cb.addTarget(self, action: #selector(cancelBtnTapped), for: .touchUpInside)
         return cb
     }()
     
@@ -87,7 +86,6 @@ extension SearchViewController {
             searchBtnWidthConstraint!.isActive = true
         }
     }
-    
 }
    
 //MARK: - Set Up UI
@@ -104,7 +102,6 @@ extension SearchViewController{
         self.searchView.addSubview(searchTextField)
         self.searchView.addSubview(searchBtn)
         
-        
         cancelBtn.centerYAnchor(margin: 0)
             .trailingAnchor(margin: 12)
         
@@ -115,11 +112,12 @@ extension SearchViewController{
         searchTextField.trailingAnchor.constraint(equalTo: searchBtn.leadingAnchor, constant: -16).isActive = true
         
         searchBtn.centerYAnchor(margin: 0)
-            .trailingAnchor(margin: 3)
+            .trailingAnchor(margin: 4)
             .heightAnchor(30)
         
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(searchTextDidChange), for: .editingChanged)
+        cancelBtn.addTarget(self, action: #selector(cancelBtnTapped), for: .touchUpInside)
     }
 }
 
@@ -130,7 +128,6 @@ extension SearchViewController {
             constaint!.constant = value
             self.view.layoutIfNeeded()
         } completion: { _ in
-          
         }
     }
 }
@@ -152,7 +149,7 @@ extension SearchViewController {
 }
 
 //MARK: - Actions
-extension SearchViewController : UITextFieldDelegate{
+extension SearchViewController : UITextFieldDelegate {
   
     @objc private func searchTextDidChange(){
         
@@ -175,4 +172,12 @@ extension SearchViewController : UITextFieldDelegate{
         self.isSearchTextFieldInEditingMode.send(true)
     }
 }
-   
+ 
+//MARK: - Keyboard Search UIButton
+extension SearchViewController {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+}

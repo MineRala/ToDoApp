@@ -13,23 +13,22 @@ class TaskModel {
     var hourPeriodLabel: String = ""
     var taskName: String = ""
     var taskCatagory: String = ""
-    var isTaskCompleted :  Bool = false
-   
+    var isTaskCompleted: Bool = false
     
     static func all() -> [TaskModel] {
         
-        var arrInfo: [TaskModel] = []
-        var info: TaskModel
+        var arrTaskInfo: [TaskModel] = []
+        var taskInfo: TaskModel
         
-        for _ in 0..<100 {
-            info = TaskModel()
-            info.hourLabel = "10:00"
-            info.hourPeriodLabel = "AM"
-            info.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
-            info.taskCatagory = "Official"
-            arrInfo.append(info)
+        for _ in 0..<4 {
+            taskInfo = TaskModel()
+            taskInfo.hourLabel = "10:00"
+            taskInfo.hourPeriodLabel = "AM"
+            taskInfo.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
+            taskInfo.taskCatagory = "Official"
+            arrTaskInfo.append(taskInfo)
         }
         
-        return arrInfo
+        return arrTaskInfo
     }
 }

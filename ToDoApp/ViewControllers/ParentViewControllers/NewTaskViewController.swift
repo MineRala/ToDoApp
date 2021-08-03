@@ -20,14 +20,6 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var pageMode: NewAndEditVCState = .newTask
     
-    private func getMode(_ model: TaskModel?) -> NewAndEditVCState {
-        if model == nil {
-            return .newTask
-        } else {
-            return .editTask
-        }
-    }
-    
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
@@ -47,23 +39,21 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.updateTaskTitle(string: pageMode.navigationBarTitle)
-    }
 }
 
 //MARK: - Lifecycle
 extension NewTaskViewController {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.updateTaskTitle(string: pageMode.navigationBarTitle)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pageMode = getMode(model)
         setUpUI()
-        self.hideKeyboardWhenTappedAround()
     }
 }
-      
 //MARK: - Set Up UI
 extension NewTaskViewController {
     func setUpUI() {
@@ -80,7 +70,6 @@ extension NewTaskViewController {
 
         self.scrollViewAddTask.reloadData()
         
-        
         self.view.addSubview(addBtn)
         addBtn.bottomAnchor(margin: 0)
             .leadingAnchor(margin: 0)
@@ -93,6 +82,17 @@ extension NewTaskViewController {
         
         scrollViewAddTask.bottomAnchor(margin: 0)
         
+    }
+}
+
+//MARK: Get Page Mode
+extension NewTaskViewController {
+    private func getMode(_ model: TaskModel?) -> NewAndEditVCState {
+        if model == nil {
+            return .newTask
+        } else {
+            return .editTask
+        }
     }
 }
    

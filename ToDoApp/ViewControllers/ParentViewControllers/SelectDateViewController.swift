@@ -73,19 +73,19 @@ extension SelectDateViewController{
         timeView.leadingAnchor(margin: 24)
             .trailingAnchor(margin: 24)
 
-        
         selectButton.bottomAnchor(margin: 0)
             .leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
             .heightAnchor(view.frame.width/5)
-        
-
+    
         timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true
         
         selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
        
     }
-    
+}
+//MARK: - Actions
+extension SelectDateViewController {
     @objc func selectButtonTapped(){
         navigationController?.popViewController(animated: true)
     }
