@@ -13,7 +13,6 @@ import DeclarativeLayout
 
 class SearchViewController : UIViewController {
     private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
-    private(set) var buttonImage = CurrentValueSubject<UIImage, Never>(#imageLiteral(resourceName: "SearchIcon"))
     
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
@@ -53,6 +52,8 @@ class SearchViewController : UIViewController {
         let cb = UIButton(frame: .zero)
         cb.translatesAutoresizingMaskIntoConstraints = false
         cb.setTitle("Cancel", for: .normal)
+        cb.setTitleColor(.white, for: .normal)
+        cb.titleFont(UIFont(name: C.Font.bold.rawValue, size: 16)!)
         cb.addTarget(self, action: #selector(cancelBtnTapped), for: .touchUpInside)
         return cb
     }()
@@ -65,20 +66,20 @@ class SearchViewController : UIViewController {
 //MARK: - Lifecycle
 extension SearchViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setUpUI()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addListeners()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setUpUI()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if cancelBtnWidthConstraint == nil {
-            cancelBtnWidthConstraint = cancelBtn.widthAnchor.constraint(equalToConstant: 75)
+            cancelBtnWidthConstraint = cancelBtn.widthAnchor.constraint(equalToConstant: 60)
             cancelBtnWidthConstraint!.isActive = true
         }
         if searchBtnWidthConstraint == nil {
@@ -122,8 +123,8 @@ extension SearchViewController{
     }
 }
 
+//MARK: - Change Constraint
 extension SearchViewController {
-    
     private func changeConstraint(viewConstraint constaint: NSLayoutConstraint?, to value: CGFloat) {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
             constaint!.constant = value
