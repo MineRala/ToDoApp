@@ -85,7 +85,7 @@ extension NewTaskViewController {
     }
 }
 
-//MARK: Get Page Mode
+//MARK: - Get Page Mode
 extension NewTaskViewController {
     private func getMode(_ model: TaskModel?) -> NewAndEditVCState {
         if model == nil {

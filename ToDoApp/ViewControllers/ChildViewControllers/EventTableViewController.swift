@@ -12,6 +12,7 @@ class EventTableViewController : UIViewController {
   
 
     private var arrModel: [TaskModel] = []
+  
     
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -59,10 +60,11 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrModel.count
+        return  arrModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
         let model = arrModel[indexPath.row]
         cell.updateCell(model: model, delegate: self, indexPath: indexPath)

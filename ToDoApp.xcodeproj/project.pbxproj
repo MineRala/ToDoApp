@@ -21,7 +21,13 @@
 		E8058DA226B9B69F00E66219 /* BaseLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8058DA426B9B69F00E66219 /* BaseLocalization.strings */; };
 		E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */; };
 		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
+		E812DDE026BB3F6A00889F7E /* TaskModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E812DDDF26BB3F6A00889F7E /* TaskModels.swift */; };
 		E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81F49E026B3DC3B00EAF637 /* TaskModel.swift */; };
+		E836DA7A26BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */; };
+		E836DA7B26BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */; };
+		E836DA8026BAFEF90059EF8C /* TaskVDMConverters.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */; };
+		E836DA8526BAFF240059EF8C /* TaskVDM.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA8426BAFF240059EF8C /* TaskVDM.swift */; };
+		E836DA8A26BB0D5D0059EF8C /* CoreDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */; };
 		E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */; };
 		E851C0CB26AEE0BF003D9CA3 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */; };
 		E851C0CC26AEE0BF003D9CA3 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */; };
@@ -95,7 +101,13 @@
 		E8058DA326B9B69F00E66219 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BaseLocalization.strings; sourceTree = "<group>"; };
 		E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
+		E812DDDF26BB3F6A00889F7E /* TaskModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModels.swift; sourceTree = "<group>"; };
 		E81F49E026B3DC3B00EAF637 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
+		E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskVDMConverters.swift; sourceTree = "<group>"; };
+		E836DA8426BAFF240059EF8C /* TaskVDM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskVDM.swift; sourceTree = "<group>"; };
+		E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLayer.swift; sourceTree = "<group>"; };
 		E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		E851C0BB26AEE0BD003D9CA3 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E851C0BC26AEE0BE003D9CA3 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -158,6 +170,8 @@
 		E8027F0C26AC66F80071E506 = {
 			isa = PBXGroup;
 			children = (
+				E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */,
+				E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */,
 				E8058DAB26B9B89100E66219 /* Localization */,
 				E8027F1726AC66F80071E506 /* ToDoApp */,
 				E8027F3126AC67020071E506 /* ToDoAppTests */,
@@ -343,6 +357,10 @@
 			children = (
 				FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */,
 				E81F49E026B3DC3B00EAF637 /* TaskModel.swift */,
+				E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */,
+				E836DA8426BAFF240059EF8C /* TaskVDM.swift */,
+				E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */,
+				E812DDDF26BB3F6A00889F7E /* TaskModels.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -505,9 +523,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E836DA8526BAFF240059EF8C /* TaskVDM.swift in Sources */,
 				E8027F1926AC66F80071E506 /* AppDelegate.swift in Sources */,
 				E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */,
+				E836DA7A26BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift in Sources */,
+				E836DA8026BAFEF90059EF8C /* TaskVDMConverters.swift in Sources */,
 				E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */,
+				E836DA7B26BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift in Sources */,
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
 				E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */,
 				E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */,
@@ -519,12 +541,14 @@
 				E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */,
 				E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */,
 				E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */,
+				E812DDE026BB3F6A00889F7E /* TaskModels.swift in Sources */,
 				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
 				E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */,
 				A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */,
 				E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */,
 				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,
 				E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */,
+				E836DA8A26BB0D5D0059EF8C /* CoreDataLayer.swift in Sources */,
 				E8058D7726B9800900E66219 /* Alerts.swift in Sources */,
 				FDD947F626B063E100E4FA1C /* Configuration.swift in Sources */,
 			);

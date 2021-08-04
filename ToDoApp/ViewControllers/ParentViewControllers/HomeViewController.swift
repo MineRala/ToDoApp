@@ -155,22 +155,16 @@ extension HomeViewController  {
 extension HomeViewController {
     func localNotification(){
        
-        notificationCenter.requestAuthorization(options: [.alert,.sound]) { (permissionGranted, error) in
-            if !permissionGranted{
-                print("Permission Denied")
-            }
-        }
-    
         let content = UNMutableNotificationContent()
         content.title = "Hey I'am a notification"
         content.body = "Look at me!"
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        let someDateTime = formatter.date(from: "2021/08/04 17:05")
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+//        let someDateTime = formatter.date(from: "2021/08/04 19:11")
         
-     //   let date =  Date().addingTimeInterval(5)
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: someDateTime!)
+        let date =  Date().addingTimeInterval(5)
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         

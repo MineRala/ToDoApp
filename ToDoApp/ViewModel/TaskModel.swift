@@ -15,6 +15,7 @@ class TaskModel {
     var taskCatagory: String = ""
     var isTaskCompleted: Bool = false
     
+    
     static func all() -> [TaskModel] {
         
         var arrTaskInfo: [TaskModel] = []
@@ -22,7 +23,7 @@ class TaskModel {
         
         for _ in 0..<4 {
             taskInfo = TaskModel()
-            taskInfo.hourLabel = NSLocalizedString("10:00", comment: "")
+            taskInfo.hourLabel = "10:00"
             taskInfo.hourPeriodLabel = NSLocalizedString("AM", comment: "")
             taskInfo.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
             taskInfo.taskCatagory = "Official"
