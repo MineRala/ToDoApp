@@ -291,7 +291,6 @@
 			isa = PBXGroup;
 			children = (
 				E8D2FBE726B02917006D0936 /* TaskCell.swift */,
-				E81F49E026B3DC3B00EAF637 /* TaskModel.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -343,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */,
+				E81F49E026B3DC3B00EAF637 /* TaskModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";

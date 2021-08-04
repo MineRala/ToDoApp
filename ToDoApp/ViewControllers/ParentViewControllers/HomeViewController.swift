@@ -27,6 +27,7 @@ class HomeViewController : BaseVC {
     private let eventVC : EventTableViewController = EventTableViewController()
     
     private let calendarViewHeightRatio: CGFloat = 35/100
+    let notificationCenter = UNUserNotificationCenter.current()
     
     private let itemsContainerView : UIView = {
         let icv = UIView(frame: .zero)
@@ -51,6 +52,7 @@ extension HomeViewController {
         super.viewDidLoad()
         setUpUI()
         addListeners()
+        localNotification()
     }
     
     override func viewDidLayoutSubviews() {
@@ -146,5 +148,40 @@ extension HomeViewController  {
     private func routeToNewTasks() {
         let newViewController = NewTaskViewController()
         self.navigationController?.pushViewController(newViewController, animated: true)
+    }
+}
+
+//MARK: - Local Notification
+extension HomeViewController {
+    func localNotification(){
+       
+        notificationCenter.requestAuthorization(options: [.alert,.sound]) { (permissionGranted, error) in
+            if !permissionGranted{
+                print("Permission Denied")
+            }
+        }
+    
+        let content = UNMutableNotificationContent()
+        content.title = "Hey I'am a notification"
+        content.body = "Look at me!"
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let someDateTime = formatter.date(from: "2021/08/04 17:05")
+        
+     //   let date =  Date().addingTimeInterval(5)
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: someDateTime!)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+        
+         notificationCenter.add(request) { (error) in
+            if error != nil {
+                print("Error" + error.debugDescription)
+                return
+            }
+        }
     }
 }
