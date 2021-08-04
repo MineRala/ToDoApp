@@ -17,10 +17,10 @@ enum ViewControllerType: String {
     
     var title: String {
         switch self {
-            case .home: return "Tasks"
-            case .newTask: return "New Task"
-            case .taskDetails: return "Task Details"
-            case .selectDate: return "Select Date"
+            case .home: return NSLocalizedString("Tasks", comment: "")
+            case .newTask: return NSLocalizedString("New Task", comment: "")
+            case .taskDetails: return NSLocalizedString("Task Details", comment: "")
+            case .selectDate: return NSLocalizedString("Select Date", comment: "")
         }
     }
     

@@ -139,7 +139,7 @@ extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
 extension EventTableViewController {
     private func handleTrash(indexPath: IndexPath) {
       print("Trash")
-        Alerts().showAlertDelete(controller: self, "Are you sure you want to delete the task? ", deletion: {
+        Alerts().showAlertDelete(controller: self,NSLocalizedString("Are you sure you want to delete the task?", comment: ""), deletion: {
             self.arrModel.remove(at: indexPath.row)
             self.eventTableView.reloadData()
         })

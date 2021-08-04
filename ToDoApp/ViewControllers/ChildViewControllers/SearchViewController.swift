@@ -32,7 +32,7 @@ class SearchViewController : UIViewController {
         st.returnKeyType = .search
         st.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         st.layer.cornerRadius = 8
-        st.placeholder = "Search Task"
+        st.placeholder = NSLocalizedString("Search Task", comment: "")
         let leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16, height: 2.0))
         st.leftView = leftView
         st.leftViewMode = .always
@@ -51,7 +51,7 @@ class SearchViewController : UIViewController {
     private let cancelBtn : UIButton = {
         let cb = UIButton(frame: .zero)
         cb.translatesAutoresizingMaskIntoConstraints = false
-        cb.setTitle("Cancel", for: .normal)
+        cb.setTitle(NSLocalizedString("Cancel", comment: ""), for: .normal)
         cb.setTitleColor(.white, for: .normal)
         cb.titleFont(UIFont(name: C.Font.bold.rawValue, size: 16)!)
         return cb
@@ -78,7 +78,7 @@ extension SearchViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if cancelBtnWidthConstraint == nil {
-            cancelBtnWidthConstraint = cancelBtn.widthAnchor.constraint(equalToConstant: 60)
+            cancelBtnWidthConstraint = cancelBtn.widthAnchor.constraint(equalToConstant: 0)
             cancelBtnWidthConstraint!.isActive = true
         }
         if searchBtnWidthConstraint == nil {
@@ -176,7 +176,13 @@ extension SearchViewController : UITextFieldDelegate {
 //MARK: - Keyboard Search UIButton
 extension SearchViewController {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+     if textField.text?.count == 0 {
+            textField.resignFirstResponder()
+        }
+     else{
         textField.resignFirstResponder()
+        self.isSearchTextFieldInEditingMode.send(false)
+     }
         return true
     }
     

@@ -34,7 +34,7 @@ class SelectDateViewController : BaseVC{
         let sb = UIButton(frame: .zero)
         sb.translatesAutoresizingMaskIntoConstraints = false
         sb.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
-        sb.setTitle("Select", for: .normal)
+        sb.setTitle(NSLocalizedString("Select", comment: ""), for: .normal)
         sb.titleLabel?.font = C.Font.medium.font(21)
         return sb
     }()

@@ -17,6 +17,8 @@
 		E8027F3E26AC67020071E506 /* ToDoAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F3D26AC67020071E506 /* ToDoAppUITests.swift */; };
 		E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F5626ACB24F0071E506 /* HomeViewController.swift */; };
 		E8058D7726B9800900E66219 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8058D7626B9800900E66219 /* Alerts.swift */; };
+		E8058D9726B9B51C00E66219 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8058D9926B9B51C00E66219 /* Localizable.strings */; };
+		E8058DA226B9B69F00E66219 /* BaseLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8058DA426B9B69F00E66219 /* BaseLocalization.strings */; };
 		E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */; };
 		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
 		E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81F49E026B3DC3B00EAF637 /* TaskModel.swift */; };
@@ -88,6 +90,9 @@
 		E8027F3F26AC67020071E506 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E8027F5626ACB24F0071E506 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E8058D7626B9800900E66219 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
+		E8058D8E26B9B4C800E66219 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		E8058D9826B9B51C00E66219 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E8058DA326B9B69F00E66219 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BaseLocalization.strings; sourceTree = "<group>"; };
 		E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
 		E81F49E026B3DC3B00EAF637 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
@@ -153,6 +158,7 @@
 		E8027F0C26AC66F80071E506 = {
 			isa = PBXGroup;
 			children = (
+				E8058DAB26B9B89100E66219 /* Localization */,
 				E8027F1726AC66F80071E506 /* ToDoApp */,
 				E8027F3126AC67020071E506 /* ToDoAppTests */,
 				E8027F3C26AC67020071E506 /* ToDoAppUITests */,
@@ -226,6 +232,15 @@
 				E8058D7626B9800900E66219 /* Alerts.swift */,
 			);
 			path = Alert;
+			sourceTree = "<group>";
+		};
+		E8058DAB26B9B89100E66219 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E8058D9926B9B51C00E66219 /* Localizable.strings */,
+				E8058DA426B9B69F00E66219 /* BaseLocalization.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		E851C0BA26AEE0A8003D9CA3 /* Fonts */ = {
@@ -422,6 +437,7 @@
 			knownRegions = (
 				en,
 				Base,
+				tr,
 			);
 			mainGroup = E8027F0C26AC66F80071E506;
 			packageReferences = (
@@ -453,6 +469,7 @@
 				E8027F2526AC67010071E506 /* Assets.xcassets in Resources */,
 				E851C0D626AEE0BF003D9CA3 /* Roboto-MediumItalic.ttf in Resources */,
 				E851C0D326AEE0BF003D9CA3 /* Roboto-Bold.ttf in Resources */,
+				E8058DA226B9B69F00E66219 /* BaseLocalization.strings in Resources */,
 				E851C0DA26AEE0BF003D9CA3 /* Roboto-Thin.ttf in Resources */,
 				E851C0CD26AEE0BF003D9CA3 /* Roboto-BoldItalic.ttf in Resources */,
 				E851C0D526AEE0BF003D9CA3 /* Roboto-BlackItalic.ttf in Resources */,
@@ -461,6 +478,7 @@
 				E851C0D426AEE0BF003D9CA3 /* Roboto-Medium.ttf in Resources */,
 				E851C0CB26AEE0BF003D9CA3 /* Roboto-Light.ttf in Resources */,
 				E851C0D926AEE0BF003D9CA3 /* Roboto-Regular.ttf in Resources */,
+				E8058D9726B9B51C00E66219 /* Localizable.strings in Resources */,
 				E851C0CF26AEE0BF003D9CA3 /* Roboto-Condensed.ttf in Resources */,
 				E851C0D126AEE0BF003D9CA3 /* Roboto-BoldCondensedItalic.ttf in Resources */,
 			);
@@ -548,8 +566,25 @@
 			isa = PBXVariantGroup;
 			children = (
 				E8027F2726AC67010071E506 /* Base */,
+				E8058D8E26B9B4C800E66219 /* tr */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E8058D9926B9B51C00E66219 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E8058D9826B9B51C00E66219 /* tr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E8058DA426B9B69F00E66219 /* BaseLocalization.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E8058DA326B9B69F00E66219 /* en */,
+			);
+			name = BaseLocalization.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -559,6 +594,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -620,6 +656,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

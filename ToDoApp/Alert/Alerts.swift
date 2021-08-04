@@ -11,11 +11,11 @@ import UIKit
 class Alerts : NSObject {
     
     func showAlertDelete(controller: UIViewController, _ message: String, deletion: @escaping () -> Void) {
-        let dialogMessage = UIAlertController(title: "Deletion Confirmation", message: message, preferredStyle: .alert)
-        dialogMessage.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+        let dialogMessage = UIAlertController(title: NSLocalizedString("Deletion Confirmation", comment: ""), message: message, preferredStyle: .alert)
+        dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive, handler: { (action) in
             deletion()
         }))
-        dialogMessage.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+        dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { (action) in
            print("cancel is tapped.")
         }))
         controller.present(dialogMessage, animated: true, completion: {})

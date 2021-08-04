@@ -22,8 +22,8 @@ class TaskModel {
         
         for _ in 0..<4 {
             taskInfo = TaskModel()
-            taskInfo.hourLabel = "10:00"
-            taskInfo.hourPeriodLabel = "AM"
+            taskInfo.hourLabel = NSLocalizedString("10:00", comment: "")
+            taskInfo.hourPeriodLabel = NSLocalizedString("AM", comment: "")
             taskInfo.taskName = "Arkadaşlar ile Eskişehir'de asd buluşma.Arkadaşlar ile Eskişehir'de buluşma. "
             taskInfo.taskCatagory = "Official"
             arrTaskInfo.append(taskInfo)

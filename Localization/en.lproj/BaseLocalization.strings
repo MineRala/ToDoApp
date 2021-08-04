@@ -1,0 +1,30 @@
+/* 
+  BaseLocalization.strings
+  ToDoApp
+
+  Created by Mine Rala on 3.08.2021.
+  
+*/
+
+"Tasks" = "Tasks";
+"New Task" = "New Task";
+"Task Details" = "Task Details";
+"Select Date" = "Select Date";
+"Edit Task" = "Edit Task";
+"Add" = "Add";
+"Save" = "Save";
+"Deletion Confirmation" = "Deletion Confirmation";
+"Delete" = "Delete";
+"Cancel" = "Cancel";
+"Are you sure you want to delete the task?" =  "Are you sure you want to delete the task?";
+"10:00" =  "10:00";
+"AM" = "AM";
+"PM" = "PM";
+"Task Name" = "Task Name";
+"Description" = "Description";
+"Category" = "Category";
+"Pick Date & Time" = "Pick Date & Time";
+"Notification" = "Notification";
+"Select" = "Select";
+"Search Task" = "Search Task";
+"Cancel" = "Cancel";

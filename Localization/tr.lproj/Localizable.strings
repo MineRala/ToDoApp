@@ -1,0 +1,29 @@
+/* 
+  Localizable.strings
+  ToDoApp
+
+  Created by Mine Rala on 3.08.2021.
+  
+*/
+"Tasks" = "Görev";
+"New Task" = "Yeni Görev";
+"Task Details" = "Görev Detayları";
+"Select Date" = "Tarih Seç";
+"Edit Task" = "Görev Düzenle";
+"Add" = "Ekle";
+"Save" = "Kaydet";
+"Deletion Confirmation" = "Silme Onayı";
+"Delete" = "Sil";
+"Cancel" = "İptal";
+"Are you sure you want to delete the task?" = "Görevi silmek istediğinizden emin misiniz?";
+"10:00" =  "10:00";
+"AM" = "ÖÖ";
+"PM" = "ÖS";
+"Task Name" = "Görev Adı";
+"Description" = "Açıklama";
+"Category" = "Katagori";
+"Pick Date & Time" = "Tarih & Saat Seç";
+"Notification" = "Bildirim";
+"Select" = "Seç";
+"Search Task" = "Task Ara";
+"Cancel" = "İptal";

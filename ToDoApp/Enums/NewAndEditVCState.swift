@@ -5,25 +5,28 @@
 //  Created by Akmuhammet Ashyralyyev on 2021-08-02.
 //
 
-enum NewAndEditVCState{
+import UIKit
+
+enum NewAndEditVCState {
     case newTask
     case editTask
     
     var navigationBarTitle: String {
         switch self {
         case .newTask:
-            return "New Task"
+            return NSLocalizedString("New Task", comment: "")
         case .editTask:
-            return "Edit Task"
+            return NSLocalizedString("Edit Task", comment: "")
         }
     }
     
     var confirmButtonTitle: String {
         switch self {
         case .newTask:
-            return "Add"
+            return NSLocalizedString("Add", comment: "")
         case .editTask:
-            return "Save"
+            return NSLocalizedString("Save", comment: "")
         }
     }
+
 }
