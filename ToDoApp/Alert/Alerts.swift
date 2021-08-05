@@ -10,7 +10,7 @@ import UIKit
 
 class Alerts : NSObject {
     
-    func showAlertDelete(controller: UIViewController, _ message: String, deletion: @escaping () -> Void) {
+   static func showAlertDelete(controller: UIViewController, _ message: String, deletion: @escaping () -> Void) {
         let dialogMessage = UIAlertController(title: NSLocalizedString("Deletion Confirmation", comment: ""), message: message, preferredStyle: .alert)
         dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive, handler: { (action) in
             deletion()

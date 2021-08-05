@@ -23,9 +23,7 @@
 		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
 		E812DDE026BB3F6A00889F7E /* TaskModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E812DDDF26BB3F6A00889F7E /* TaskModels.swift */; };
 		E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81F49E026B3DC3B00EAF637 /* TaskModel.swift */; };
-		E836DA7A26BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */; };
-		E836DA7B26BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */; };
-		E836DA8026BAFEF90059EF8C /* TaskVDMConverters.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */; };
+		E836DA8026BAFEF90059EF8C /* TaskVDMConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA7F26BAFEF90059EF8C /* TaskVDMConverter.swift */; };
 		E836DA8526BAFF240059EF8C /* TaskVDM.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA8426BAFF240059EF8C /* TaskVDM.swift */; };
 		E836DA8A26BB0D5D0059EF8C /* CoreDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */; };
 		E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */; };
@@ -47,6 +45,8 @@
 		E851C0DA26AEE0BF003D9CA3 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */; };
 		E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */; };
 		E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */; };
+		E8A2345426BBD79700255314 /* ToDoItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A2345226BBD79700255314 /* ToDoItem+CoreDataClass.swift */; };
+		E8A2345526BBD79700255314 /* ToDoItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A2345326BBD79700255314 /* ToDoItem+CoreDataProperties.swift */; };
 		E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */; };
 		E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */; };
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
@@ -103,9 +103,7 @@
 		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
 		E812DDDF26BB3F6A00889F7E /* TaskModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModels.swift; sourceTree = "<group>"; };
 		E81F49E026B3DC3B00EAF637 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
-		E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskVDMConverters.swift; sourceTree = "<group>"; };
+		E836DA7F26BAFEF90059EF8C /* TaskVDMConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskVDMConverter.swift; sourceTree = "<group>"; };
 		E836DA8426BAFF240059EF8C /* TaskVDM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskVDM.swift; sourceTree = "<group>"; };
 		E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLayer.swift; sourceTree = "<group>"; };
 		E851C0B426AED596003D9CA3 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
@@ -127,6 +125,8 @@
 		E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewController.swift; sourceTree = "<group>"; };
 		E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		E8A2345226BBD79700255314 /* ToDoItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E8A2345326BBD79700255314 /* ToDoItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
@@ -170,8 +170,8 @@
 		E8027F0C26AC66F80071E506 = {
 			isa = PBXGroup;
 			children = (
-				E836DA7826BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift */,
-				E836DA7926BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift */,
+				E8A2345226BBD79700255314 /* ToDoItem+CoreDataClass.swift */,
+				E8A2345326BBD79700255314 /* ToDoItem+CoreDataProperties.swift */,
 				E8058DAB26B9B89100E66219 /* Localization */,
 				E8027F1726AC66F80071E506 /* ToDoApp */,
 				E8027F3126AC67020071E506 /* ToDoAppTests */,
@@ -357,7 +357,7 @@
 			children = (
 				FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */,
 				E81F49E026B3DC3B00EAF637 /* TaskModel.swift */,
-				E836DA7F26BAFEF90059EF8C /* TaskVDMConverters.swift */,
+				E836DA7F26BAFEF90059EF8C /* TaskVDMConverter.swift */,
 				E836DA8426BAFF240059EF8C /* TaskVDM.swift */,
 				E836DA8926BB0D5D0059EF8C /* CoreDataLayer.swift */,
 				E812DDDF26BB3F6A00889F7E /* TaskModels.swift */,
@@ -526,10 +526,8 @@
 				E836DA8526BAFF240059EF8C /* TaskVDM.swift in Sources */,
 				E8027F1926AC66F80071E506 /* AppDelegate.swift in Sources */,
 				E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */,
-				E836DA7A26BAFA5E0059EF8C /* ToDoItem+CoreDataClass.swift in Sources */,
-				E836DA8026BAFEF90059EF8C /* TaskVDMConverters.swift in Sources */,
+				E836DA8026BAFEF90059EF8C /* TaskVDMConverter.swift in Sources */,
 				E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */,
-				E836DA7B26BAFA5E0059EF8C /* ToDoItem+CoreDataProperties.swift in Sources */,
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
 				E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */,
 				E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */,
@@ -541,6 +539,7 @@
 				E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */,
 				E851C0B526AED596003D9CA3 /* CustomNavigationBar.swift in Sources */,
 				E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */,
+				E8A2345426BBD79700255314 /* ToDoItem+CoreDataClass.swift in Sources */,
 				E812DDE026BB3F6A00889F7E /* TaskModels.swift in Sources */,
 				FD26B03726B050F5009F056C /* ScrollView.swift in Sources */,
 				E81F49E126B3DC3B00EAF637 /* TaskModel.swift in Sources */,
@@ -548,6 +547,7 @@
 				E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */,
 				FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */,
 				E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */,
+				E8A2345526BBD79700255314 /* ToDoItem+CoreDataProperties.swift in Sources */,
 				E836DA8A26BB0D5D0059EF8C /* CoreDataLayer.swift in Sources */,
 				E8058D7726B9800900E66219 /* Alerts.swift in Sources */,
 				FDD947F626B063E100E4FA1C /* Configuration.swift in Sources */,

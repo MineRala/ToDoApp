@@ -7,18 +7,14 @@
 
 import Foundation
 
-struct TaskCellViewDataModel {
-    let title: String
-    let hourStr: String
-    let category: String
-    let amPmSymbol: String
-}
-
-struct NewTaskViewDataModel {
+struct TaskListVDM {
     let taskName: String
-    let description: String
-    let category: String
-    let pickDateTime: String
-    let notification: String
+   // let taskDescription: String
+    let taskCategory: String
+    let dateHourAndMinute: String
+    let datePeriod: String
+  //  let notificationDate: String
+    let taskId: String
+    let isTaskCompleted: Bool
 }
 

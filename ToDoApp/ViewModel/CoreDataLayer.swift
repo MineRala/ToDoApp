@@ -12,50 +12,37 @@ import  UIKit
 class CoreDataLayer {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-   
-    private var models =  [ToDoItem]()
     
-    func getAllItems() -> [ToDoItem]? {
-        do{
-        return try context.fetch(ToDoItem.fetchRequest())
-        }catch{
-            return nil 
-}
-        
-    }
     
-    func createItem(taskName: String , taskDescription: String){
-        let newTaskItem = ToDoItem(context: context)
-        newTaskItem.taskName = taskName
-        newTaskItem.taskDescription = taskDescription
-        
+    private func save(){
         do{
             try context.save()
-            getAllItems()
         }catch{
             
         }
+    }
+    
+    
+    func getAllItems() -> [ToDoItem] {
+        do{
+            return try context.fetch(ToDoItem.fetchRequest())
+        }catch{
+            return []
+        }
         
+    }
+    
+    func createItem(item: ToDoItem){
+        
+        save()
     }
     
     func deleteItem(item: ToDoItem){
         context.delete(item)
-        do{
-            try context.save()
-            getAllItems()
-        }catch{
-            
-        }
+        save()
     }
     
-    func updateItem(item: ToDoItem ,newName: String, newDescription: String){
-        item.taskName = newName
-        item.taskDescription = newDescription          
-        do{
-            try context.save()
-            getAllItems()   
-        }catch{
-            
-        }
-}
+    func updateItem(item: ToDoItem){
+        save()
     }
+}

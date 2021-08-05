@@ -214,7 +214,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func deleteButtonTapped() {
-        Alerts().showAlertDelete(controller: self, NSLocalizedString("Are you sure you want to delete the task?", comment: "")) {
+        Alerts.showAlertDelete(controller: self, NSLocalizedString("Are you sure you want to delete the task?", comment: "")) {
             self.delegate?.taskCellDeleted(indexPath: self.indexPath)
             self.navigationController?.popViewController(animated: true)
         }

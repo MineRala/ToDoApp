@@ -24,7 +24,7 @@ class HomeViewController : BaseVC {
     
     private let searchVC : SearchViewController = SearchViewController()
     private let calendarVC : CalendarViewController = CalendarViewController()
-    private let eventVC : EventTableViewController = EventTableViewController()
+    private var eventVC : EventTableViewController!
     
     private let calendarViewHeightRatio: CGFloat = 35/100
     let notificationCenter = UNUserNotificationCenter.current()
@@ -53,6 +53,7 @@ extension HomeViewController {
         setUpUI()
         addListeners()
         localNotification()
+        viewModel.getDataModels()
     }
     
     override func viewDidLayoutSubviews() {
@@ -93,12 +94,16 @@ extension HomeViewController {
         
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
+       
+        
         self.itemsContainerView.addSubview(eventVCContainer)
         
         eventVCContainer.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 0).isActive = true
         eventVCContainer.leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
         eventVCContainer.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        
+        eventVC = EventTableViewController(homeViewModel: viewModel)
         
         self.addChildViewController(childController: eventVC, onView: eventVCContainer)
     }
