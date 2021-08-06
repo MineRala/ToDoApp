@@ -9,12 +9,26 @@ import Foundation
 
 struct TaskListVDM {
     let taskName: String
-   // let taskDescription: String
     let taskCategory: String
     let dateHourAndMinute: String
     let datePeriod: String
-  //  let notificationDate: String
     let taskId: String
     let isTaskCompleted: Bool
+}
+
+struct TaskDetailVDM {
+    let taskName: String
+    let taskDescription: String
+    let taskDate: String
+    let taskId: String
+    let isTaskCompleted: Bool
+}
+
+struct TaskEditVDM {
+    let taskName: String
+    let taskDescription: String
+    let taskDate: String
+    let notificationDate: String
+    let taskId: String
 }
 

@@ -27,9 +27,8 @@ class HomeViewModel {
         }
         return vdms
     }
-    
-    
 }
+
 //var toDoItem = ToDoItem(context: dataLayer.context)
 //        print("\(toDoItem.id)")
 //        toDoItem.taskName = "Task1"

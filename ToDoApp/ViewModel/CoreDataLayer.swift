@@ -13,7 +13,6 @@ class CoreDataLayer {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    
     private func save(){
         do{
             try context.save()
@@ -21,7 +20,6 @@ class CoreDataLayer {
             
         }
     }
-    
     
     func getAllItems() -> [ToDoItem] {
         do{
@@ -33,7 +31,6 @@ class CoreDataLayer {
     }
     
     func createItem(item: ToDoItem){
-        
         save()
     }
     
