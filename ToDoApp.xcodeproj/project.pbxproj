@@ -48,6 +48,7 @@
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
 		E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */; };
+		E8D7BE4C26BD8B13006BB384 /* HeaderTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */; };
 		FD26B03726B050F5009F056C /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B03626B050F5009F056C /* ScrollView.swift */; };
 		FD26B05F26B0627A009F056C /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD26B05E26B0627A009F056C /* BaseVC.swift */; };
 		FDAD7E3126BD60C6004FE394 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAD7E3026BD60C6004FE394 /* AppError.swift */; };
@@ -128,6 +129,7 @@
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
+		E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTaskCell.swift; sourceTree = "<group>"; };
 		FD26B03626B050F5009F056C /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		FD26B05E26B0627A009F056C /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		FDAD7E3026BD60C6004FE394 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				E8D2FBE726B02917006D0936 /* TaskCell.swift */,
+				E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */,
 				FDC3052126BD6CF2002833A1 /* DeclarativeLayout.swift in Sources */,
 				E836DA8A26BB0D5D0059EF8C /* CoreDataLayer.swift in Sources */,
+				E8D7BE4C26BD8B13006BB384 /* HeaderTaskCell.swift in Sources */,
 				E8058D7726B9800900E66219 /* Alerts.swift in Sources */,
 				FDD947F626B063E100E4FA1C /* Configuration.swift in Sources */,
 			);

@@ -60,11 +60,6 @@ extension EventTableViewController {
         eventTableView.reloadData()
     }
 }
-
-// MARK: - Public
-extension EventTableViewController{
-   
-}
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
@@ -81,6 +76,8 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
+        let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath)as! HeaderTaskCell
+        
         let model = viewModel.arrTaskListData[indexPath.row]
         cell.updateCell(model: model, delegate: self, indexPath: indexPath)
         return cell

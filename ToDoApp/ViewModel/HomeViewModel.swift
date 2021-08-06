@@ -45,6 +45,27 @@ extension HomeViewModel {
 }
 
 extension HomeViewModel {
+    
+    private func convertTaskVMsToDictionary(arr: [TaskListVDM]) ->  [String: [TaskListVDM]]? {
+    
+        var dictionary: [ String : [TaskListVDM] ]?
+        
+        for i in 0 ..< arr.count {
+            if i == 0 {
+                dictionary = [arr[i].day : [arr[i]]]
+            continue
+            }
+            if arr[i-1].day == arr[i].day {
+                var taskListVDMs = dictionary![arr[i].day]
+                taskListVDMs!.append(arr[i])
+                dictionary!.updateValue(taskListVDMs!, forKey: arr[i].day)
+            } else {
+                dictionary = [arr[i].day : [arr[i]]]
+            }
+        }
+        return dictionary
+    }
+    
     private func addSampleData(count: Int) {
         for index in 0 ..< count {
             let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
@@ -62,7 +83,6 @@ extension HomeViewModel {
                 
             }.store(in: &cancellables)
         }
-        
     }
     
     func randomString(of length: Int) -> String {

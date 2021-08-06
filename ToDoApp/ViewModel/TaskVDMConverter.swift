@@ -15,13 +15,28 @@ class TaskVDMConverter {
     
     static func taskViewDataModel(toDoItem: ToDoItem) -> TaskListVDM? {
         guard let taskName = toDoItem.taskName, let description = toDoItem.taskDescription, let category = toDoItem.taskCategory else { return nil }
-        var dayAndNight : String = ""
-    
-    
+  
         let calendar = Calendar.current
         var hour = calendar.component(.hour, from: toDoItem.taskDate!)
         let minute = calendar.component(.minute, from: toDoItem.taskDate!)
+        var dayAndNight : String = ""
 
+        var day: String = ""
+        if calendar.isDateInToday(toDoItem.taskDate!) {
+            day = "Today"
+        }
+        else if calendar.isDateInYesterday(toDoItem.taskDate!) {
+            day = "Yesterday"
+        }
+        else if calendar.isDateInTomorrow(toDoItem.taskDate!){
+            day = "Tomorrow"
+        }
+        else {
+            let components = calendar.dateComponents([.year, .month, .day], from: toDoItem.taskDate!)
+            let monthName = DateFormatter().monthSymbols[components.month!-1]
+            day = String(format: "%02d %@ %04d", components.day!, monthName, components.year!)
+        }
+        
         if hour == 0{
             hour = 12
             dayAndNight = "AM"
@@ -43,7 +58,7 @@ class TaskVDMConverter {
         let taskId = "\(toDoItem.taskId!)"
         let isTaskCompleted = toDoItem.isTaskCompleted
         
-        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted)
+        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted,day: day)
     }
     
     static func detailTaskViewModel(toDoItem: ToDoItem) -> TaskDetailVDM? {

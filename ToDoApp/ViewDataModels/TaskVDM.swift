@@ -14,6 +14,7 @@ struct TaskListVDM {
     let datePeriod: String
     let taskId: String
     let isTaskCompleted: Bool
+    let day: String
 }
 
 struct TaskDetailVDM {

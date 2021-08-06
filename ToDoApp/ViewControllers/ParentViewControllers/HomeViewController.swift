@@ -94,8 +94,6 @@ extension HomeViewController {
         
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
-       
-        
         self.itemsContainerView.addSubview(eventVCContainer)
         
         eventVCContainer.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 0).isActive = true
