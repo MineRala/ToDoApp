@@ -11,7 +11,7 @@ import DeclarativeUI
 import DeclarativeLayout
 
 protocol TaskCellDelegate {
-    func taskCellDidSelected(_ cell: TaskCell, model: TaskModel)
+    func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM)
 }
 
 class TaskCell: UITableViewCell {
@@ -21,7 +21,8 @@ class TaskCell: UITableViewCell {
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
     
     private var tap: UITapGestureRecognizer!
-    private var model: TaskModel!
+    private var model: TaskListVDM!
+    
     var delegate: TaskCellDelegate?
     private var indexPath: IndexPath!
     
@@ -110,23 +111,23 @@ extension TaskCell {
     }
     
     
-    func updateCell(model: TaskModel, delegate: TaskCellDelegate, indexPath: IndexPath) {
+    func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, indexPath: IndexPath) {
         print("cell update")
         self.model = model
         self.indexPath = indexPath
         self.delegate = delegate
         
         if model.isTaskCompleted {
-            hourLabel.attributedText = NSAttributedString(string: model.hourLabel, attributes:  attrStrikethroughStyle)
-            hourPeriodLabel.attributedText = NSAttributedString(string: model.hourPeriodLabel, attributes: attrStrikethroughStyle)
+            hourLabel.attributedText = NSAttributedString(string: model.dateHourAndMinute, attributes:  attrStrikethroughStyle)
+            hourPeriodLabel.attributedText = NSAttributedString(string: model.datePeriod, attributes: attrStrikethroughStyle)
             taskName.attributedText = NSAttributedString(string: model.taskName, attributes: attrStrikethroughStyle)
-            taskCatagory.attributedText = NSAttributedString(string: model.taskCatagory, attributes: attrStrikethroughStyle)
+            taskCatagory.attributedText = NSAttributedString(string: model.taskCategory, attributes: attrStrikethroughStyle)
         }else{
             
-            hourLabel.attributedText = NSAttributedString(string: model.hourLabel)
-            hourPeriodLabel.attributedText = NSAttributedString(string: model.hourPeriodLabel)
+            hourLabel.attributedText = NSAttributedString(string: model.dateHourAndMinute)
+            hourPeriodLabel.attributedText = NSAttributedString(string: model.datePeriod)
             taskName.attributedText = NSAttributedString(string: model.taskName)
-            taskCatagory.attributedText = NSAttributedString(string: model.taskCatagory)
+            taskCatagory.attributedText = NSAttributedString(string: model.taskCategory)
         }
         self.layoutIfNeeded()
     }

@@ -2,7 +2,7 @@
 //  ToDoItem+CoreDataClass.swift
 //  ToDoApp
 //
-//  Created by Mine Rala on 5.08.2021.
+//  Created by Aybek Can Kaya on 6.08.2021.
 //
 //
 

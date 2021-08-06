@@ -9,25 +9,72 @@ import Foundation
 import Combine
 
 class HomeViewModel {
-// update olduğunda combine ile mesaj yollasın.
+
+    private(set) var shouldUpdateData = PassthroughSubject<Void, Never>()
     
-    var arrTaskData: [TaskListVDM] = []
+    
+    private(set) var arrTaskListData: [TaskListVDM] = []
 
     private let dataLayer = CoreDataLayer()
     
-    func initVM() {
-        //getdataModelden çekince eşitleyip combine ile bildiricek
-    }
-
-    func getDataModels() -> [TaskListVDM]?{
+    private var cancellables = Set<AnyCancellable>()
     
-        let dataItems = dataLayer.getAllItems()
-        let vdms = dataItems.compactMap { (toDoItem) -> TaskListVDM? in
-            return TaskVDMConverter.taskViewDataModel(toDoItem: toDoItem)
+}
+
+// MARK: - Public
+extension HomeViewModel {
+    func initializeViewModel() {
+        //addSampleData(count: 500)
+        shouldUpdateData.send()
+        let allItemsPublisher = self.dataLayer.getAllItems().flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
+            if let error = response.error {
+                // TODO: Error
+                return Just([]).eraseToAnyPublisher()
+            } else if response.success == false {
+                return Just([]).eraseToAnyPublisher()
+            }
+            let convertedModels = TaskVDMConverter.taskViewDataModels(from: response.items)
+            return Just(convertedModels).eraseToAnyPublisher()
         }
-        return vdms
+        
+        allItemsPublisher.sink { taskVDMs in
+            self.arrTaskListData = taskVDMs
+            self.shouldUpdateData.send()
+        }.store(in: &cancellables)
     }
 }
+
+extension HomeViewModel {
+    private func addSampleData(count: Int) {
+        for index in 0 ..< count {
+            let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
+            let toDoItem = ToDoItem(context: CoreDataLayer.context)
+            print("\(toDoItem.id)")
+            
+            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
+            toDoItem.taskCategory = "Official"
+            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+            toDoItem.taskId = UUID().uuidString
+            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
+            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+            toDoItem.isTaskCompleted = false
+            dataLayer.createItem(item: toDoItem).sink { _ in
+                
+            }.store(in: &cancellables)
+        }
+        
+    }
+    
+    func randomString(of length: Int) -> String {
+         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+         var s = ""
+         for _ in 0 ..< length {
+             s.append(letters.randomElement()!)
+         }
+         return s
+    }
+}
+
 
 //var toDoItem = ToDoItem(context: dataLayer.context)
 //        print("\(toDoItem.id)")

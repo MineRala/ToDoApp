@@ -7,13 +7,12 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class EventTableViewController : UIViewController {
   
-
     private var viewModel : HomeViewModel!
   
-    
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
         etv.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +20,8 @@ class EventTableViewController : UIViewController {
         etv.isUserInteractionEnabled = true
         return etv
     }()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(homeViewModel: HomeViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -37,6 +38,7 @@ extension EventTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
+        addListeners()
     }
 }
 
@@ -66,19 +68,21 @@ extension EventTableViewController{
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
-    func taskCellDidSelected(_ cell: TaskCell, model: TaskModel) {
+    func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
         let vc = TaskDetailsViewController(model: model, indexPath: cell.getIndexPath())
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return viewModel.arrTaskListData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
+        let model = viewModel.arrTaskListData[indexPath.row]
+        cell.updateCell(model: model, delegate: self, indexPath: indexPath)
         return cell
     }
     
@@ -163,4 +167,13 @@ extension EventTableViewController {
     }
 }
 
-
+// MARK: - Listeners
+extension EventTableViewController {
+    private func addListeners() {
+        viewModel.shouldUpdateData
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.eventTableView.reloadData()
+        }.store(in: &cancellables)
+    }
+}

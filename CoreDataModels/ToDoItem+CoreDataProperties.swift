@@ -2,7 +2,7 @@
 //  ToDoItem+CoreDataProperties.swift
 //  ToDoApp
 //
-//  Created by Mine Rala on 5.08.2021.
+//  Created by Aybek Can Kaya on 6.08.2021.
 //
 //
 
@@ -16,13 +16,13 @@ extension ToDoItem {
         return NSFetchRequest<ToDoItem>(entityName: "ToDoItem")
     }
 
+    @NSManaged public var isTaskCompleted: Bool
     @NSManaged public var notificationDate: Date?
     @NSManaged public var taskCategory: String?
     @NSManaged public var taskDate: Date?
     @NSManaged public var taskDescription: String?
     @NSManaged public var taskId: String?
     @NSManaged public var taskName: String?
-    @NSManaged public var isTaskCompleted: Bool
 
 }
 
