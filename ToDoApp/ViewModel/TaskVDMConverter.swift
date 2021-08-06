@@ -9,15 +9,15 @@ import Foundation
 
 class TaskVDMConverter {
     
+    static func taskViewDataModels(from toDoItems: [ToDoItem]) -> [TaskListVDM] {
+        return toDoItems.compactMap { TaskVDMConverter.taskViewDataModel(toDoItem: $0) }
+    }
+    
     static func taskViewDataModel(toDoItem: ToDoItem) -> TaskListVDM? {
-        guard let taskName = toDoItem.taskName  else {
-            return nil
-        }
-        
+        guard let taskName = toDoItem.taskName, let description = toDoItem.taskDescription, let category = toDoItem.taskCategory else { return nil }
         var dayAndNight : String = ""
-        var hourString : String = ""
-        var minuteString : String = ""
-
+    
+    
         let calendar = Calendar.current
         var hour = calendar.component(.hour, from: toDoItem.taskDate!)
         let minute = calendar.component(.minute, from: toDoItem.taskDate!)
@@ -37,12 +37,13 @@ class TaskVDMConverter {
             dayAndNight = "AM"
         }
         
+        
         let dateHourAndMinute = String(format: "%02d:%02d", hour, minute)
-        let taskCategory = "\(toDoItem.taskCategory)"
-        let taskId = "\(toDoItem.taskId)"
+        
+        let taskId = "\(toDoItem.taskId!)"
         let isTaskCompleted = toDoItem.isTaskCompleted
         
-        return TaskListVDM(taskName: taskName, taskCategory: taskCategory, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted)
+        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted)
     }
     
     static func detailTaskViewModel(toDoItem: ToDoItem) -> TaskDetailVDM? {

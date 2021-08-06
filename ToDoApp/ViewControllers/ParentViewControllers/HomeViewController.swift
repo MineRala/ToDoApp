@@ -53,7 +53,7 @@ extension HomeViewController {
         setUpUI()
         addListeners()
         localNotification()
-        viewModel.getDataModels()
+        viewModel.initializeViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -151,8 +151,8 @@ extension HomeViewController: UITextFieldDelegate {
 // MARK: - Route
 extension HomeViewController  {
     private func routeToNewTasks() {
-        let newViewController = NewTaskViewController()
-        self.navigationController?.pushViewController(newViewController, animated: true)
+//        let newViewController = NewTaskViewController()
+//        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
