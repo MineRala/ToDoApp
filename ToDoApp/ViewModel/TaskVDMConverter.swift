@@ -59,7 +59,7 @@ class TaskVDMConverter {
         let taskId = "\(toDoItem.taskId!)"
         let isTaskCompleted = toDoItem.isTaskCompleted
         
-        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted,day: day)
+        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted,day: day, taskDate: taskDate)
     }
     
     static func detailTaskViewModel(toDoItem: ToDoItem) -> TaskDetailVDM? {

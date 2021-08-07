@@ -39,9 +39,10 @@ extension CoreDataLayer {
         return self.save(item)
     }
     
-    func read<T: CoreDataManagableObject>() -> AnyPublisher<CoreDataResponse<T>, Never> {
+    func read<T: CoreDataManagableObject>(filterPredicate: NSPredicate? = nil) -> AnyPublisher<CoreDataResponse<T>, Never> {
         do {
             let fetchRequest = NSFetchRequest<T>(entityName: T.tableName)
+            fetchRequest.predicate = filterPredicate
             let coreDataItems = try ManagedObjectContext.fetch(fetchRequest)
             let response = CoreDataResponse<T>(error: nil, success: true, items: coreDataItems, savedItem: nil)
             return Just(response).eraseToAnyPublisher()

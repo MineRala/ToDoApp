@@ -25,6 +25,13 @@ extension ToDoItem: CoreDataManagableObject {
     @NSManaged public var taskId: String?
     @NSManaged public var taskName: String?
 
+    static func dateRangeFilterPredicate(minDate: Date, maxDate: Date) -> NSPredicate {
+        let dateMinPredicate = NSPredicate(format: "%K > %@", #keyPath(ToDoItem.taskDate), (minDate as NSDate) )
+        let dateMaxPredicate = NSPredicate(format: "%K < %@", #keyPath(ToDoItem.taskDate), (maxDate as NSDate) )
+        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [dateMinPredicate, dateMaxPredicate])
+        return datePredicate
+    }
+    
     static func newItem(taskTitle: String, taskDescription: String, taskCategory: String, taskDate: Date, notificationDate: Date? ) -> ToDoItem {
         let todoItem = ToDoItem(context: ManagedObjectContext)
         todoItem.taskId = UUID().uuidString
@@ -36,6 +43,8 @@ extension ToDoItem: CoreDataManagableObject {
         todoItem.isTaskCompleted = false
         return todoItem
     }
+    
+    
 }
 
 extension ToDoItem : Identifiable {

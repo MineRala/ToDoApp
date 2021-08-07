@@ -69,7 +69,8 @@ extension HomeViewModel {
 
 extension HomeViewModel {
     private func fetchEventsData() {
-        let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read()
+        let dateRangeFilter = ToDoItem.dateRangeFilterPredicate(minDate: Date(), maxDate: Date() + 1.years) // events that will occur in 24 hours
+        let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read(filterPredicate: dateRangeFilter)
         let taskListVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
             guard self.showErrorIfNeeded(from: response) == false else {
                 return Just([]).eraseToAnyPublisher()
