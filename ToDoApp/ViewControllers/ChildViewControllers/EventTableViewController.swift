@@ -76,7 +76,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
-        let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath)as! HeaderTaskCell
+       // let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath)as! HeaderTaskCell
         
         let model = viewModel.arrTaskListData[indexPath.row]
         cell.updateCell(model: model, delegate: self, indexPath: indexPath)
@@ -167,10 +167,24 @@ extension EventTableViewController {
 // MARK: - Listeners
 extension EventTableViewController {
     private func addListeners() {
-        viewModel.shouldUpdateData
+        viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.eventTableView.reloadData()
+                self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
         }.store(in: &cancellables)
+        
+        viewModel.shouldChangeScrollOffsetOfEventsTable
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
+        }.store(in: &cancellables)
+    }
+}
+
+// MARK: - Scroll Offset Update
+extension EventTableViewController {
+    private func changeScrollOffset(to date: Date) {
+        NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
     }
 }

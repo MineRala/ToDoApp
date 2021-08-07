@@ -7,8 +7,6 @@
 
 import Foundation
 import UIKit
-import DeclarativeUI
-import DeclarativeLayout
 
 protocol CustomNavigationBarDelegate {
     func customNavigationBarDidTappedLeftButton(_ navigationBar: CustomNavigationBar)

@@ -7,8 +7,8 @@
 
 import Foundation
 import UIKit
-import DeclarativeUI
-import DeclarativeLayout
+
+
 
 protocol TaskCellDelegate {
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM)
@@ -70,7 +70,6 @@ class TaskCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        print("cell init")
         setUpUI()
     }
     
@@ -112,7 +111,7 @@ extension TaskCell {
     
     
     func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, indexPath: IndexPath) {
-        print("cell update")
+      
         self.model = model
         self.indexPath = indexPath
         self.delegate = delegate

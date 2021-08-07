@@ -8,12 +8,10 @@
 import Foundation
 import UIKit
 import Combine
-import DeclarativeUI
-import DeclarativeLayout
 
 class SearchViewController : UIViewController {
-    
     private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
+    private let viewModel: HomeViewModel
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
     private var searchBtnWidthConstraint: NSLayoutConstraint?
@@ -57,6 +55,15 @@ class SearchViewController : UIViewController {
         return cb
     }()
     
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit {
         self.cancellables.forEach { $0.cancel() }
     }
@@ -64,7 +71,6 @@ class SearchViewController : UIViewController {
 
 //MARK: - Lifecycle
 extension SearchViewController {
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addListeners()

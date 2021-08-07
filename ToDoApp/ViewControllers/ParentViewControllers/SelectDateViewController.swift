@@ -7,13 +7,13 @@
 
 import Foundation
 import UIKit
-import DeclarativeUI
-import DeclarativeLayout
+
+
 
 class SelectDateViewController : BaseVC{
     
     private let calendarVCContainer = UIView.view().backgroundColor(.blue)
-    private let calendarVC : CalendarViewController = CalendarViewController()
+    //private let calendarVC : CalendarViewController = CalendarViewController()
         
     private let timeView: UIView = {
         let tv = UIView(frame: .zero)
@@ -64,7 +64,7 @@ extension SelectDateViewController{
             .leadingAnchor(margin: 0)
         
         calendarVCContainer.heightAnchor.constraint(equalTo: itemContainerView.heightAnchor, multiplier: 40/100).isActive = true
-        self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
+      //  self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
  
         self.itemContainerView.addSubview(timeView)
         self.itemContainerView.addSubview(selectButton)
