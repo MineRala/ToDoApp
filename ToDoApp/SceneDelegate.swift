@@ -17,15 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let ws = (scene as? UIWindowScene) else { return }
-    //    ws.statusBarManager?.statusBarStyle = UIStatusBarStyle.lightContent
         self.window = UIWindow(windowScene: ws)
         let vc =  HomeViewController()
         let navController = UINavigationController(rootViewController: vc)
         navController.isNavigationBarHidden = true
         self.window?.rootViewController = navController
         self.window?.makeKeyAndVisible()
-        let statusBarSize = ws.statusBarManager!.statusBarFrame
-        print("Status bar frame: \(statusBarSize)")
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

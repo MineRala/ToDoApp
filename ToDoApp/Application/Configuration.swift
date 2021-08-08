@@ -7,8 +7,10 @@
 
 import Foundation
 import UIKit
+import CoreData
 
-var KeyWindow : UIWindow {UIApplication.shared.windows.first(where: { $0.isKeyWindow })! }
+var KeyWindow : UIWindow { UIApplication.shared.windows.first(where: { $0.isKeyWindow })! }
+var ManagedObjectContext: NSManagedObjectContext  { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
 
 struct C {
 

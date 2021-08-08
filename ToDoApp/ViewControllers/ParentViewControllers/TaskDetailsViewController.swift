@@ -7,8 +7,7 @@
 
 import Foundation
 import  UIKit
-import DeclarativeUI
-import DeclarativeLayout
+
 
 protocol TaskCellDeleteAndDoneDelegate {
     func taskCellDeleted(indexPath : IndexPath)

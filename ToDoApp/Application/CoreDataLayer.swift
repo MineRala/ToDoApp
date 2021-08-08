@@ -10,56 +10,58 @@ import CoreData
 import UIKit
 import Combine
 
+// MARK: - CoreDataManagableObject
+protocol CoreDataManagableObject where Self: NSManagedObject {
+    static var tableName: String { get }
+}
+
 // MARK: - Core Data Response
-struct CoreDataResponse {
+struct CoreDataResponse<T: CoreDataManagableObject> {
     let error: AppError?
     let success: Bool
-    let items: [ToDoItem]
+    let items: [T]
+    let savedItem: T?
 }
 
 // MARK: - Core Data Layer
 class CoreDataLayer {
-    
-    static let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    private func save() -> AnyPublisher<CoreDataResponse, Never> {
-        do{
-            try CoreDataLayer.context.save()
-            let response = CoreDataResponse(error: nil, success: true, items: [])
-            return Just(response).eraseToAnyPublisher()
-        }catch let error {
-            NSLog("Core Data Error: \(error)")
-            let response = CoreDataResponse(error: AppError.coreDataError, success: false, items: [])
-            return Just(response).eraseToAnyPublisher()
-        }
+   
+}
+
+// NSFetchRequest<ToDoItem>(entityName: "ToDoItem")
+// MARK: - CRUD
+extension CoreDataLayer {
+    func update<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        return self.save(item)
     }
     
-    func getAllItems() -> AnyPublisher<CoreDataResponse, Never> {
-        do{
-            guard let items = try CoreDataLayer.context.fetch(ToDoItem.fetchRequest()) as? [ToDoItem] else {
-                let response = CoreDataResponse(error: AppError.coreDataConvertingError, success: false, items: [])
-                return Just(response).eraseToAnyPublisher()
-            }
-            let response = CoreDataResponse(error: nil, success: true, items: items)
+    func create<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        return self.save(item)
+    }
+    
+    func read<T: CoreDataManagableObject>(filterPredicate: NSPredicate? = nil) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        do {
+            let fetchRequest = NSFetchRequest<T>(entityName: T.tableName)
+            fetchRequest.predicate = filterPredicate
+            let coreDataItems = try ManagedObjectContext.fetch(fetchRequest)
+            let response = CoreDataResponse<T>(error: nil, success: true, items: coreDataItems, savedItem: nil)
             return Just(response).eraseToAnyPublisher()
-        }catch let error {
-            NSLog("Core Data Error: \(error)")
-            let response = CoreDataResponse(error: AppError.coreDataError, success: false, items: [])
+        } catch let error {
+            NSLog("Error: \(error)")
+            let response = CoreDataResponse<T>(error: AppError.coreDataError, success: false, items: [], savedItem: nil)
             return Just(response).eraseToAnyPublisher()
         }
-        
     }
-    
-    func createItem(item: ToDoItem) -> AnyPublisher<CoreDataResponse, Never>{
-        return save()
-    }
-    
-    func deleteItem(item: ToDoItem) -> AnyPublisher<CoreDataResponse, Never>{
-        CoreDataLayer.context.delete(item)
-        return save()
-    }
-    
-    func updateItem(item: ToDoItem) -> AnyPublisher<CoreDataResponse, Never> {
-        return save()
+
+    func save<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        do {
+            try ManagedObjectContext.save()
+            let response = CoreDataResponse<T>(error: nil, success: true, items: [], savedItem: item)
+            return Just(response).eraseToAnyPublisher()
+        } catch let error {
+            NSLog("Error: \(error)")
+            let response = CoreDataResponse<T>(error: AppError.coreDataError, success: false, items: [], savedItem: nil)
+            return Just(response).eraseToAnyPublisher()
+        }
     }
 }

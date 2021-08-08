@@ -9,38 +9,100 @@ import Foundation
 import Combine
 
 class HomeViewModel {
-
-    private(set) var shouldUpdateData = PassthroughSubject<Void, Never>()
-    
-    
+    private let coreDataLayer = CoreDataLayer()
+   
     private(set) var arrTaskListData: [TaskListVDM] = []
-
-    private let dataLayer = CoreDataLayer()
+    private(set) var selectedDate: Date?
+    private(set) var minimumVisibleDate: Date?
+    private(set) var maximumVisibleDate: Date?
     
+    private(set) var shouldUpdateAllData = PassthroughSubject<Void, Never>()
+    private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
+   
     private var cancellables = Set<AnyCancellable>()
-    
 }
 
 // MARK: - Public
 extension HomeViewModel {
     func initializeViewModel() {
         //addSampleData(count: 500)
-        shouldUpdateData.send()
-        let allItemsPublisher = self.dataLayer.getAllItems().flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
-            if let error = response.error {
-                // TODO: Error
-                return Just([]).eraseToAnyPublisher()
-            } else if response.success == false {
+        selectDate(Date())
+    }
+    
+    func updateSelectedDate(_ date: Date) {
+        selectDate(date)
+    }
+    
+    func updateVisibleDateRange(min: Date, max: Date) {
+        self.setVisibleDateRange(min: min, max: max)
+    }
+}
+
+// MARK: - Date Select
+extension HomeViewModel {
+    private func setVisibleDateRange(min: Date, max: Date) {
+        self.minimumVisibleDate = min
+        self.maximumVisibleDate = max
+    }
+    
+    private func selectDate(_ date: Date) {
+        if isNeededFetchEventsData() {
+            self.fetchEventsData()
+        }
+        if isNeededChangeScrollOffset(for: date) {
+            self.selectedDate = date
+            self.shouldChangeScrollOffsetOfEventsTable.send()
+        }
+        self.selectedDate = date
+    }
+    
+    fileprivate func isNeededChangeScrollOffset(for date: Date) -> Bool {
+        guard let currentDate = selectedDate else { return true }
+        if currentDate.day == date.day && currentDate.month == date.month && currentDate.year == date.year { return false }
+        return true
+    }
+    
+    fileprivate func isNeededFetchEventsData() -> Bool {
+        return selectedDate == nil
+    }
+}
+
+extension HomeViewModel {
+    private func fetchEventsData() {
+        let dateRangeFilter = ToDoItem.dateRangeFilterPredicate(minDate: Date(), maxDate: Date() + 1.years) // events that will occur in 24 hours
+        let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read(filterPredicate: dateRangeFilter)
+        let taskListVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
+            guard self.showErrorIfNeeded(from: response) == false else {
                 return Just([]).eraseToAnyPublisher()
             }
-            let convertedModels = TaskVDMConverter.taskViewDataModels(from: response.items)
-            return Just(convertedModels).eraseToAnyPublisher()
-        }
+            return self.convertTodoItemsToVDMs(response.items)
+        }.eraseToAnyPublisher()
         
-        allItemsPublisher.sink { taskVDMs in
-            self.arrTaskListData = taskVDMs
-            self.shouldUpdateData.send()
+        shouldUpdateAllData.send()
+        
+        taskListVDMsPublisher.sink { taskListVDMs in
+            self.arrTaskListData = taskListVDMs
+            self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
+    }
+    
+    private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
+        if let error = response.error {
+           NSLog("Current Error :\(error)")
+            return true
+        } else if response.success == false {
+            NSLog("unsuccessful")
+            return true
+        }
+        return false
+    }
+    
+    private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
+        let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
+            return itemA.taskDate! < itemB.taskDate!
+        }
+        let vdmItems = TaskVDMConverter.taskViewDataModels(from: itemsSorted)
+        return Just(vdmItems).eraseToAnyPublisher()
     }
 }
 
@@ -66,24 +128,25 @@ extension HomeViewModel {
         return dictionary
     }
     
-    private func addSampleData(count: Int) {
-        for index in 0 ..< count {
-            let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
-            let toDoItem = ToDoItem(context: CoreDataLayer.context)
-            print("\(toDoItem.id)")
-            
-            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
-            toDoItem.taskCategory = "Official"
-            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
-            toDoItem.taskId = UUID().uuidString
-            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
-            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-            toDoItem.isTaskCompleted = false
-            dataLayer.createItem(item: toDoItem).sink { _ in
-                
-            }.store(in: &cancellables)
-        }
-    }
+    // TODO
+//    private func addSampleData(count: Int) {
+//        for index in 0 ..< count {
+//            let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
+//            let toDoItem = ToDoItem(context: CoreDataLayer.context)
+//            print("\(toDoItem.id)")
+//
+//            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
+//            toDoItem.taskCategory = "Official"
+//            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+//            toDoItem.taskId = UUID().uuidString
+//            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
+//            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+//            toDoItem.isTaskCompleted = false
+//            dataLayer.createItem(item: toDoItem).sink { _ in
+//
+//            }.store(in: &cancellables)
+//        }
+//    }
     
     func randomString(of length: Int) -> String {
          let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
