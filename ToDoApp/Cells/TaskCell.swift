@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-
-
 protocol TaskCellDelegate {
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM)
 }
