@@ -17,7 +17,6 @@
 		E8027F3E26AC67020071E506 /* ToDoAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F3D26AC67020071E506 /* ToDoAppUITests.swift */; };
 		E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F5626ACB24F0071E506 /* HomeViewController.swift */; };
 		E8058D7726B9800900E66219 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8058D7626B9800900E66219 /* Alerts.swift */; };
-		E8058D9726B9B51C00E66219 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8058D9926B9B51C00E66219 /* Localizable.strings */; };
 		E8058DA226B9B69F00E66219 /* BaseLocalization.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8058DA426B9B69F00E66219 /* BaseLocalization.strings */; };
 		E8074C4026B2CE6C00030963 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */; };
 		E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074C4426B2F48C00030963 /* SelectDateViewController.swift */; };
@@ -46,6 +45,7 @@
 		E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */; };
 		E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */; };
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
+		E8CE5BCA26C0242400B053B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8CE5BC926C0242400B053B4 /* Localizable.strings */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
 		E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */; };
 		E8D7BE4C26BD8B13006BB384 /* HeaderTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */; };
@@ -101,7 +101,6 @@
 		E8027F5626ACB24F0071E506 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E8058D7626B9800900E66219 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		E8058D8E26B9B4C800E66219 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		E8058D9826B9B51C00E66219 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E8058DA326B9B69F00E66219 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BaseLocalization.strings; sourceTree = "<group>"; };
 		E8074C3F26B2CE6C00030963 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E8074C4426B2F48C00030963 /* SelectDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectDateViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +129,7 @@
 		E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
+		E8CE5BC926C0242400B053B4 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
 		E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTaskCell.swift; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 		E8058DAB26B9B89100E66219 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				E8058D9926B9B51C00E66219 /* Localizable.strings */,
+				E8CE5BC926C0242400B053B4 /* Localizable.strings */,
 				E8058DA426B9B69F00E66219 /* BaseLocalization.strings */,
 			);
 			path = Localization;
@@ -535,6 +535,7 @@
 				E851C0CC26AEE0BF003D9CA3 /* Roboto-Italic.ttf in Resources */,
 				E851C0D726AEE0BF003D9CA3 /* Roboto-Black.ttf in Resources */,
 				E851C0D226AEE0BF003D9CA3 /* Roboto-LightItalic.ttf in Resources */,
+				E8CE5BCA26C0242400B053B4 /* Localizable.strings in Resources */,
 				E8027F2526AC67010071E506 /* Assets.xcassets in Resources */,
 				E851C0D626AEE0BF003D9CA3 /* Roboto-MediumItalic.ttf in Resources */,
 				E851C0D326AEE0BF003D9CA3 /* Roboto-Bold.ttf in Resources */,
@@ -547,7 +548,6 @@
 				E851C0D426AEE0BF003D9CA3 /* Roboto-Medium.ttf in Resources */,
 				E851C0CB26AEE0BF003D9CA3 /* Roboto-Light.ttf in Resources */,
 				E851C0D926AEE0BF003D9CA3 /* Roboto-Regular.ttf in Resources */,
-				E8058D9726B9B51C00E66219 /* Localizable.strings in Resources */,
 				E851C0CF26AEE0BF003D9CA3 /* Roboto-Condensed.ttf in Resources */,
 				E851C0D126AEE0BF003D9CA3 /* Roboto-BoldCondensedItalic.ttf in Resources */,
 			);
@@ -650,14 +650,6 @@
 				E8058D8E26B9B4C800E66219 /* tr */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		E8058D9926B9B51C00E66219 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E8058D9826B9B51C00E66219 /* tr */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		E8058DA426B9B69F00E66219 /* BaseLocalization.strings */ = {
