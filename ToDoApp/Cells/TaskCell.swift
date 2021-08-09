@@ -107,7 +107,7 @@ extension TaskCell {
         self.addGestureRecognizer(tap)
     }
     
-    
+
     func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, indexPath: IndexPath) {
       
         self.model = model

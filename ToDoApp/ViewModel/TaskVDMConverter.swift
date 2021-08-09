@@ -35,7 +35,7 @@ class TaskVDMConverter {
         else {
             let components = calendar.dateComponents([.year, .month, .day], from: taskDate)
             let monthName = DateFormatter().monthSymbols[components.month!-1]
-            day = String(format: "%02d %@ %04d", components.day!, monthName, components.year!)
+            day = String(format: "%02d %@", components.day!, monthName)
         }
         
         if hour == 0{

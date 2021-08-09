@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskListVDM {
+struct TaskListVDM: TaskListEventTableViewItem{
     let taskName: String
     let taskCategory: String
     let dateHourAndMinute: String

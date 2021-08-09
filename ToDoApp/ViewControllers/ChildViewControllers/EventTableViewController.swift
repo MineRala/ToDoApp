@@ -53,10 +53,10 @@ extension EventTableViewController {
             .bottomAnchor(margin: 0)
 
         eventTableView.register(TaskCell.self, forCellReuseIdentifier: "TaskCell")
+        eventTableView.register(HeaderTaskCell.self, forCellReuseIdentifier: "HeaderTaskCell")
         eventTableView.dataSource = self
         eventTableView.delegate = self
-        
-        
+    
         eventTableView.reloadData()
     }
 }
@@ -70,17 +70,20 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.arrTaskListData.count
+        return viewModel.arrAllElemetsEventTableView.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
-       // let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath)as! HeaderTaskCell
-        
-        let model = viewModel.arrTaskListData[indexPath.row]
-        cell.updateCell(model: model, delegate: self, indexPath: indexPath)
-        return cell
+        if type(of: viewModel.arrAllElemetsEventTableView[indexPath.row]) == TaskListVDM.self {
+            let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath)as! TaskCell
+            let model = viewModel.arrAllElemetsEventTableView[indexPath.row]
+            cell.updateCell(model: model as! TaskListVDM, delegate: self, indexPath: indexPath)
+            return cell
+        }else{
+             let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath)as! HeaderTaskCell
+            headerCell.updateHeaderCell(title: ((viewModel.arrAllElemetsEventTableView[indexPath.row]as? TaskListVDMHeader)?.getCellDateTitle())!)
+           return headerCell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -138,28 +141,29 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
 // MARK: -  Task Cell Delete Delegate
 extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
     func taskCellDeleted( indexPath : IndexPath) {
+        self.viewModel.initializeArrAllElemetsEventTableView()
         eventTableView.reloadData()
     }
     
     func taskCellDoneTapped(indexPath: IndexPath) {
        handleDone(indexPath: indexPath)
     }
-    
 }
-
-
 //MARK: - Actions
 extension EventTableViewController {
     private func handleTrash(indexPath: IndexPath) {
       print("Trash")
         Alerts.showAlertDelete(controller: self,NSLocalizedString("Are you sure you want to delete the task?", comment: ""), deletion: {
+            self.viewModel.initializeArrAllElemetsEventTableView()
             self.eventTableView.reloadData()
+          
         })
     }
     
     private func handleDone(indexPath: IndexPath){
         print("Done")
 //        arrModel[indexPath.row].isTaskCompleted = !arrModel[indexPath.row].isTaskCompleted
+        self.viewModel.initializeArrAllElemetsEventTableView()
         self.eventTableView.reloadData()
     }
 }
@@ -170,6 +174,7 @@ extension EventTableViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
+                self.viewModel.initializeArrAllElemetsEventTableView()
                 self.eventTableView.reloadData()
                 self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
         }.store(in: &cancellables)

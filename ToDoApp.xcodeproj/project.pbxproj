@@ -41,11 +41,11 @@
 		E851C0D926AEE0BF003D9CA3 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0C926AEE0BF003D9CA3 /* Roboto-Regular.ttf */; };
 		E851C0DA26AEE0BF003D9CA3 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */; };
 		E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */; };
+		E85B83E426C138F9008EC7A0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E85B83E626C138F9008EC7A0 /* Localizable.strings */; };
 		E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */; };
 		E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */; };
 		E8C57AC826B19DDF00E51F6F /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */; };
 		E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */; };
-		E8CE5BCA26C0242400B053B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8CE5BC926C0242400B053B4 /* Localizable.strings */; };
 		E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D2FBE726B02917006D0936 /* TaskCell.swift */; };
 		E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */; };
 		E8D7BE4C26BD8B13006BB384 /* HeaderTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */; };
@@ -125,11 +125,11 @@
 		E851C0C926AEE0BF003D9CA3 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewController.swift; sourceTree = "<group>"; };
+		E85B83E526C138F9008EC7A0 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		E8C57ABF26B19DC700E51F6F /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		E8C57AC726B19DDF00E51F6F /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		E8C57ACC26B19DF600E51F6F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
-		E8CE5BC926C0242400B053B4 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E8D2FBE726B02917006D0936 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewController.swift; sourceTree = "<group>"; };
 		E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTaskCell.swift; sourceTree = "<group>"; };
@@ -261,7 +261,7 @@
 		E8058DAB26B9B89100E66219 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				E8CE5BC926C0242400B053B4 /* Localizable.strings */,
+				E85B83E626C138F9008EC7A0 /* Localizable.strings */,
 				E8058DA426B9B69F00E66219 /* BaseLocalization.strings */,
 			);
 			path = Localization;
@@ -535,7 +535,7 @@
 				E851C0CC26AEE0BF003D9CA3 /* Roboto-Italic.ttf in Resources */,
 				E851C0D726AEE0BF003D9CA3 /* Roboto-Black.ttf in Resources */,
 				E851C0D226AEE0BF003D9CA3 /* Roboto-LightItalic.ttf in Resources */,
-				E8CE5BCA26C0242400B053B4 /* Localizable.strings in Resources */,
+				E85B83E426C138F9008EC7A0 /* Localizable.strings in Resources */,
 				E8027F2526AC67010071E506 /* Assets.xcassets in Resources */,
 				E851C0D626AEE0BF003D9CA3 /* Roboto-MediumItalic.ttf in Resources */,
 				E851C0D326AEE0BF003D9CA3 /* Roboto-Bold.ttf in Resources */,
@@ -658,6 +658,14 @@
 				E8058DA326B9B69F00E66219 /* en */,
 			);
 			name = BaseLocalization.strings;
+			sourceTree = "<group>";
+		};
+		E85B83E626C138F9008EC7A0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E85B83E526C138F9008EC7A0 /* tr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

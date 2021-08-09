@@ -8,10 +8,25 @@
 import Foundation
 import Combine
 
+protocol TaskListEventTableViewItem {}
+
+struct TaskListVDMHeader: TaskListEventTableViewItem {
+
+    private var cellDateTitle: String = ""
+
+    mutating func setTitle(title: String) {
+        self.cellDateTitle = title
+    }
+    
+    func getCellDateTitle() -> String{
+        return cellDateTitle
+    }
+}
 class HomeViewModel {
     private let coreDataLayer = CoreDataLayer()
    
     private(set) var arrTaskListData: [TaskListVDM] = []
+    private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
@@ -82,9 +97,31 @@ extension HomeViewModel {
         
         taskListVDMsPublisher.sink { taskListVDMs in
             self.arrTaskListData = taskListVDMs
+            
+            self.initializeArrAllElemetsEventTableView()
+            
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
     }
+    
+    func initializeArrAllElemetsEventTableView() {
+        if self.arrAllElemetsEventTableView.count > 0 {
+            self.arrAllElemetsEventTableView.removeAll()
+        }
+        
+        for i in 0 ..< self.arrTaskListData.count {
+            if i == 0 || self.arrTaskListData[i-1].day != self.arrTaskListData[i].day {
+                var titleCell = TaskListVDMHeader()
+                titleCell.setTitle(title: self.arrTaskListData[i].day)
+                self.arrAllElemetsEventTableView.append(titleCell)
+                self.arrAllElemetsEventTableView.append(self.arrTaskListData[i])
+                continue
+                }
+                else {
+                    self.arrAllElemetsEventTableView.append(self.arrTaskListData[i])
+                }
+            }
+        }
     
     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
         if let error = response.error {
@@ -107,26 +144,38 @@ extension HomeViewModel {
 }
 
 extension HomeViewModel {
-    
-    private func convertTaskVMsToDictionary(arr: [TaskListVDM]) ->  [String: [TaskListVDM]]? {
-    
-        var dictionary: [ String : [TaskListVDM] ]?
-        
-        for i in 0 ..< arr.count {
-            if i == 0 {
-                dictionary = [arr[i].day : [arr[i]]]
-            continue
-            }
-            if arr[i-1].day == arr[i].day {
-                var taskListVDMs = dictionary![arr[i].day]
-                taskListVDMs!.append(arr[i])
-                dictionary!.updateValue(taskListVDMs!, forKey: arr[i].day)
-            } else {
-                dictionary = [arr[i].day : [arr[i]]]
-            }
-        }
-        return dictionary
+    func randomString(of length: Int) -> String {
+         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+         var s = ""
+         for _ in 0 ..< length {
+             s.append(letters.randomElement()!)
+         }
+         return s
     }
+}
+
+
+
+//
+////    private func convertTaskVMsToDictionary(arr: [TaskListVDM]) ->  [String: [TaskListVDM]]? {
+////
+////        var dictionary: [ String : [TaskListVDM] ]?
+////
+////        for i in 0 ..< arr.count {
+////            if i == 0 {
+////                dictionary = [arr[i].day : [arr[i]]]
+////                continue
+////            }
+////            if arr[i-1].day == arr[i].day {
+////                var taskListVDMs = dictionary![arr[i].day]
+////                taskListVDMs!.append(arr[i])
+////                dictionary!.updateValue(taskListVDMs!, forKey: arr[i].day)
+////            } else {
+////                dictionary = [arr[i].day : [arr[i]]]
+////            }
+////        }
+////        return dictionary
+////    }
     
     // TODO
 //    private func addSampleData(count: Int) {
@@ -147,28 +196,18 @@ extension HomeViewModel {
 //            }.store(in: &cancellables)
 //        }
 //    }
-    
-    func randomString(of length: Int) -> String {
-         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-         var s = ""
-         for _ in 0 ..< length {
-             s.append(letters.randomElement()!)
-         }
-         return s
-    }
-}
-
 
 //var toDoItem = ToDoItem(context: dataLayer.context)
 //        print("\(toDoItem.id)")
 //        toDoItem.taskName = "Task1"
 //        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(24*60*60*3)
+//        toDoItem.taskDate = Date().addingTimeInterval(-24*60*60*3)
 //        toDoItem.taskId = UUID().uuidString
 //        toDoItem.taskDescription = "Task Desc"
 //        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
 //        toDoItem.isTaskCompleted = false
 //        dataLayer.createItem(item: toDoItem)
+
 //
 //
 //        toDoItem = ToDoItem(context: dataLayer.context)
