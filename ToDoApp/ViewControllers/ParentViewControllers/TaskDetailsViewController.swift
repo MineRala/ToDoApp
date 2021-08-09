@@ -10,8 +10,8 @@ import UIKit
 
 
 protocol TaskCellDeleteAndDoneDelegate {
-    func taskCellDeleted(indexPath : IndexPath)
-    func taskCellDoneTapped(indexPath : IndexPath)
+    func taskCellDeleted(index : Int)
+    func taskCellDoneTapped(index : Int)
 }
 
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
@@ -22,7 +22,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     
     private var model: TaskListVDM!
     var delegate: TaskCellDeleteAndDoneDelegate?
-    private var indexPath: IndexPath!
+    private var index: Int!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -88,10 +88,10 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return bd
     }()
     
-    init(model: TaskListVDM, indexPath: IndexPath) {
+    init(model: TaskListVDM, index: Int) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
-        self.indexPath = indexPath
+        self.index = index
     }
     
     required init?(coder: NSCoder) {
@@ -214,18 +214,18 @@ extension TaskDetailsViewController{
     
     @objc func deleteButtonTapped() {
         Alerts.showAlertDelete(controller: self, NSLocalizedString("Are you sure you want to delete the task?", comment: "")) {
-            self.delegate?.taskCellDeleted(indexPath: self.indexPath)
+            self.delegate?.taskCellDeleted(index: self.index)
             self.navigationController?.popViewController(animated: true)
         }
     }
     
     @objc func editButtonTapped() {
-//        let vc = NewTaskViewController(model: TaskListVDM())
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = NewTaskViewController(model: model)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func doneButtonTapped() {
-        self.delegate?.taskCellDoneTapped(indexPath: self.indexPath)
+        self.delegate?.taskCellDoneTapped(index: self.index)
         self.navigationController?.popViewController(animated: true)
     }
 }

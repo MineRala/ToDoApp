@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import Combine
 
-
 class HomeViewController : BaseVC {
     
     private let viewModel: HomeViewModel = HomeViewModel()
@@ -159,8 +158,8 @@ extension HomeViewController: UITextFieldDelegate {
 // MARK: - Route
 extension HomeViewController  {
     private func routeToNewTasks() {
-//        let newViewController = NewTaskViewController()
-//        self.navigationController?.pushViewController(newViewController, animated: true)
+        let newViewController = NewTaskViewController()
+        self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
 
@@ -171,10 +170,6 @@ extension HomeViewController {
         let content = UNMutableNotificationContent()
         content.title = "Hey I'am a notification"
         content.body = "Look at me!"
-        
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-//        let someDateTime = formatter.date(from: "2021/08/04 19:11")
         
         let date =  Date().addingTimeInterval(5)
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)

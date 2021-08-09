@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct TaskListVDM: TaskListEventTableViewItem{
+struct TaskListVDM{
     let taskName: String
     let taskCategory: String
     let dateHourAndMinute: String
     let datePeriod: String
     let taskId: String
-    let isTaskCompleted: Bool
+    var isTaskCompleted: Bool
     let day: String
     let taskDate: Date 
 }

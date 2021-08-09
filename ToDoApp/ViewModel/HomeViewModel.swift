@@ -8,23 +8,9 @@
 import Foundation
 import Combine
 
-protocol TaskListEventTableViewItem {}
-
-struct TaskListVDMHeader: TaskListEventTableViewItem {
-
-    private var cellDateTitle: String = ""
-
-    mutating func setTitle(title: String) {
-        self.cellDateTitle = title
-    }
-    
-    func getCellDateTitle() -> String{
-        return cellDateTitle
-    }
-}
 class HomeViewModel {
+    
     private let coreDataLayer = CoreDataLayer()
-   
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
@@ -39,6 +25,15 @@ class HomeViewModel {
 
 // MARK: - Public
 extension HomeViewModel {
+    
+    func removedElement(index: Int){
+        arrTaskListData.remove(at: index)
+    }
+    
+    func reverseTaskCompletionAtIndex(index: Int){
+       arrTaskListData[index].isTaskCompleted = !arrTaskListData[index].isTaskCompleted
+    }
+    
     func initializeViewModel() {
         //addSampleData(count: 500)
         selectDate(Date())
@@ -108,22 +103,22 @@ extension HomeViewModel {
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
         }
-        
-        for i in 0 ..< self.arrTaskListData.count {
-            if i == 0 || self.arrTaskListData[i-1].day != self.arrTaskListData[i].day {
-                var titleCell = TaskListVDMHeader()
-                titleCell.setTitle(title: self.arrTaskListData[i].day)
+        for index in 0 ..< self.arrTaskListData.count {
+            if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
+                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day)
                 self.arrAllElemetsEventTableView.append(titleCell)
-                self.arrAllElemetsEventTableView.append(self.arrTaskListData[i])
+                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                self.arrAllElemetsEventTableView.append(taskCell)
                 continue
-                }
-                else {
-                    self.arrAllElemetsEventTableView.append(self.arrTaskListData[i])
-                }
+            }
+            else {
+                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                self.arrAllElemetsEventTableView.append(taskCell)
             }
         }
+    }
     
-    private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
+     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
         if let error = response.error {
            NSLog("Current Error :\(error)")
             return true
@@ -132,9 +127,9 @@ extension HomeViewModel {
             return true
         }
         return false
-    }
+     }
     
-    private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
+     private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
         let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
             return itemA.taskDate! < itemB.taskDate!
         }
@@ -154,48 +149,26 @@ extension HomeViewModel {
     }
 }
 
-
-
 //
-////    private func convertTaskVMsToDictionary(arr: [TaskListVDM]) ->  [String: [TaskListVDM]]? {
-////
-////        var dictionary: [ String : [TaskListVDM] ]?
-////
-////        for i in 0 ..< arr.count {
-////            if i == 0 {
-////                dictionary = [arr[i].day : [arr[i]]]
-////                continue
-////            }
-////            if arr[i-1].day == arr[i].day {
-////                var taskListVDMs = dictionary![arr[i].day]
-////                taskListVDMs!.append(arr[i])
-////                dictionary!.updateValue(taskListVDMs!, forKey: arr[i].day)
-////            } else {
-////                dictionary = [arr[i].day : [arr[i]]]
-////            }
-////        }
-////        return dictionary
-////    }
-    
-    // TODO
-//    private func addSampleData(count: Int) {
-//        for index in 0 ..< count {
-//            let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
-//            let toDoItem = ToDoItem(context: CoreDataLayer.context)
-//            print("\(toDoItem.id)")
+ // TODO
+//private func addSampleData(count: Int) {
+//    for index in 0 ..< count {
+//        let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
+//        let toDoItem = ToDoItem(context: ManagedObjectContext)
+//        print("\(toDoItem.id)")
 //
-//            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
-//            toDoItem.taskCategory = "Official"
-//            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
-//            toDoItem.taskId = UUID().uuidString
-//            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
-//            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//            toDoItem.isTaskCompleted = false
-//            dataLayer.createItem(item: toDoItem).sink { _ in
+//        toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
+//        toDoItem.taskCategory = "Official"
+//        toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+//        toDoItem.taskId = UUID().uuidString
+//        toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
+//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+//        toDoItem.isTaskCompleted = false
+//        coreDataLayer.create(toDoItem).sink { _ in
 //
-//            }.store(in: &cancellables)
-//        }
+//        }.store(in: &cancellables)
 //    }
+//}
 
 //var toDoItem = ToDoItem(context: dataLayer.context)
 //        print("\(toDoItem.id)")

@@ -12,9 +12,12 @@ class Alerts : NSObject {
     
    static func showAlertDelete(controller: UIViewController, _ message: String, deletion: @escaping () -> Void) {
         let dialogMessage = UIAlertController(title: NSLocalizedString("Deletion Confirmation", comment: ""), message: message, preferredStyle: .alert)
-        dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive, handler: { (action) in
-            deletion()
-        }))
+        let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .default, handler: { (action) in
+        deletion()
+        })
+        deleteAction.setValue(UIColor.red, forKey: "titleTextColor")
+        dialogMessage.addAction(deleteAction)
+   
         dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { (action) in
            print("cancel is tapped.")
         }))

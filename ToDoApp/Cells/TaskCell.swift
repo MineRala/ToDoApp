@@ -22,7 +22,7 @@ class TaskCell: UITableViewCell {
     private var model: TaskListVDM!
     
     var delegate: TaskCellDelegate?
-    private var indexPath: IndexPath!
+    private var index: Int!
     
     let attrStrikethroughStyle = [ NSAttributedString.Key.strikethroughStyle: NSNumber(value: NSUnderlineStyle.single.rawValue) ]
 
@@ -62,8 +62,8 @@ class TaskCell: UITableViewCell {
         return tc
     }()
     
-    func getIndexPath() -> IndexPath{
-        return self.indexPath
+    func getIndex() -> Int{
+        return self.index
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -103,15 +103,14 @@ extension TaskCell {
    
         self.selectionStyle = .none
         tap = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped))
-        
         self.addGestureRecognizer(tap)
     }
     
 
-    func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, indexPath: IndexPath) {
+    func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, index: Int) {
       
         self.model = model
-        self.indexPath = indexPath
+        self.index = index
         self.delegate = delegate
         
         if model.isTaskCompleted {
@@ -133,6 +132,3 @@ extension TaskCell {
         self.delegate?.taskCellDidSelected(self, model: model)
     }
 }
-    
-
-
