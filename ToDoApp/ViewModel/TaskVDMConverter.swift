@@ -12,7 +12,19 @@ class TaskVDMConverter {
     static func taskViewDataModels(from toDoItems: [ToDoItem]) -> [TaskListVDM] {
         return toDoItems.compactMap { TaskVDMConverter.taskViewDataModel(toDoItem: $0) }
     }
+   
+    static func detailTaskViewDataModels(from toDoItems: [ToDoItem]) -> [TaskDetailVDM] {
+        return toDoItems.compactMap {
+            TaskVDMConverter.detailTaskViewModel(toDoItem: $0)
+        }
+    }
     
+    static func editTaskViewDataModels(from toDoItems: [ToDoItem]) -> [TaskEditVDM] {
+        return toDoItems.compactMap {
+            TaskVDMConverter.editTaskViewModel(toDoItem: $0)
+        }
+    }
+
     static func taskViewDataModel(toDoItem: ToDoItem) -> TaskListVDM? {
         guard var taskName = toDoItem.taskName, let descriptionTask = toDoItem.taskDescription, let category = toDoItem.taskCategory, let taskDate = toDoItem.taskDate else { return nil }
         taskName = taskDate.toString(with: "dd/MM/yyyy")

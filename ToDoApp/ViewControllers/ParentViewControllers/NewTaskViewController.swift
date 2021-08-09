@@ -14,7 +14,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
-    var model : TaskListVDM!
+    private var model : TaskEditVDM!
     
     private var pageMode: NewAndEditVCState = .newTask
     
@@ -29,7 +29,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         return ab
     }()
     
-    init(model: TaskListVDM? = nil) {
+    init(model: TaskEditVDM? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
     }
@@ -81,11 +81,12 @@ extension NewTaskViewController {
         scrollViewAddTask.bottomAnchor(margin: 0)
         
     }
+    
 }
 
 //MARK: - Get Page Mode
 extension NewTaskViewController {
-    private func getMode(_ model: TaskListVDM?) -> NewAndEditVCState {
+    private func getMode(_ model: TaskEditVDM?) -> NewAndEditVCState {
         if model == nil {
             return .newTask
         } else {
@@ -178,6 +179,15 @@ extension NewTaskViewController {
             .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
+        
+        
+        
+          if pageMode == .editTask {
+            taskNameFLTextfield.asFloatingTextfield().text = self.model.taskName
+            
+           
+          }
+        
         
     }
 }

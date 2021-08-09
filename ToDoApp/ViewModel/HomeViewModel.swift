@@ -13,6 +13,8 @@ class HomeViewModel {
     private let coreDataLayer = CoreDataLayer()
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
+    private(set) var arrEditTaskListData: [TaskEditVDM] = []
+    private(set) var arrDetailTaskListData: [TaskDetailVDM] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
@@ -88,6 +90,20 @@ extension HomeViewModel {
             return self.convertTodoItemsToVDMs(response.items)
         }.eraseToAnyPublisher()
         
+        let taskEditVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskEditVDM], Never> in
+            guard self.showErrorIfNeeded(from: response) == false else {
+                return Just([]).eraseToAnyPublisher()
+            }
+            return self.convertTodoItemsToEditVDMs(response.items)
+        }.eraseToAnyPublisher()
+        
+        let taskDetailVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskDetailVDM], Never> in
+            guard self.showErrorIfNeeded(from: response) == false else {
+                return Just([]).eraseToAnyPublisher()
+            }
+            return self.convertTodoItemsToDetailVDMs(response.items)
+        }.eraseToAnyPublisher()
+        
         shouldUpdateAllData.send()
         
         taskListVDMsPublisher.sink { taskListVDMs in
@@ -97,12 +113,30 @@ extension HomeViewModel {
             
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
+        
+        taskEditVDMsPublisher.sink { taskEditVDMs in
+            self.arrEditTaskListData = taskEditVDMs
+            
+            self.initializeArrAllElemetsEventTableView()
+            
+            self.shouldUpdateAllData.send()
+        }.store(in: &cancellables)
+        
+        taskDetailVDMsPublisher.sink { taskDetailVDMs in
+            self.arrDetailTaskListData = taskDetailVDMs
+            
+            self.initializeArrAllElemetsEventTableView()
+            
+            self.shouldUpdateAllData.send()
+        }.store(in: &cancellables)
     }
+    
     
     func initializeArrAllElemetsEventTableView() {
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
         }
+        
         for index in 0 ..< self.arrTaskListData.count {
             if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
                 let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day)
@@ -114,6 +148,7 @@ extension HomeViewModel {
             else {
                 let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
+               
             }
         }
     }
@@ -136,6 +171,23 @@ extension HomeViewModel {
         let vdmItems = TaskVDMConverter.taskViewDataModels(from: itemsSorted)
         return Just(vdmItems).eraseToAnyPublisher()
     }
+    
+    private func convertTodoItemsToEditVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskEditVDM], Never> {
+        let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
+            return itemA.taskDate! < itemB.taskDate!
+        }
+        let vdmItems = TaskVDMConverter.editTaskViewDataModels(from: itemsSorted)
+        return Just(vdmItems).eraseToAnyPublisher()
+   }
+    
+    private func convertTodoItemsToDetailVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskDetailVDM], Never> {
+       let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
+           return itemA.taskDate! < itemB.taskDate!
+       }
+        let vdmItems = TaskVDMConverter.detailTaskViewDataModels(from: itemsSorted)
+       return Just(vdmItems).eraseToAnyPublisher()
+   }
+    
 }
 
 extension HomeViewModel {

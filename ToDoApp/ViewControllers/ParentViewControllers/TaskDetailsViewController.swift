@@ -20,7 +20,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
-    private var model: TaskListVDM!
+    private var model: TaskDetailVDM!
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
     
@@ -88,7 +88,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return bd
     }()
     
-    init(model: TaskListVDM, index: Int) {
+    init(model: TaskDetailVDM, index: Int) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
         self.index = index
@@ -220,7 +220,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController(model: model)
+        let vc = NewTaskViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

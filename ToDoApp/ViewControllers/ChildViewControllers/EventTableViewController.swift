@@ -178,7 +178,7 @@ extension EventTableViewController {
     
     private func handleDone(index: Int){
         print("Done")
-        viewModel.reverseTaskCompletionAtIndex(index: index)
+        self.viewModel.reverseTaskCompletionAtIndex(index: index)
         self.viewModel.initializeArrAllElemetsEventTableView()
         self.eventTableView.reloadData()
     }
