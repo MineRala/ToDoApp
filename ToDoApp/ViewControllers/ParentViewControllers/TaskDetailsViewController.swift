@@ -24,7 +24,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
-    private var model: TaskDetailVDM!
+    private var model: ToDoItem!
   
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
@@ -50,7 +50,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let labelTaskName: UILabel = {
         let ltn = UILabel(frame: .zero)
         ltn.translatesAutoresizingMaskIntoConstraints = false
-        ltn.text = "Meet Joshoep"
         ltn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         ltn.font = UIFont(name: C.Font.medium.rawValue, size: 20)
         return ltn
@@ -59,7 +58,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let labelDate: UILabel = {
         let ld = UILabel(frame: .zero)
         ld.translatesAutoresizingMaskIntoConstraints = false
-        ld.text = "27 Feb, 2018 | 04:00 PM"
         ld.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         ld.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         return ld
@@ -78,27 +76,27 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let buttonDelete : UIButton = {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
-        bd.setImage(UIImage(named: "TrashIcon"), for: .normal)
+        bd.setImage(UIImage(named: C.ImageName.trash.rawValue), for: .normal)
         return bd
     }()
     
     private let buttonEdit : UIButton = {
         let be = UIButton(frame: .zero)
         be.translatesAutoresizingMaskIntoConstraints = false
-        be.setImage(UIImage(named: "EditIcon"), for: .normal)
+        be.setImage(UIImage(named: C.ImageName.edit.rawValue), for: .normal)
         return be
     }()
     private let buttonDone : UIButton = {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
-        bd.setImage(UIImage(named: "CheckIcon"), for: .normal)
+        bd.setImage(UIImage(named: C.ImageName.check.rawValue), for: .normal)
         return bd
     }()
     
-    init(model: TaskDetailVDM, index: Int) {
+    init(model: ToDoItem) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
-        self.index = index
+        
     }
     
     required init?(coder: NSCoder) {
@@ -116,11 +114,11 @@ extension TaskDetailsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if model.isTaskCompleted {
-            self.buttonDone.setImage(UIImage(named: "undoGray"), for: .normal)
+            self.buttonDone.setTitle(C.ImageName.undo.rawValue, for: .normal)
         }
         
         labelTaskName.text = model.taskName
-        labelDate.text = model.taskDate
+      //  labelDate.text = model.taskDate
         textViewDescription.text = model.taskDescription
         
     }
@@ -197,25 +195,12 @@ extension TaskDetailsViewController{
         
         textViewDescription.textContainerInset = UIEdgeInsets.fill(with: -4)
         
-        textViewDescription.text = """
-        Have to meet him because i want to show him my latest app design in person.
-        
-        Also need to ask for advice on these:
-
-        - style
-        - copy
-        - interaction
-        """
-        
-        print(textViewDescription)
         textViewDescription.sizeToFit()
         let sizeTv = textViewDescription.sizeThatFits(CGSize(width: viewDetail.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         print(textViewDescription)
         print(sizeTv)
         textViewDescription.isScrollEnabled = false
-        
     }
-    
 }
 
 //MARK: - Actions
@@ -232,10 +217,12 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController(model: model)
-        self.delegateModeSelection = vc 
-        self.delegateModeSelection?.setPageMode(mode: .editTask)
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+//        let vc = NewTaskViewController(model: self.delegateRetriveTaskEdit?.getTaskEditVDM())
+//        self.delegateModeSelection = vc
+//        self.delegateModeSelection?.setPageMode(mode: .editTask)
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    
     }
     
     @objc func doneButtonTapped() {

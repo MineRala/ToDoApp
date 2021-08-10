@@ -12,6 +12,7 @@ import Combine
 class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
+    var delegateRetrieveTaskDetail: RetriveTaskEditVDMDelegate?
   
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -39,6 +40,7 @@ extension EventTableViewController {
         super.viewDidLoad()
         setUpUI()
         addListeners()
+        self.delegateRetrieveTaskDetail = self
     }
 }
 
@@ -64,8 +66,9 @@ extension EventTableViewController {
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
-        let vc = TaskDetailsViewCgontroller(model: viewModel.arrDetailTaskListData[cell.getIndex()], index: cell.getIndex())
+        let vc = TaskDetailsViewController(model: model.toDoItem)
         vc.delegate = self
+        vc.delegateRetriveTaskEdit = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -165,6 +168,14 @@ extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
        handleDone(index: index)
     }
 }
+
+//MARK: - Implentation of Protocols
+extension EventTableViewController: RetriveTaskEditVDMDelegate {
+    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
+        return self.delegateRetrieveTaskDetail?.getTaskEditVDM(index: index)
+    }
+}
+
 //MARK: - Actions
 extension EventTableViewController {
     private func handleTrash(index: Int) {
@@ -209,3 +220,4 @@ extension EventTableViewController {
         NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
     }
 }
+

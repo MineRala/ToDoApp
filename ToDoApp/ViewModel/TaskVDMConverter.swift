@@ -24,8 +24,10 @@ class TaskVDMConverter {
             TaskVDMConverter.editTaskViewModel(toDoItem: $0)
         }
     }
-    
-    
+}
+
+//MARK: - Format Converters
+extension TaskVDMConverter {
     static func convertTo12HourPeriod(hour: Int) -> (Int, String) {
         if hour == 0 {
             return (12, "AM")
@@ -60,6 +62,21 @@ class TaskVDMConverter {
         
         return String(format: "%02d %@, %04d | %@", components.day!, String(shortNameOfMonth), components.year!, dateHourAndMinute)
     }
+    
+    static func formatDateForEditTaskVDM(date taskDate: Date) -> String {
+        let calendar = Calendar.current
+        var hour = calendar.component(.hour, from: taskDate)
+        let minute = calendar.component(.minute, from: taskDate)
+        let tupple12HourPeriod = convertTo12HourPeriod(hour: hour)
+        
+        hour = tupple12HourPeriod.0
+        let dayAndNight = tupple12HourPeriod.1
+        
+        let dateHourAndMınite = String(format: "%02d:%02d %@", hour,minute,dayAndNight)
+        let  components = calendar.dateComponents([.year,.month,.day], from: taskDate)
+        
+        return String(format: "%02d-%02d-%04d | %@", components.day!,components.month!,components.year!,dateHourAndMınite)
+    }
 }
 
 //MARK: - Task View Data Model Converter
@@ -70,7 +87,7 @@ extension TaskVDMConverter {
         let calendar = Calendar.current
         var hour = calendar.component(.hour, from: taskDate)
         let minute = calendar.component(.minute, from: taskDate)
-
+        let tupple12HourPeriod = convertTo12HourPeriod(hour: hour)
 
         var day: String = ""
         if calendar.isDateInToday(taskDate) {
@@ -87,19 +104,16 @@ extension TaskVDMConverter {
             let monthName = DateFormatter().monthSymbols[components.month!-1]
             day = String(format: "%02d %@", components.day!, monthName)
         }
-       
-        let tupple12HourPeriod = convertTo12HourPeriod(hour: hour)
         
         hour = tupple12HourPeriod.0
         let dayAndNight = tupple12HourPeriod.1
-        
         
         let dateHourAndMinute = String(format: "%02d:%02d", hour, minute)
         
         let taskId = "\(toDoItem.taskId!)"
         let isTaskCompleted = toDoItem.isTaskCompleted
         
-        return TaskListVDM(taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted,day: day, taskDate: taskDate)
+        return TaskListVDM(toDoItem: toDoItem,taskName: taskName, taskCategory: category, dateHourAndMinute: dateHourAndMinute, datePeriod: dayAndNight, taskId: taskId, isTaskCompleted: isTaskCompleted,day: day, taskDate: taskDate)
     }
 }
 
@@ -109,10 +123,7 @@ extension TaskVDMConverter{
         guard let taskName = toDoItem.taskName, let taskDescription = toDoItem.taskDescription, let taskDate = toDoItem.taskDate else{
             return nil
         }
-        
         let taskDateTime = formatDateForTaskDetailVDM(date: taskDate)
-        
-        
         let taskId = "\(toDoItem.taskId)"
         let isTaskCompleted = toDoItem.isTaskCompleted
         
@@ -125,14 +136,18 @@ extension TaskVDMConverter{
 //MARK: - Edit Task View Model Converter
     extension TaskVDMConverter {
     static func editTaskViewModel(toDoItem: ToDoItem) -> TaskEditVDM? {
-        guard let taskName = toDoItem.taskName else {
+        guard let taskName = toDoItem.taskName ,let taskDescription = toDoItem.taskDescription, let taskCategory = toDoItem.taskCategory, let taskDate = toDoItem.taskDate , let notificationDate = toDoItem.notificationDate?.description else {
             return nil
         }
-        let taskDescription = "\(toDoItem.taskDescription)"
-        let taskDate = "\(toDoItem.taskDate?.description)"
-        let notificationDate = "\(toDoItem.notificationDate?.description)"
+        let taskNameTitle = NSLocalizedString("Task Name", comment: "")
+        let taskDescriptionTitle = NSLocalizedString("Desciption", comment: "")
+        let taskCategoryTitle = NSLocalizedString("Category", comment: "")
+        let taskDateTitle  = NSLocalizedString("Pick Date & Time", comment: "")
+        let notificationDateTitle = NSLocalizedString("Notification", comment: "")
+        
+        let taskDateTime = formatDateForEditTaskVDM(date: taskDate)
         let taskId = "\(toDoItem.taskId)"
         
-        return TaskEditVDM(taskName: taskName, taskDescription: taskDescription, taskDate: taskDate, notificationDate: notificationDate, taskId: taskId)
+        return TaskEditVDM(taskNameTitle: taskNameTitle, taskDescriptionTitle: taskDescriptionTitle, taskCategoryTitle: taskCategoryTitle, taskDateTitle: taskDateTitle, notificationDateTitle: notificationDateTitle, taskName: taskName, taskDescription: taskDescription, taskCategory: taskCategory, taskDate: taskDateTime, notificationDate: notificationDate, taskId: taskId)
     }
 }

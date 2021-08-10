@@ -27,4 +27,13 @@ struct C {
             return UIFont(name: self.rawValue, size: size)!
         }
     }
+    
+    enum ImageName : String {
+       case undo = "undoGray"
+       case trash = "TrashIcon"
+       case edit = "EditIcon"
+       case check = "CheckIcon"
+        
+    }
+    
 }

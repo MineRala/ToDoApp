@@ -52,6 +52,7 @@ extension HomeViewController {
         addListeners()
         localNotification()
         viewModel.initializeViewModel()
+      //  eventVC.delegateRetrieveTaskDetail = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -110,20 +111,19 @@ extension HomeViewController {
             self.calendarHeightConstraint!.constant = value
             self.view.layoutIfNeeded()
         } completion: { _ in
-          
         }
     }
 }
 
-//MARK: - Edit Protocol Delegate
-extension HomeViewController: RetriveTaskEditVDMDelegate {
-    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
-        if index < 0 || index >= viewModel.arrEditTaskListData.count {
-            return nil
-        }
-        return viewModel.arrEditTaskListData[index]
-    }
-}
+////MARK: - Edit Protocol Delegate
+//extension HomeViewController: RetriveTaskEditVDMDelegate {
+//    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
+//        if index < 0 || index >=  {
+//            return nil
+//        }
+//        return viewModel.arrEditTaskListData[index]
+//    }
+//}
 
 // MARK: - Actions
 extension HomeViewController {

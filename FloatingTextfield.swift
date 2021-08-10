@@ -59,6 +59,7 @@ extension FloatingTextfield {
             .trailingAnchor(margin: 0)
             .heightAnchor(1)
         
+        
         self.addSubview(self.lblTitle)
         self.trailingConstraintTitleLabel = self.lblTitle.trailingAnchor.constraint(equalTo: viewBottomLine.trailingAnchor, constant: 0)
         self.leadingConstraintTitleLabel =  self.lblTitle.leadingAnchor.constraint(equalTo: viewBottomLine.leadingAnchor, constant: 0)
@@ -198,6 +199,7 @@ extension FloatingTextfield {
         self.textFieldShouldChangeCharactersCallback = callback
         return self
     }
+    
 }
 
 // MARK: - Declarative UI
@@ -268,7 +270,7 @@ extension FloatingTextfield {
         updateUI(animated: false)
         return self
     }
-    
+
     @discardableResult
     public func configureTextfield() -> FloatingTextfield {
         updateUI(animated: false)

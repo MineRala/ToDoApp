@@ -53,7 +53,7 @@ extension CoreDataLayer {
         }
     }
 
-    func save<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+    private func save<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
         do {
             try ManagedObjectContext.save()
             let response = CoreDataResponse<T>(error: nil, success: true, items: [], savedItem: item)

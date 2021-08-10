@@ -13,8 +13,8 @@ class HomeViewModel {
     private let coreDataLayer = CoreDataLayer()
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
-    private(set) var arrEditTaskListData: [TaskEditVDM] = []
-    private(set) var arrDetailTaskListData: [TaskDetailVDM] = []
+//    private(set) var arrEditTaskListData: [TaskEditVDM] = []
+//    private(set) var arrDetailTaskListData: [TaskDetailVDM] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
@@ -90,19 +90,19 @@ extension HomeViewModel {
             return self.convertTodoItemsToVDMs(response.items)
         }.eraseToAnyPublisher()
         
-        let taskEditVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskEditVDM], Never> in
-            guard self.showErrorIfNeeded(from: response) == false else {
-                return Just([]).eraseToAnyPublisher()
-            }
-            return self.convertTodoItemsToEditVDMs(response.items)
-        }.eraseToAnyPublisher()
-        
-        let taskDetailVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskDetailVDM], Never> in
-            guard self.showErrorIfNeeded(from: response) == false else {
-                return Just([]).eraseToAnyPublisher()
-            }
-            return self.convertTodoItemsToDetailVDMs(response.items)
-        }.eraseToAnyPublisher()
+//        let taskEditVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskEditVDM], Never> in
+//            guard self.showErrorIfNeeded(from: response) == false else {
+//                return Just([]).eraseToAnyPublisher()
+//            }
+//            return self.convertTodoItemsToEditVDMs(response.items)
+//        }.eraseToAnyPublisher()
+//
+//        let taskDetailVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskDetailVDM], Never> in
+//            guard self.showErrorIfNeeded(from: response) == false else {
+//                return Just([]).eraseToAnyPublisher()
+//            }
+//            return self.convertTodoItemsToDetailVDMs(response.items)
+//        }.eraseToAnyPublisher()
         
         shouldUpdateAllData.send()
         
@@ -114,21 +114,21 @@ extension HomeViewModel {
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
         
-        taskEditVDMsPublisher.sink { taskEditVDMs in
-            self.arrEditTaskListData = taskEditVDMs
-            
-            self.initializeArrAllElemetsEventTableView()
-            
-            self.shouldUpdateAllData.send()
-        }.store(in: &cancellables)
-        
-        taskDetailVDMsPublisher.sink { taskDetailVDMs in
-            self.arrDetailTaskListData = taskDetailVDMs
-            
-            self.initializeArrAllElemetsEventTableView()
-            
-            self.shouldUpdateAllData.send()
-        }.store(in: &cancellables)
+//        taskEditVDMsPublisher.sink { taskEditVDMs in
+//            self.arrEditTaskListData = taskEditVDMs
+//            
+//            self.initializeArrAllElemetsEventTableView()
+//            
+//            self.shouldUpdateAllData.send()
+//        }.store(in: &cancellables)
+//        
+//        taskDetailVDMsPublisher.sink { taskDetailVDMs in
+//            self.arrDetailTaskListData = taskDetailVDMs
+//            
+//            self.initializeArrAllElemetsEventTableView()
+//            
+//            self.shouldUpdateAllData.send()
+//        }.store(in: &cancellables)
     }
     
     

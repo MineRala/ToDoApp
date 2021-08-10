@@ -7,9 +7,14 @@
 
 import Foundation
 import UIKit
+import Combine
 
 protocol SetPageModeToNewTaskViewControllerDelegate {
     func setPageMode(mode: NewAndEditVCState)
+}
+
+protocol AddNewTaskDelegate {
+    func passTask(toDoItem: ToDoItem)
 }
 
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
@@ -17,14 +22,62 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
-    private var model : TaskEditVDM!
-    
+    private var model: TaskEditVDM!
+    var delegate: AddNewTaskDelegate!
     private var pageMode: NewAndEditVCState = .newTask
+    var newToDoItem = ToDoItem()
+ 
+    static let editingColor = UIColor.black
+    static let defaultColor = UIColor.lightGray
+    
+    private let taskNameTextField = FloatingTextfield()
+        .textInsets(dx: 2, dy: 0)
+        .defaultBottomLineColor(defaultColor)
+        .editingBottomLineColor(editingColor)
+        .defaultTitleColor(defaultColor)
+        .editingTitleColor(editingColor)
+        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .asFloatingTextfield()
+    
+    private let descriptionTextField = FloatingTextfield()
+        .textInsets(dx: 2, dy: 0)
+        .defaultBottomLineColor(defaultColor)
+        .editingBottomLineColor(editingColor)
+        .defaultTitleColor(defaultColor)
+        .editingTitleColor(editingColor)
+        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .asFloatingTextfield()
+    
+    private let categoryFLTextfield = FloatingTextfield()
+        .textInsets(dx: 2, dy: 0)
+        .defaultBottomLineColor(defaultColor)
+        .editingBottomLineColor(editingColor)
+        .defaultTitleColor(defaultColor)
+        .editingTitleColor(editingColor)
+        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .asFloatingTextfield()
+    
+    private let pickDateFLTextField = FloatingTextfield()
+        .textInsets(dx: 2, dy: 0)
+        .defaultBottomLineColor(defaultColor)
+        .editingBottomLineColor(editingColor)
+        .defaultTitleColor(defaultColor)
+        .editingTitleColor(editingColor)
+        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .asFloatingTextfield()
+    
+    private  let notification = FloatingTextfield()
+        .textInsets(dx: 2, dy: 0)
+        .defaultBottomLineColor(defaultColor)
+        .editingBottomLineColor(editingColor)
+        .defaultTitleColor(defaultColor)
+        .editingTitleColor(editingColor)
+        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .asFloatingTextfield()
     
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
-        ab.setTitle("ADD", for: .normal)
         ab.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
         ab.titleLabel?.font = UIFont(name: C.Font.medium.rawValue, size: 20)
         ab.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
@@ -47,6 +100,7 @@ extension NewTaskViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.updateTaskTitle(string: pageMode.navigationBarTitle)
+
     }
     
     override func viewDidLoad() {
@@ -115,61 +169,21 @@ extension NewTaskViewController {
             .bottomAnchor(margin: 32)
         
         let textfieldDefaultHeight: CGFloat = 44
-        
-        let defaultColor = UIColor.lightGray
-        let editingColor = UIColor.black
+       
         stackView.backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         
         let viewTop = UIView().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)).heightAnchor(0)
         stackView.addArrangedSubview(viewTop)
         
-        let taskNameFLTextfield = FloatingTextfield
-            .floatingTextField()
-            .textInsets(dx: 2, dy: 0)
-            .defaultBottomLineColor(defaultColor)
-            .editingBottomLineColor(editingColor)
-            .defaultTitleColor(defaultColor)
-            .editingTitleColor(editingColor)
-            .title(NSLocalizedString("Task Name", comment: ""))
-            .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        stackView.addArrangedSubview(taskNameFLTextfield)
-        taskNameFLTextfield.heightAnchor(textfieldDefaultHeight)
+        stackView.addArrangedSubview(taskNameTextField)
+        taskNameTextField.heightAnchor(textfieldDefaultHeight)
         
-        let description = FloatingTextfield
-            .floatingTextField()
-            .textInsets(dx: 2, dy: 0)
-            .defaultBottomLineColor(defaultColor)
-            .editingBottomLineColor(editingColor)
-            .defaultTitleColor(defaultColor)
-            .editingTitleColor(editingColor)
-            .title(NSLocalizedString("Description", comment: ""))
-            .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
-        stackView.addArrangedSubview(description)
-        description.heightAnchor(textfieldDefaultHeight)
-       
+        stackView.addArrangedSubview(descriptionTextField)
+        descriptionTextField.heightAnchor(textfieldDefaultHeight)
         
-        let categoryFLTextfield = FloatingTextfield
-            .floatingTextField()
-            .textInsets(dx: 2, dy: 0)
-            .defaultBottomLineColor(defaultColor)
-            .editingBottomLineColor(editingColor)
-            .defaultTitleColor(defaultColor)
-            .editingTitleColor(editingColor)
-            .title(NSLocalizedString("Category", comment: ""))
-            .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         stackView.addArrangedSubview(categoryFLTextfield)
         categoryFLTextfield.heightAnchor(textfieldDefaultHeight)
         
-        
-        let pickDateFLTextField = FloatingTextfield
-            .floatingTextField()
-            .textInsets(dx: 2, dy: 0)
-            .defaultBottomLineColor(defaultColor)
-            .editingBottomLineColor(editingColor)
-            .defaultTitleColor(defaultColor)
-            .editingTitleColor(editingColor)
-            .title(NSLocalizedString("Pick Date & Time", comment: ""))
-            .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         stackView.addArrangedSubview(pickDateFLTextField)
         stackView.setCustomSpacing(0, after: pickDateFLTextField)
         pickDateFLTextField.heightAnchor(textfieldDefaultHeight)
@@ -177,30 +191,29 @@ extension NewTaskViewController {
         let view = UIView().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)).heightAnchor(30)
         stackView.addArrangedSubview(view)
         
-        
-        let notification = FloatingTextfield
-            .floatingTextField()
-            .textInsets(dx: 2, dy: 0)
-            .defaultBottomLineColor(defaultColor)
-            .editingBottomLineColor(editingColor)
-            .defaultTitleColor(defaultColor)
-            .editingTitleColor(editingColor)
-            .title(NSLocalizedString("Notification", comment: ""))
-            .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-        
-        
           if pageMode == .editTask {
-            taskNameFLTextfield.asFloatingTextfield().text = self.model.taskName
+           setEditPageMode()
           }
     }
 }
   
+//MARK: - Edit Page Mode
+extension NewTaskViewController {
+    private func setEditPageMode(){
+        taskNameTextField.asFloatingTextfield().text = self.model.taskName
+        descriptionTextField.asFloatingTextfield().text = self.model.taskDescription
+        categoryFLTextfield.asFloatingTextfield().text = self.model.taskCategory
+        pickDateFLTextField.asFloatingTextfield().text = self.model.taskDate
+        notification.asFloatingTextfield().text = self.model.notificationDate
+    }
+}
 //MARK: - Action
 extension NewTaskViewController {
-        @objc func addBtnPressed() {
-            self.navigationController?.popViewController(animated: true)
-        }
+    @objc func addBtnPressed() {
+        self.navigationController?.popViewController(animated: true)
+    }
 }
+

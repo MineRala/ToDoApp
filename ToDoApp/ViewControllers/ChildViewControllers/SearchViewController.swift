@@ -190,6 +190,5 @@ extension SearchViewController {
         self.isSearchTextFieldInEditingMode.send(false)
      }
         return true
-    }
-    
+    }    
 }
