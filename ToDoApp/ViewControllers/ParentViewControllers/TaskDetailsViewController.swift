@@ -14,6 +14,10 @@ protocol TaskCellDeleteAndDoneDelegate {
     func taskCellDoneTapped(index : Int)
 }
 
+protocol RetriveTaskEditVDMDelegate {
+    func getTaskEditVDM(index: Int) -> TaskEditVDM?
+}
+
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
    
     private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
@@ -21,8 +25,11 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
     private var model: TaskDetailVDM!
+  
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
+    var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
+    var delegateRetriveTaskEdit: RetriveTaskEditVDMDelegate?
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -111,6 +118,11 @@ extension TaskDetailsViewController {
         if model.isTaskCompleted {
             self.buttonDone.setImage(UIImage(named: "undoGray"), for: .normal)
         }
+        
+        labelTaskName.text = model.taskName
+        labelDate.text = model.taskDate
+        textViewDescription.text = model.taskDescription
+        
     }
     
 }
@@ -220,7 +232,9 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController()
+        let vc = NewTaskViewController(model: model)
+        self.delegateModeSelection = vc 
+        self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -115,6 +115,16 @@ extension HomeViewController {
     }
 }
 
+//MARK: - Edit Protocol Delegate
+extension HomeViewController: RetriveTaskEditVDMDelegate {
+    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
+        if index < 0 || index >= viewModel.arrEditTaskListData.count {
+            return nil
+        }
+        return viewModel.arrEditTaskListData[index]
+    }
+}
+
 // MARK: - Actions
 extension HomeViewController {
     override func baseVCAddOnTap() {
@@ -161,6 +171,9 @@ extension HomeViewController  {
         let newViewController = NewTaskViewController()
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
+    
+    //TODO
+    // Get new task from newTaskViewController(Protocol)
 }
 
 //MARK: - Local Notification

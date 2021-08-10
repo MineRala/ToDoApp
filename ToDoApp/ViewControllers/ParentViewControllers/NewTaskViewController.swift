@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 
+protocol SetPageModeToNewTaskViewControllerDelegate {
+    func setPageMode(mode: NewAndEditVCState)
+}
 
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
@@ -52,6 +55,7 @@ extension NewTaskViewController {
         setUpUI()
     }
 }
+
 //MARK: - Set Up UI
 extension NewTaskViewController {
     func setUpUI() {
@@ -81,7 +85,6 @@ extension NewTaskViewController {
         scrollViewAddTask.bottomAnchor(margin: 0)
         
     }
-    
 }
 
 //MARK: - Get Page Mode
@@ -92,6 +95,13 @@ extension NewTaskViewController {
         } else {
             return .editTask
         }
+    }
+}
+
+//MARK: - Set Page Mode Protocol
+extension NewTaskViewController : SetPageModeToNewTaskViewControllerDelegate {
+    func setPageMode(mode: NewAndEditVCState) {
+        self.pageMode = mode
     }
 }
    
@@ -184,11 +194,7 @@ extension NewTaskViewController {
         
           if pageMode == .editTask {
             taskNameFLTextfield.asFloatingTextfield().text = self.model.taskName
-            
-           
           }
-        
-        
     }
 }
   

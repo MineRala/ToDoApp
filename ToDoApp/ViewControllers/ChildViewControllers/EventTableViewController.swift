@@ -64,7 +64,7 @@ extension EventTableViewController {
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
-        let vc = TaskDetailsViewController(model: model, index: cell.getIndex())
+        let vc = TaskDetailsViewCgontroller(model: viewModel.arrDetailTaskListData[cell.getIndex()], index: cell.getIndex())
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
