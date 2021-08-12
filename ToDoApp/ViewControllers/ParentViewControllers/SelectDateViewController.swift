@@ -9,11 +9,16 @@ import Foundation
 import UIKit
 
 
+protocol SelectDateDelegate {
+    func setSelectTime(date: Date)
+}
+
 class SelectDateViewController : BaseVC{
     
     private let viewModel: HomeViewModel = HomeViewModel()
     private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
     private var calendarVC : CalendarViewController!
+    var selectDelegate: SelectDateDelegate?
     
     var taskTimePicker = UIDatePicker()
 
@@ -23,6 +28,7 @@ class SelectDateViewController : BaseVC{
         tv.backgroundColor = .clear
         tv.taskDetailsShadow()
         tv.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tv.layer.cornerRadius = 8
         return tv
     }()
     
@@ -103,6 +109,24 @@ extension SelectDateViewController{
 //MARK: - Actions
 extension SelectDateViewController {
     @objc func selectButtonTapped(){
+       
+        let date: Date = calendarVC.getSelectedDate()
+            let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
+            
+            // Specify date components
+            var dateComponents = DateComponents()
+            dateComponents.year = components.year
+            dateComponents.month = components.month
+            dateComponents.day = components.day
+            dateComponents.timeZone = TimeZone(abbreviation: "GMT+3") // Japan Standard Time
+            dateComponents.hour = 12
+            dateComponents.minute = 59
+
+            // Create date from components
+            let userCalendar = Calendar(identifier: .gregorian)
+            let selectedDate = userCalendar.date(from: dateComponents)
+        
+        self.selectDelegate?.setSelectTime(date:selectedDate!)
         navigationController?.popViewController(animated: true)
     }
 }

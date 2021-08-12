@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import FSCalendar
-import Combine
+
 
 // MARK: - Calendar View Controller
 class CalendarViewController : UIViewController{
@@ -31,6 +31,7 @@ extension CalendarViewController {
         super.viewDidLoad()
         setUpUI()
     }
+    
 }
     
 // MARK: - Set Up UI
@@ -58,6 +59,10 @@ extension CalendarViewController {
     func selectDate(_ date: Date) {
         self.calendar.select(date)
         self.viewModel.updateSelectedDate(date)
+    }
+    
+    func getSelectedDate() -> Date {
+        return self.calendar.selectedDate!
     }
 }
    

@@ -4,6 +4,12 @@
 //
 //  Created by Mine Rala on 26.07.2021.
 //
+//
+//  NewTaskViewController.swift
+//  ToDoApp
+//
+//  Created by Mine Rala on 26.07.2021.
+//
 
 import Foundation
 import UIKit
@@ -17,12 +23,19 @@ protocol AddNewTaskDelegate {
     func passTask(toDoItem: ToDoItem)
 }
 
+protocol ToolbarPickerViewDelegate {
+    func didTapDone()
+    func didTapCancel()
+}
+
+
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
-    let arrNotificationTime = [NSLocalizedString("5 Minutes Before", comment: ""),
+    let arrNotificationTime = [NSLocalizedString("Do Not Send Notification", comment: ""),
+                               NSLocalizedString("5 Minutes Before", comment: ""),
                                NSLocalizedString("10 Minutes Before", comment: ""),
                                NSLocalizedString("15 Minutes Before", comment: ""),
                                NSLocalizedString("30 Minutes Before", comment: ""),
@@ -32,12 +45,13 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
                                NSLocalizedString("1 Day Before", comment: ""),
                                NSLocalizedString("2 Days Before", comment: "")]
     
-    var notificationPickerView = UIPickerView()
+    var notificationPickerView =  ToolbarPickerView()
     
     private var model: TaskEditVDM!
     var delegate: AddNewTaskDelegate!
     private var pageMode: NewAndEditVCState = .newTask
     var newToDoItem = ToDoItem()
+   
  
     static let editingColor = UIColor.black
     static let defaultColor = UIColor.lightGray
@@ -137,10 +151,9 @@ extension NewTaskViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        notificationPickerView.delegate = self
-        notificationPickerView.dataSource = self
         self.pageMode = getMode(model)
         setUpUI()
+        setUpPickerView()
        
     }
 }
@@ -186,6 +199,14 @@ extension NewTaskViewController {
         
         scrollViewAddTask.bottomAnchor(margin: 0)
         
+    }
+    
+    func setUpPickerView() {
+        notificationPickerView.delegate = self
+        notificationPickerView.dataSource = self
+        self.notificationPickerView.toolbarDelegate = self
+        notification.inputAccessoryView = notificationPickerView.toolbar
+        self.notificationPickerView.reloadAllComponents()
     }
 }
 
@@ -271,9 +292,18 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return arrNotificationTime[row]
     }
+}
+
+extension NewTaskViewController: ToolbarPickerViewDelegate {
+    func didTapDone() {
+        let row = self.notificationPickerView.selectedRow(inComponent: 0)
+        self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
+        self.notification.text = self.arrNotificationTime[row]
+        notification.resignFirstResponder()
+    }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        notification.text = arrNotificationTime[row]
+    func didTapCancel() {
+        // Do nothing
         notification.resignFirstResponder()
     }
 }
@@ -285,8 +315,16 @@ extension NewTaskViewController {
     
     @objc func pickDateButtonTapped() {
         let vc = SelectDateViewController()
+        vc.selectDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
         
+    }
+}
+
+//MARK: - Set Select Date Delegate
+extension NewTaskViewController : SelectDateDelegate {
+    func setSelectTime(date: Date) {
+        print(date)
     }
 }
 
