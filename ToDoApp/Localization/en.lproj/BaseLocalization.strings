@@ -28,3 +28,14 @@
 "Select" = "Select";
 "Search Task" = "Search Task";
 "Cancel" = "Cancel";
+
+
+"5 Minutes Before" = "5 Minutes Before";
+"10 Minutes Before" = "10 Minutes Before";
+"15 Minutes Before" = "15 Minutes Before";
+"30 Minutes Before" = "30 Minutes Before";
+"1 Hour Before" = "1 Hour Before";
+"2 Hours Before" = "2 Hours Before";
+"5 Hours Before" = "5 Hours Before";
+"1 Day Before" = "1 Day Before";
+"2 Days Before" = "2 Days Before";

@@ -8,16 +8,21 @@
 import Foundation
 import UIKit
 
+
 class SelectDateViewController : BaseVC{
     
-    private let calendarVCContainer = UIView.view().backgroundColor(.blue)
-    //private let calendarVC : CalendarViewController = CalendarViewController()
-        
+    private let viewModel: HomeViewModel = HomeViewModel()
+    private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
+    private var calendarVC : CalendarViewController!
+    
+    var taskTimePicker = UIDatePicker()
+
     private let timeView: UIView = {
         let tv = UIView(frame: .zero)
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        tv.backgroundColor = .clear
         tv.taskDetailsShadow()
+        tv.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         return tv
     }()
     
@@ -42,13 +47,20 @@ class SelectDateViewController : BaseVC{
 extension SelectDateViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpUI()
-    }
+        taskTimePicker.datePickerMode = .time
+        if #available(iOS 13.4, *) {
+            taskTimePicker.preferredDatePickerStyle = .wheels
+        } else {
+            // Fallback on earlier versions
+        }
+         setUpUI()
+        }
 }
-    
+
 //MARK: - Set Up UI
 extension SelectDateViewController{
     private func setUpUI(){
+        self.view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         self.view.addSubview(itemContainerView)
         itemContainerView.leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
@@ -62,26 +74,32 @@ extension SelectDateViewController{
             .leadingAnchor(margin: 0)
         
         calendarVCContainer.heightAnchor.constraint(equalTo: itemContainerView.heightAnchor, multiplier: 40/100).isActive = true
-       // self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
  
         self.itemContainerView.addSubview(timeView)
         self.itemContainerView.addSubview(selectButton)
         
-        timeView.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 24).isActive = true
-        timeView.leadingAnchor(margin: 24)
-            .trailingAnchor(margin: 24)
+        timeView.topAnchor.constraint(equalTo: calendarVCContainer.bottomAnchor, constant: 32).isActive = true
+        timeView.leadingAnchor(margin: 32)
+            .trailingAnchor(margin: 32)
 
+        timeView.addSubview(taskTimePicker)
+        taskTimePicker.trailingAnchor(margin: 0).leadingAnchor(margin: 0).topAnchor(margin: 0).bottomAnchor(margin: 0)
+        
         selectButton.bottomAnchor(margin: 0)
             .leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
             .heightAnchor(view.frame.width/5)
     
-        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -24).isActive = true
+        timeView.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -32).isActive = true
         
         selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
-       
+        
+        calendarVC = CalendarViewController(viewModel: viewModel)
+        self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
+        
     }
 }
+
 //MARK: - Actions
 extension SelectDateViewController {
     @objc func selectButtonTapped(){

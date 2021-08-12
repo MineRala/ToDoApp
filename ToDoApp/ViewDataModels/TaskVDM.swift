@@ -28,8 +28,8 @@ struct TaskDetailVDM {
 }
 
 struct TaskEditVDM {
-    let taskNameTitle: String
-    let taskDescriptionTitle: String
+    var taskNameTitle: String
+    var taskDescriptionTitle: String
     let taskCategoryTitle: String
     let taskDateTitle: String
     let notificationDateTitle: String
