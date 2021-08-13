@@ -46,9 +46,7 @@ class NewAndEditViewModel{
         return pageMode
     }
     
-    func setMode(mode: NewAndEditVCState) {
-        self.pageMode = mode
-    }
+   
     
     func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
         if taskName != nil && taskDescription != nil && taskCategory != nil  && pickerDate != nil {
@@ -65,13 +63,14 @@ class NewAndEditViewModel{
                 toDoItem.isTaskCompleted = false
                 toDoItem.taskId = UUID().uuidString
                 coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables)
+                
             case .editTask:
                 coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables)
             }
         }
     }
     
-    func setNotificationTime(notificationTime: String) {
+    private func setNotificationTime(notificationTime: String) {
         switch notificationTime {
         case NSLocalizedString( "5 Minutes Before", comment: ""):
             self.notificationTime = 5*60
@@ -96,4 +95,3 @@ class NewAndEditViewModel{
         }
     }
 }
-

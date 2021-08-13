@@ -34,7 +34,6 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     var notificationPickerView =  ToolbarPickerView()
     
     var delegate: AddNewTaskDelegate!
-    var newToDoItem = ToDoItem()
     var model: NewAndEditViewModel!
     var fetchDelegate: FetchDelegate?
     
@@ -194,12 +193,6 @@ extension NewTaskViewController {
     }
 }
 
-//MARK: - Set Page Mode Protocol
-extension NewTaskViewController : SetPageModeToNewTaskViewControllerDelegate {
-    func setPageMode(mode: NewAndEditVCState) {
-        self.model.setMode(mode: mode)
-    }
-}
    
 //MARK: - ScrollView Elements
 extension NewTaskViewController {
@@ -271,7 +264,7 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
-        self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
+     //   self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
         self.notification.text = self.model.arrNotificationTime[row]
         
         notification.resignFirstResponder()

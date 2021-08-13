@@ -18,13 +18,12 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
-    
-    private var toDoItem: ToDoItem!
-    
+
     var fetchDelegate: FetchDelegate?
     var delegate: TaskCellDeleteAndDoneDelegate?
-    private var index: Int!
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
+    
+    private var toDoItem: ToDoItem!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -211,7 +210,6 @@ extension TaskDetailsViewController{
     
     @objc func editButtonTapped() {
         let vc = NewTaskViewController(toDoItem: toDoItem)
-        self.delegateModeSelection = vc
         vc.fetchDelegate = self
         self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)
