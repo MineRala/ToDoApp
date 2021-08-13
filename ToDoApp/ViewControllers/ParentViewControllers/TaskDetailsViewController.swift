@@ -22,8 +22,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     var fetchDelegate: FetchDelegate?
     var delegate: TaskCellDeleteAndDoneDelegate?
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
-    
-    private var toDoItem: ToDoItem!
+    var detailModel: DetailTaskViewModel!
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -89,7 +88,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     
     init(model: ToDoItem) {
         super.init(nibName: nil, bundle: nil)
-        self.toDoItem = model
+        self.detailModel = DetailTaskViewModel(toDoItem: model)
     }
     
     required init?(coder: NSCoder) {
@@ -106,12 +105,12 @@ extension TaskDetailsViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if toDoItem.isTaskCompleted {
+        if detailModel.detailTaskVDM!.isTaskCompleted {
             self.buttonDone.setImage(UIImage(named:C.ImageName.undo.rawValue), for: .normal)
         }
         
-        labelTaskName.text = toDoItem.taskName
-        textViewDescription.text = toDoItem.taskDescription
+        labelTaskName.text = detailModel.detailTaskVDM!.taskName
+        textViewDescription.text = detailModel.detailTaskVDM!.taskDescription
         
     }
     
@@ -203,20 +202,20 @@ extension TaskDetailsViewController{
     
     @objc func deleteButtonTapped() {
         Alerts.showAlertDelete(controller: self, NSLocalizedString("Are you sure you want to delete the task?", comment: "")) {
-            self.delegate?.taskCellDeleted(toDoItem: self.toDoItem)
+            self.delegate?.taskCellDeleted(toDoItem: self.detailModel.getToDoItem())
             self.navigationController?.popViewController(animated: true)
         }
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController(toDoItem: toDoItem)
+        let vc = NewTaskViewController(toDoItem: self.detailModel.getToDoItem())
         vc.fetchDelegate = self
         self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func doneButtonTapped() {
-        self.delegate?.taskCellDoneTapped(toDoItem: self.toDoItem)
+        self.delegate?.taskCellDoneTapped(toDoItem: self.detailModel.getToDoItem())
         self.navigationController?.popViewController(animated: true)
     }
 }

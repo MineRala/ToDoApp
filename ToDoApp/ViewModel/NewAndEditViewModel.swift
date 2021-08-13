@@ -15,7 +15,7 @@ class NewAndEditViewModel{
     private(set) var editTaskVDM: TaskEditVDM?
     private var pageMode: NewAndEditVCState = .newTask
     var pickerDate: Date?
-    var notificationDate: Date?
+    private var notificationDate: Date?
     private var notificationTime: Int?
     private var cancellables = Set<AnyCancellable>()
     
