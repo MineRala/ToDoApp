@@ -23,11 +23,11 @@ class ToolbarPickerView: UIPickerView {
     }
 
     private func commonInit() {
-        
         let toolBar = UIToolbar()
-        toolBar.barStyle = .default
+        toolBar.barStyle = .black
         toolBar.isTranslucent = true
-        toolBar.tintColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
+        toolBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        toolBar.layer.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
         toolBar.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))

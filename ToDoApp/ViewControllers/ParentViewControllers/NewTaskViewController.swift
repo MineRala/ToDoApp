@@ -1,10 +1,3 @@
-//
-//  NewTaskViewController.swift
-//  ToDoApp
-//
-//  Created by Mine Rala on 26.07.2021.
-//
-//
 //  NewTaskViewController.swift
 //  ToDoApp
 //
@@ -28,31 +21,23 @@ protocol ToolbarPickerViewDelegate {
     func didTapCancel()
 }
 
+protocol FetchDelegate {
+    func fetchData()
+}
 
 class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
     
-    let arrNotificationTime = [NSLocalizedString("Do Not Send Notification", comment: ""),
-                               NSLocalizedString("5 Minutes Before", comment: ""),
-                               NSLocalizedString("10 Minutes Before", comment: ""),
-                               NSLocalizedString("15 Minutes Before", comment: ""),
-                               NSLocalizedString("30 Minutes Before", comment: ""),
-                               NSLocalizedString("1 Hour Before", comment: ""),
-                               NSLocalizedString("2 Hours Before", comment: ""),
-                               NSLocalizedString("5 Hours Before", comment: ""),
-                               NSLocalizedString("1 Day Before", comment: ""),
-                               NSLocalizedString("2 Days Before", comment: "")]
-    
+  
     var notificationPickerView =  ToolbarPickerView()
     
-    private var model: TaskEditVDM!
     var delegate: AddNewTaskDelegate!
-    private var pageMode: NewAndEditVCState = .newTask
     var newToDoItem = ToDoItem()
-   
- 
+    var model: NewAndEditViewModel!
+    var fetchDelegate: FetchDelegate?
+    
     static let editingColor = UIColor.black
     static let defaultColor = UIColor.lightGray
     
@@ -118,9 +103,11 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
         return ab
     }()
 
-    init(model: TaskEditVDM? = nil) {
+    init(toDoItem: ToDoItem? = nil) {
         super.init(nibName: nil, bundle: nil)
-        if model ==  nil { //New Task
+        self.model = NewAndEditViewModel(toDoItem: toDoItem)
+        
+        if model.getMode() ==  .newTask { //New Task
             taskNameTextField.title("Task Name")
             descriptionTextField.title("Description")
             categoryFLTextfield.title("Category")
@@ -128,12 +115,11 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
             notification.title("Notification")
         }
         else{
-            self.model = model
-            taskNameTextField.title(model!.taskNameTitle)
-            descriptionTextField.title(model!.taskDescriptionTitle)
-            categoryFLTextfield.title(model!.taskCategoryTitle)
-            pickDateFLTextField.title(model!.taskDateTitle)
-            notification.title(model!.notificationDateTitle)
+            taskNameTextField.title(model.editTaskVDM!.taskNameTitle)
+            descriptionTextField.title(model.editTaskVDM!.taskDescriptionTitle)
+            categoryFLTextfield.title(model.editTaskVDM!.taskCategoryTitle)
+            pickDateFLTextField.title(model.editTaskVDM!.taskDateTitle)
+            notification.title(model.editTaskVDM!.notificationDateTitle)
         }
     }
     
@@ -146,15 +132,13 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
 extension NewTaskViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        self.updateTaskTitle(string: pageMode.navigationBarTitle)
+        self.updateTaskTitle(string: model.getMode().navigationBarTitle)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.pageMode = getMode(model)
         setUpUI()
         setUpPickerView()
-       
     }
 }
 
@@ -192,7 +176,7 @@ extension NewTaskViewController {
             .trailingAnchor(margin: 0)
             .heightAnchor(view.frame.width/5)
             
-        self.addBtn.setTitle(pageMode.confirmButtonTitle, for: .normal)
+        self.addBtn.setTitle(model.getMode().confirmButtonTitle, for: .normal)
     
         pickDateButton.addTarget(nil, action: #selector(pickDateButtonTapped), for: UIControl.Event.touchUpInside)
         addBtn.addTarget(nil, action: #selector(addBtnPressed), for: UIControl.Event.touchUpInside)
@@ -210,21 +194,10 @@ extension NewTaskViewController {
     }
 }
 
-//MARK: - Get Page Mode
-extension NewTaskViewController {
-    private func getMode(_ model: TaskEditVDM?) -> NewAndEditVCState {
-        if model == nil {
-            return .newTask
-        } else {
-            return .editTask
-        }
-    }
-}
-
 //MARK: - Set Page Mode Protocol
 extension NewTaskViewController : SetPageModeToNewTaskViewControllerDelegate {
     func setPageMode(mode: NewAndEditVCState) {
-        self.pageMode = mode
+        self.model.setMode(mode: mode)
     }
 }
    
@@ -263,7 +236,7 @@ extension NewTaskViewController {
         stackView.addArrangedSubview(notification)
         notification.heightAnchor(textfieldDefaultHeight)
         
-          if pageMode == .editTask {
+        if model.getMode() == .editTask {
            setEditPageMode()
           }
     }
@@ -272,11 +245,11 @@ extension NewTaskViewController {
 //MARK: - Edit Page Mode
 extension NewTaskViewController {
     private func setEditPageMode(){
-        taskNameTextField.asFloatingTextfield().text = self.model.taskName
-        descriptionTextField.asFloatingTextfield().text = self.model.taskDescription
-        categoryFLTextfield.asFloatingTextfield().text = self.model.taskCategory
-        pickDateFLTextField.asFloatingTextfield().text = self.model.taskDate
-        notification.asFloatingTextfield().text = self.model.notificationDate
+        taskNameTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskName
+        descriptionTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDescription
+        categoryFLTextfield.asFloatingTextfield().text = self.model.editTaskVDM!.taskCategory
+        pickDateFLTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDate
+        notification.asFloatingTextfield().text = self.model.editTaskVDM!.notificationDate
     }
 }
 
@@ -286,11 +259,11 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return 1
     }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return arrNotificationTime.count
+        return model.arrNotificationTime.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return arrNotificationTime[row]
+        return model.arrNotificationTime[row]
     }
 }
 
@@ -298,7 +271,9 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
-        self.notification.text = self.arrNotificationTime[row]
+        self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
+        self.notification.text = self.model.arrNotificationTime[row]
+        
         notification.resignFirstResponder()
     }
     
@@ -310,7 +285,13 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
 //MARK: - Action
 extension NewTaskViewController {
     @objc func addBtnPressed() {
+        let taskName = taskNameTextField.asFloatingTextfield().text
+        let description =  descriptionTextField.asFloatingTextfield().text
+        let category =  categoryFLTextfield.asFloatingTextfield().text
+        model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
         self.navigationController?.popViewController(animated: true)
+        self.fetchDelegate?.fetchData()
+        
     }
     
     @objc func pickDateButtonTapped() {
@@ -324,7 +305,7 @@ extension NewTaskViewController {
 //MARK: - Set Select Date Delegate
 extension NewTaskViewController : SelectDateDelegate {
     func setSelectTime(date: Date) {
-        print(date)
+        model.pickerDate = date
+        pickDateFLTextField.asFloatingTextfield().text = TaskVDMConverter.formatDateForEditTaskVDM(date: date)
     }
 }
-

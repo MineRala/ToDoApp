@@ -52,7 +52,6 @@ extension HomeViewController {
         addListeners()
         localNotification()
         viewModel.initializeViewModel()
-      //  eventVC.delegateRetrieveTaskDetail = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -115,15 +114,13 @@ extension HomeViewController {
     }
 }
 
-////MARK: - Edit Protocol Delegate
-//extension HomeViewController: RetriveTaskEditVDMDelegate {
-//    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
-//        if index < 0 || index >=  {
-//            return nil
-//        }
-//        return viewModel.arrEditTaskListData[index]
-//    }
-//}
+//MARK: - Fetch Data Protocol Delegate
+extension HomeViewController: FetchDelegate {
+    func fetchData() {
+        viewModel.fetchEventsData()
+        eventVC.reloadData()
+    }
+}
 
 // MARK: - Actions
 extension HomeViewController {
@@ -169,6 +166,7 @@ extension HomeViewController: UITextFieldDelegate {
 extension HomeViewController  {
     private func routeToNewTasks() {
         let newViewController = NewTaskViewController()
+        newViewController.fetchDelegate = self
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
     

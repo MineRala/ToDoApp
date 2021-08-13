@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 protocol SelectDateDelegate {
     func setSelectTime(date: Date)
 }
@@ -111,22 +110,25 @@ extension SelectDateViewController {
     @objc func selectButtonTapped(){
        
         let date: Date = calendarVC.getSelectedDate()
-            let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
-            
-            // Specify date components
-            var dateComponents = DateComponents()
-            dateComponents.year = components.year
-            dateComponents.month = components.month
-            dateComponents.day = components.day
-            dateComponents.timeZone = TimeZone(abbreviation: "GMT+3") // Japan Standard Time
-            dateComponents.hour = 12
-            dateComponents.minute = 59
-
-            // Create date from components
-            let userCalendar = Calendar(identifier: .gregorian)
-            let selectedDate = userCalendar.date(from: dateComponents)
+        let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
         
+        var dateComponents = DateComponents()
+        dateComponents.year = components.year
+        dateComponents.month = components.month
+        dateComponents.day = components.day
+
+        let datePicker = taskTimePicker.date
+        let pickerDateComponent = Calendar(identifier: .gregorian).dateComponents([.hour, .minute], from: datePicker)
+        dateComponents.hour = pickerDateComponent.hour
+        dateComponents.minute = pickerDateComponent.minute
+        
+        let userCalendar = Calendar.current
+        let selectedDate = userCalendar.date(from: dateComponents)
+    
         self.selectDelegate?.setSelectTime(date:selectedDate!)
         navigationController?.popViewController(animated: true)
     }
 }
+
+
+

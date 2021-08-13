@@ -42,6 +42,10 @@ extension EventTableViewController {
         addListeners()
         self.delegateRetrieveTaskDetail = self
     }
+    
+    func reloadData(){
+        self.eventTableView.reloadData()
+    }
 }
 
 //MARK: - Set Up UI

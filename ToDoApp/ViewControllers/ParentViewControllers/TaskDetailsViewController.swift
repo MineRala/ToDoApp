@@ -24,7 +24,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
-    private var model: ToDoItem!
+    private var toDoItem: ToDoItem!
   
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
@@ -95,7 +95,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     
     init(model: ToDoItem) {
         super.init(nibName: nil, bundle: nil)
-        self.model = model
+        self.toDoItem = model
         
     }
     
@@ -113,13 +113,13 @@ extension TaskDetailsViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if model.isTaskCompleted {
+        if toDoItem.isTaskCompleted {
             self.buttonDone.setTitle(C.ImageName.undo.rawValue, for: .normal)
         }
         
-        labelTaskName.text = model.taskName
+        labelTaskName.text = toDoItem.taskName
       //  labelDate.text = model.taskDate
-        textViewDescription.text = model.taskDescription
+        textViewDescription.text = toDoItem.taskDescription
         
     }
     
@@ -217,12 +217,12 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        
-//        let vc = NewTaskViewController(model: self.delegateRetriveTaskEdit?.getTaskEditVDM())
-//        self.delegateModeSelection = vc
-//        self.delegateModeSelection?.setPageMode(mode: .editTask)
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    
+
+        let vc = NewTaskViewController(toDoItem: toDoItem)
+        self.delegateModeSelection = vc
+        self.delegateModeSelection?.setPageMode(mode: .editTask)
+        self.navigationController?.pushViewController(vc, animated: true)
+    
     }
     
     @objc func doneButtonTapped() {
