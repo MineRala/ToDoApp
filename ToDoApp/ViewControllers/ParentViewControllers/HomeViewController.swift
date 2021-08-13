@@ -147,14 +147,11 @@ extension HomeViewController {
         viewModel.shouldChangeScrollOffsetOfEventsTable
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                //NSLog("Scroll Should Change")
             }.store(in: &cancellables)
         
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                
-                //self.eventTableView.reloadData()
         }.store(in: &cancellables)
     }
 }
@@ -173,9 +170,6 @@ extension HomeViewController  {
         newViewController.fetchDelegate = self
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
-    
-    //TODO
-    // Get new task from newTaskViewController(Protocol)
 }
 
 //MARK: - Local Notification

@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-
 class NewAndEditViewModel{
     
     private let coreDataLayer = CoreDataLayer()

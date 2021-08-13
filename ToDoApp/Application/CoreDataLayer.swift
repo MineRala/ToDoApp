@@ -39,6 +39,32 @@ extension CoreDataLayer {
         return self.save(item)
     }
     
+    func remove<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        return self.delete(item)
+    }
+    
+    
+    private func delete<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
+        do {
+            try ManagedObjectContext.delete(item)
+            do{
+                try ManagedObjectContext.save()
+            }catch{
+                NSLog("Error: \(error)")
+                let response = CoreDataResponse<T>(error: AppError.coreDataError, success: false, items: [], savedItem: nil)
+                return Just(response).eraseToAnyPublisher()
+            }
+            
+            let response = CoreDataResponse<T>(error: nil, success: true, items: [], savedItem: item)
+            return Just(response).eraseToAnyPublisher()
+        } catch let error {
+            NSLog("Error: \(error)")
+            let response = CoreDataResponse<T>(error: AppError.coreDataError, success: false, items: [], savedItem: nil)
+            return Just(response).eraseToAnyPublisher()
+        }
+    }
+   
+    
     func read<T: CoreDataManagableObject>(filterPredicate: NSPredicate? = nil) -> AnyPublisher<CoreDataResponse<T>, Never> {
         do {
             let fetchRequest = NSFetchRequest<T>(entityName: T.tableName)
@@ -64,4 +90,6 @@ extension CoreDataLayer {
             return Just(response).eraseToAnyPublisher()
         }
     }
+    
+    
 }

@@ -27,12 +27,13 @@ class HomeViewModel {
 // MARK: - Public
 extension HomeViewModel {
     
-    func removedElement(index: Int){
-        arrTaskListData.remove(at: index)
+    func removedElement(toDoItem: ToDoItem){
+        coreDataLayer.remove(toDoItem).sink { _ in }.store(in: &cancellables)
     }
     
-    func reverseTaskCompletionAtIndex(index: Int){
-       arrTaskListData[index].isTaskCompleted = !arrTaskListData[index].isTaskCompleted
+    func reverseTaskCompletionAtIndex(toDoItem: ToDoItem){
+        toDoItem.isTaskCompleted = !toDoItem.isTaskCompleted
+        coreDataLayer.update(toDoItem)
     }
     
     func initializeViewModel() {

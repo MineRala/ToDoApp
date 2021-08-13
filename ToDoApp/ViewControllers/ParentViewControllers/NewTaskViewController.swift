@@ -278,7 +278,6 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
     }
     
     func didTapCancel() {
-        // Do nothing
         notification.resignFirstResponder()
     }
 }
@@ -298,7 +297,6 @@ extension NewTaskViewController {
         let vc = SelectDateViewController()
         vc.selectDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
 }
 

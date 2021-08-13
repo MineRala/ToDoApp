@@ -8,14 +8,9 @@
 import Foundation
 import UIKit
 
-
 protocol TaskCellDeleteAndDoneDelegate {
-    func taskCellDeleted(index : Int)
-    func taskCellDoneTapped(index : Int)
-}
-
-protocol RetriveTaskEditVDMDelegate {
-    func getTaskEditVDM(index: Int) -> TaskEditVDM?
+    func taskCellDeleted(toDoItem: ToDoItem)
+    func taskCellDoneTapped(toDoItem: ToDoItem)
 }
 
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
@@ -30,7 +25,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
-    var delegateRetriveTaskEdit: RetriveTaskEditVDMDelegate?
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -97,7 +91,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     init(model: ToDoItem) {
         super.init(nibName: nil, bundle: nil)
         self.toDoItem = model
-        
     }
     
     required init?(coder: NSCoder) {
@@ -115,11 +108,10 @@ extension TaskDetailsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if toDoItem.isTaskCompleted {
-            self.buttonDone.setTitle(C.ImageName.undo.rawValue, for: .normal)
+            self.buttonDone.setImage(UIImage(named:C.ImageName.undo.rawValue), for: .normal)
         }
         
         labelTaskName.text = toDoItem.taskName
-      //  labelDate.text = model.taskDate
         textViewDescription.text = toDoItem.taskDescription
         
     }
@@ -212,7 +204,7 @@ extension TaskDetailsViewController{
     
     @objc func deleteButtonTapped() {
         Alerts.showAlertDelete(controller: self, NSLocalizedString("Are you sure you want to delete the task?", comment: "")) {
-            self.delegate?.taskCellDeleted(index: self.index)
+            self.delegate?.taskCellDeleted(toDoItem: self.toDoItem)
             self.navigationController?.popViewController(animated: true)
         }
     }
@@ -226,7 +218,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func doneButtonTapped() {
-        self.delegate?.taskCellDoneTapped(index: self.index)
+        self.delegate?.taskCellDoneTapped(toDoItem: self.toDoItem)
         self.navigationController?.popViewController(animated: true)
     }
 }

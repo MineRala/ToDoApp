@@ -9,11 +9,9 @@ import Foundation
 import UIKit
 import Combine
 
-
 class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
-    var delegateRetrieveTaskDetail: RetriveTaskEditVDMDelegate?
     var fetchDelegate: FetchDelegate?
   
     private let eventTableView : UITableView = {
@@ -42,7 +40,6 @@ extension EventTableViewController {
         super.viewDidLoad()
         setUpUI()
         addListeners()
-        self.delegateRetrieveTaskDetail = self
     }
     
     func reloadData(){
@@ -74,7 +71,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
         let vc = TaskDetailsViewController(model: model.toDoItem)
         vc.delegate = self
-        vc.delegateRetriveTaskEdit = self
+      //  vc.delegateRetriveTaskEdit = self
         vc.fetchDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -113,7 +110,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
                 completionHandler(false)
                 return
             }
-            self.handleTrash(index: indexPath.row)
+            
+            let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
+
+            self.handleTrash(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
@@ -135,7 +135,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
                 completionHandler(false)
                 return
             }
-            self.handleDone(index: index)
+            self.handleDone(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
@@ -162,24 +162,14 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
 
 // MARK: -  Task Cell Delete Delegate
 extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
-    
-    func taskCellDeleted(index: Int) {
-        // Delete item with index from original array
-        self.viewModel.removedElement(index: index)
-        self.viewModel.initializeArrAllElemetsEventTableView()
-        eventTableView.reloadData()
+ 
+    func taskCellDeleted(toDoItem: ToDoItem) {
+        self.viewModel.removedElement(toDoItem: toDoItem)
+        self.fetchDelegate?.fetchData()
     }
     
-    func taskCellDoneTapped(index: Int) {
-        // Handle done in item at index index
-       handleDone(index: index)
-    }
-}
-
-//MARK: - Implentation of Protocols
-extension EventTableViewController: RetriveTaskEditVDMDelegate {
-    func getTaskEditVDM(index: Int) -> TaskEditVDM? {
-        return self.delegateRetrieveTaskDetail?.getTaskEditVDM(index: index)
+    func taskCellDoneTapped(toDoItem: ToDoItem) {
+       handleDone(toDoItem: toDoItem)
     }
 }
 
@@ -191,20 +181,20 @@ extension EventTableViewController: FetchDelegate {
 
 //MARK: - Actions
 extension EventTableViewController {
-    private func handleTrash(index: Int) {
+    private func handleTrash(toDoItem: ToDoItem) {
       print("Trash")
         Alerts.showAlertDelete(controller: self,NSLocalizedString("Are you sure you want to delete the task?", comment: ""), deletion: {
-            self.viewModel.removedElement(index: (self.viewModel.arrAllElemetsEventTableView[index] as? TaskListVDMArrayElement)!.indexAt)
+            self.viewModel.removedElement(toDoItem: toDoItem)
+            self.fetchDelegate?.fetchData()
             self.viewModel.initializeArrAllElemetsEventTableView()
             self.eventTableView.reloadData()
         })
     }
     
-    private func handleDone(index: Int){
+    private func handleDone(toDoItem: ToDoItem){
         print("Done")
-        self.viewModel.reverseTaskCompletionAtIndex(index: index)
-        self.viewModel.initializeArrAllElemetsEventTableView()
-        self.eventTableView.reloadData()
+        self.viewModel.reverseTaskCompletionAtIndex(toDoItem: toDoItem)
+        self.fetchDelegate?.fetchData()
     }
 }
 
