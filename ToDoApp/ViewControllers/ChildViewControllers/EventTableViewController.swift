@@ -9,10 +9,12 @@ import Foundation
 import UIKit
 import Combine
 
+
 class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var delegateRetrieveTaskDetail: RetriveTaskEditVDMDelegate?
+    var fetchDelegate: FetchDelegate?
   
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -107,7 +109,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         }
         
         let trash = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completionHandler) in
-            guard let self = self else{
+            guard let self = self else {
                 completionHandler(false)
                 return
             }
@@ -178,6 +180,12 @@ extension EventTableViewController: TaskCellDeleteAndDoneDelegate {
 extension EventTableViewController: RetriveTaskEditVDMDelegate {
     func getTaskEditVDM(index: Int) -> TaskEditVDM? {
         return self.delegateRetrieveTaskDetail?.getTaskEditVDM(index: index)
+    }
+}
+
+extension EventTableViewController: FetchDelegate {
+    func fetchData() {
+        self.fetchDelegate?.fetchData()
     }
 }
 

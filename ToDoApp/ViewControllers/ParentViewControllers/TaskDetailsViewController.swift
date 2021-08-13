@@ -220,9 +220,9 @@ extension TaskDetailsViewController{
     @objc func editButtonTapped() {
         let vc = NewTaskViewController(toDoItem: toDoItem)
         self.delegateModeSelection = vc
+        self.fetchDelegate = self
         self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)
-    
     }
     
     @objc func doneButtonTapped() {
@@ -231,3 +231,8 @@ extension TaskDetailsViewController{
     }
 }
     
+extension TaskDetailsViewController: FetchDelegate {
+    func fetchData() {
+        self.fetchDelegate?.fetchData()
+    }
+}

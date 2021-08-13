@@ -52,6 +52,9 @@ extension HomeViewController {
         addListeners()
         localNotification()
         viewModel.initializeViewModel()
+        
+        self.eventVC.fetchDelegate = self
+        
     }
     
     override func viewDidLayoutSubviews() {
