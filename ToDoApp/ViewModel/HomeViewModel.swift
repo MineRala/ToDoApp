@@ -10,6 +10,7 @@ import Combine
 
 class HomeViewModel {
     
+    var isNeededToReloadData: Bool = false
     private let coreDataLayer = CoreDataLayer()
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
