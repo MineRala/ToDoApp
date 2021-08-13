@@ -136,9 +136,16 @@ extension TaskVDMConverter{
 //MARK: - Edit Task View Model Converter
     extension TaskVDMConverter {
     static func editTaskViewModel(toDoItem: ToDoItem) -> TaskEditVDM? {
-        guard let taskName = toDoItem.taskName ,let taskDescription = toDoItem.taskDescription, let taskCategory = toDoItem.taskCategory, let taskDate = toDoItem.taskDate , let notificationDate = toDoItem.notificationDate?.description else {
+        guard let taskName = toDoItem.taskName ,let taskDescription = toDoItem.taskDescription, let taskCategory = toDoItem.taskCategory, let taskDate = toDoItem.taskDate  else {
             return nil
         }
+        
+        var notificationDate : String? = nil
+        
+        if toDoItem.notificationDate != nil {
+            notificationDate = toDoItem.notificationDate?.description
+        }
+        
         let taskNameTitle = NSLocalizedString("Task Name", comment: "")
         let taskDescriptionTitle = NSLocalizedString("Desciption", comment: "")
         let taskCategoryTitle = NSLocalizedString("Category", comment: "")

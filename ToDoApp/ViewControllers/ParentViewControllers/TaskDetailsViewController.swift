@@ -25,7 +25,8 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var viewDetailHeightConstriant: NSLayoutConstraint!
     
     private var toDoItem: ToDoItem!
-  
+    
+    var fetchDelegate: FetchDelegate?
     var delegate: TaskCellDeleteAndDoneDelegate?
     private var index: Int!
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
@@ -217,7 +218,6 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-
         let vc = NewTaskViewController(toDoItem: toDoItem)
         self.delegateModeSelection = vc
         self.delegateModeSelection?.setPageMode(mode: .editTask)

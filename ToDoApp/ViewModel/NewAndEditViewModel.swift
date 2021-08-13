@@ -36,6 +36,7 @@ class NewAndEditViewModel{
             self.toDoItem = toDoItem!
             self.editTaskVDM = TaskVDMConverter.editTaskViewModel(toDoItem: toDoItem!)
             self.pageMode = .editTask
+            self.pickerDate = toDoItem?.taskDate
         }
         else{
             self.toDoItem = ToDoItem(context: ManagedObjectContext)
@@ -51,20 +52,22 @@ class NewAndEditViewModel{
     }
     
     func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
-        if pageMode == .newTask{
-            if taskName != nil && taskDescription != nil && taskCategory != nil  && pickerDate != nil {
-                toDoItem.taskName = taskName
-                toDoItem.taskDescription = taskDescription
-                toDoItem.taskCategory = taskCategory
-                toDoItem.taskDate = pickerDate
-                toDoItem.taskId = UUID().uuidString
-                if notificationDate != nil {
-                    toDoItem.notificationDate = pickerDate?.addingTimeInterval(-Double(notificationTime!))
-                }
+        if taskName != nil && taskDescription != nil && taskCategory != nil  && pickerDate != nil {
+            toDoItem.taskName = taskName
+            toDoItem.taskDescription = taskDescription
+            toDoItem.taskCategory = taskCategory
+            toDoItem.taskDate = pickerDate
+           
+            if notificationDate != nil {
+                toDoItem.notificationDate = pickerDate?.addingTimeInterval(-Double(notificationTime!))
+            }
+            switch pageMode {
+            case .newTask:
                 toDoItem.isTaskCompleted = false
-                coreDataLayer.create(toDoItem).sink { _ in
-                        
-                }.store(in: &cancellables)
+                toDoItem.taskId = UUID().uuidString
+                coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables)
+            case .editTask:
+                coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables)
             }
         }
     }

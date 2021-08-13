@@ -73,6 +73,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         let vc = TaskDetailsViewController(model: model.toDoItem)
         vc.delegate = self
         vc.delegateRetriveTaskEdit = self
+        vc.fetchDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
 

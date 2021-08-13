@@ -55,20 +55,68 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B5FC565B-7897-4754-B143-57FAA7C33AC4"
+            uuid = "8D24312C-E132-442A-B59E-1C0F52A8A482"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ToDoApp/ViewControllers/ParentViewControllers/TaskDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "editButtonTapped()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "92B305A1-66AA-4C4D-9D39-DED45A0CBD78"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ToDoApp/ViewControllers/ParentViewControllers/NewTaskViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "init(toDoItem:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FDC63F08-91F8-4C0A-9DB2-133250407258"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ToDoApp/ViewModel/NewAndEditViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "init(toDoItem:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD21A9F4-8FCA-4731-A054-BD6B48D37DB1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ToDoApp/ViewModel/NewAndEditViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "createNewItem(taskName:taskDescription:taskCategory:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "B5FC565B-7897-4754-B143-57FAA7C33AC4 - ad3ce5a2874574c6"
+                  uuid = "FD21A9F4-8FCA-4731-A054-BD6B48D37DB1 - ad3ce5a287457b2d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -78,23 +126,23 @@
                   urlString = "file:///Users/minerala/Desktop/RapsodoIos/ToDoApp/ToDoApp/ToDoApp/ViewModel/NewAndEditViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "4626">
+                  startingLineNumber = "70"
+                  endingLineNumber = "70"
+                  offsetFromSymbolStart = "5203">
                </Location>
                <Location
-                  uuid = "B5FC565B-7897-4754-B143-57FAA7C33AC4 - 279068c9fc8154e1"
+                  uuid = "FD21A9F4-8FCA-4731-A054-BD6B48D37DB1 - 9e29e9917a50014d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (ToDoApp.CoreDataResponse&lt;ToDoApp.ToDoItem&gt;) -&gt; () in ToDoApp.NewAndEditViewModel.createNewItem(taskName: Swift.Optional&lt;Swift.String&gt;, taskDescription: Swift.Optional&lt;Swift.String&gt;, taskCategory: Swift.Optional&lt;Swift.String&gt;) -&gt; ()"
+                  symbolName = "closure #2 (ToDoApp.CoreDataResponse&lt;ToDoApp.ToDoItem&gt;) -&gt; () in ToDoApp.NewAndEditViewModel.createNewItem(taskName: Swift.Optional&lt;Swift.String&gt;, taskDescription: Swift.Optional&lt;Swift.String&gt;, taskCategory: Swift.Optional&lt;Swift.String&gt;) -&gt; ()"
                   moduleName = "ToDoApp"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/minerala/Desktop/RapsodoIos/ToDoApp/ToDoApp/ToDoApp/ViewModel/NewAndEditViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "67"
-                  endingLineNumber = "67"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
@@ -103,8 +151,24 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D3AE91F0-A93F-47AF-B516-A7079114BB0A"
-            shouldBeEnabled = "No"
+            uuid = "562564AA-FE0B-4DA6-8835-E9C421E8E722"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ToDoApp/Application/CoreDataLayer.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "save(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2900ED1A-130B-493E-92C7-59EACDEFCD0D"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ToDoApp/ViewModel/NewAndEditViewModel.swift"
@@ -119,32 +183,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "24BA93A9-A9DF-4226-B81B-0C2F4E0533D5"
-            shouldBeEnabled = "No"
+            uuid = "1A039A24-032B-448B-9F78-F9B4C9CE1533"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ToDoApp/ViewModel/NewAndEditViewModel.swift"
+            filePath = "ToDoApp/ViewControllers/ParentViewControllers/NewTaskViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "createNewItem(taskName:taskDescription:taskCategory:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A448DC58-EC7C-4037-9B19-0D87CEA4EC2C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ToDoApp/ViewModel/NewAndEditViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "createNewItem(taskName:taskDescription:taskCategory:)"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "addBtnPressed()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
