@@ -47,10 +47,11 @@ extension CalendarViewController {
         self.selectedDate
             .receive(on: DispatchQueue.main)
             .sink { selectedDate in
-                self.pickerDate = selectedDate
-                if selectedDate.hour <= self.date!.hour && selectedDate.minute <= self.date!.minute
-                    && self.date!.day <= Date().day && self.date!.month <= Date().month && self.date!.year <= Date().year {
+                self.setPickerDate(pickerDate: selectedDate)
+                let dateGMT = Date().toGMTFromLocal()
+                if self.date!.year <= dateGMT.year && self.date!.month <= dateGMT.month  && self.date!.day <= dateGMT.day &&  selectedDate.hour <= self.date!.hour && selectedDate.minute <= self.date!.minute {
                     print("Selected invalid time. point 2")
+                    self.calendar.appearance.selectionColor = #colorLiteral(red: 0.462745098, green: 0.4910603364, blue: 1, alpha: 1)
                 }
             }.store(in: &cancellables)
     }
@@ -87,29 +88,41 @@ extension CalendarViewController {
 // MARK: - Public
 extension CalendarViewController {
     func selectDate(_ date: Date) {
+        print(date)
         if pickerDate == nil {          // If Calender is in the HomeViewController
             self.calendar.select(date)
             self.viewModel.updateSelectedDate(date)
             return
         }
-        let currentDate = Date()
-        if date.day == currentDate.day {
-            if pickerDate != nil && pickerDate!.hour <= currentDate.hour && pickerDate!.minute < currentDate.minute {
-                print(date)
-                print(Date())
-                Alerts.showAlert(controller: self, "You cannot select date from past") {}
-            } else {
-                self.calendar.select(date)
-                self.viewModel.updateSelectedDate(date)
-            }
-        } else if date < currentDate {
-            print(date)
-            print(Date())
-            Alerts.showAlert(controller: self, "You cannot select date from past") {}
-        } else {
+        let currentDate = Date().toGMTFromLocal()
+        if date > currentDate {
             self.calendar.select(date)
             self.viewModel.updateSelectedDate(date)
+            return
         }
+        if date.day != currentDate.day {
+            Alerts.showAlert(controller: self, "You cannot select date from past") {}
+            return
+        }
+        if pickerDate!.hour < currentDate.hour {
+            Alerts.showAlert(controller: self, "You cannot select date from past") {}
+            return
+        }
+        else if pickerDate!.hour > currentDate.hour {
+            self.calendar.select(date)
+            self.viewModel.updateSelectedDate(date)
+            return
+        }
+        if pickerDate!.minute <= currentDate.minute {
+            Alerts.showAlert(controller: self, "You cannot select date from past") {}
+            return
+        }
+        self.calendar.select(date)
+        self.viewModel.updateSelectedDate(date)
+    }
+    
+    func setPickerDate(pickerDate: Date) {
+        self.pickerDate = pickerDate
     }
     
     func setDateToCalendar(date: Date){

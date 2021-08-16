@@ -116,7 +116,7 @@ extension SelectDateViewController{
         
         calendarVC = CalendarViewController(viewModel: viewModel)
         calendarVC.setDate(date: date!)
-        self.calendarVC.selectedDate.send(taskTimePicker.date)
+        self.calendarVC.setPickerDate(pickerDate: taskTimePicker.date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
     }
