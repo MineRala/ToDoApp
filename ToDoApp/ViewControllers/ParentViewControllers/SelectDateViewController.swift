@@ -13,7 +13,7 @@ protocol SelectDateDelegate {
     func setSelectTime(date: Date)
 }
 
-class SelectDateViewController : BaseVC{
+class SelectDateViewController : BaseVC {
     
     private let viewModel: HomeViewModel = HomeViewModel()
     private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
@@ -61,8 +61,7 @@ extension SelectDateViewController {
         } else {
             // Fallback on earlier versions
         }
-         setUpUI()
-        
+            setUpUI()
         }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +101,8 @@ extension SelectDateViewController{
             .trailingAnchor(margin: 32)
 
         timeView.addSubview(taskTimePicker)
+        taskTimePicker.addTarget(self, action: #selector(datePickerChanged(picker:)), for: .valueChanged)
+        
         taskTimePicker.trailingAnchor(margin: 0).leadingAnchor(margin: 0).topAnchor(margin: 0).bottomAnchor(margin: 0)
         
         selectButton.bottomAnchor(margin: 0)
@@ -115,6 +116,7 @@ extension SelectDateViewController{
         
         calendarVC = CalendarViewController(viewModel: viewModel)
         calendarVC.setDate(date: date!)
+        self.calendarVC.selectedDate.send(taskTimePicker.date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
     }
@@ -149,6 +151,10 @@ extension SelectDateViewController {
     
         self.selectDelegate?.setSelectTime(date:selectedDate!)
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func datePickerChanged(picker: UIDatePicker) {
+        self.calendarVC.selectedDate.send(picker.date) // important things in date are hours and minutes.
     }
 }
 

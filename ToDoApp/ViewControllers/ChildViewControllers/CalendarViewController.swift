@@ -15,8 +15,13 @@ class CalendarViewController : UIViewController{
     private let calendar = FSCalendar()
     private let viewModel: HomeViewModel
     private var date: Date?
-    private(set) var selectedDate = CurrentValueSubject<Date,Never>(Date())
-
+    private(set) var selectedDate = CurrentValueSubject<Date, Never>(Date())
+    private var cancellables = Set<AnyCancellable>()
+    private var pickerDate : Date?
+    
+    // Store hours and minutes here so you will be able to use it whenever you need
+    // Also it will be updated when picker has changed its value.
+    
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -36,6 +41,22 @@ extension CalendarViewController {
     
 }
     
+// MARK: - Listeners
+extension CalendarViewController {
+    func addListeners() {
+        self.selectedDate
+            .receive(on: DispatchQueue.main)
+            .sink { selectedDate in
+                self.pickerDate = selectedDate
+                if selectedDate.hour <= self.date!.hour && selectedDate.minute <= self.date!.minute
+                    && self.date!.day <= Date().day && self.date!.month <= Date().month && self.date!.year <= Date().year {
+                    print("Selected invalid time. point 2")
+                }
+            }.store(in: &cancellables)
+    }
+    
+}
+
 // MARK: - Set Up UI
 extension CalendarViewController {
     func setUpUI() {
@@ -58,6 +79,7 @@ extension CalendarViewController {
         }
         else{
             self.setDateToCalendar(date: date!)
+            addListeners()
         }
     }
 }
@@ -65,17 +87,31 @@ extension CalendarViewController {
 // MARK: - Public
 extension CalendarViewController {
     func selectDate(_ date: Date) {
-        selectedDate.send(date)
-        if date < Date() {
+        if pickerDate == nil {          // If Calender is in the HomeViewController
+            self.calendar.select(date)
+            self.viewModel.updateSelectedDate(date)
+            return
+        }
+        let currentDate = Date()
+        if date.day == currentDate.day {
+            if pickerDate != nil && pickerDate!.hour <= currentDate.hour && pickerDate!.minute < currentDate.minute {
+                print(date)
+                print(Date())
+                Alerts.showAlert(controller: self, "You cannot select date from past") {}
+            } else {
+                self.calendar.select(date)
+                self.viewModel.updateSelectedDate(date)
+            }
+        } else if date < currentDate {
             print(date)
             print(Date())
             Alerts.showAlert(controller: self, "You cannot select date from past") {}
-        }else{
+        } else {
             self.calendar.select(date)
             self.viewModel.updateSelectedDate(date)
         }
-
-}
+    }
+    
     func setDateToCalendar(date: Date){
         self.calendar.select(date)
     }
@@ -83,6 +119,7 @@ extension CalendarViewController {
     func getSelectedDate() -> Date {
         return self.calendar.selectedDate!
     }
+    
 }
    
 // MARK: - FSCalendar Delegate / Datasource
@@ -94,6 +131,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDelegateAppearan
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        // add hours and minutes(date) from SelectedDateViewController to the date (integration of hours and minutes)
         selectDate(date)
     }
 }
@@ -103,5 +141,22 @@ extension CalendarViewController {
     func setDate(date: Date){
         self.date = date
         
+    }
+}
+
+
+extension Date {
+    func isDateEarlierInHoursAndMinutes(hourDate: Date) -> Bool {
+        if self.hour <= hourDate.hour && self.minute < hourDate.minute {
+            return true
+        }
+        return false
+    }
+    
+    func isDateEarlierInDays(dayDate: Date) -> Bool {
+        if self.day <= dayDate.day && self.month <= dayDate.month && self.year <= dayDate.year {
+            return true
+        }
+        return false
     }
 }
