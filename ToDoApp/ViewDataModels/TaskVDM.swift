@@ -36,8 +36,11 @@ struct TaskEditVDM {
     let taskName: String
     let taskDescription: String
     let taskCategory: String
-    let taskDate: String
+    let taskDate: Date
+    let taskDateFormated: String
     let notificationDate: String?
     let taskId: String
 }
+
+
 

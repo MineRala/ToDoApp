@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 protocol SelectDateDelegate {
     func setSelectTime(date: Date)
@@ -18,6 +19,8 @@ class SelectDateViewController : BaseVC{
     private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
     private var calendarVC : CalendarViewController!
     var selectDelegate: SelectDateDelegate?
+    var date: Date?
+    private var cancellables = Set<AnyCancellable>()
     
     var taskTimePicker = UIDatePicker()
 
@@ -59,7 +62,18 @@ extension SelectDateViewController {
             // Fallback on earlier versions
         }
          setUpUI()
+        
         }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if date == nil{
+            taskTimePicker.setDate(Date(), animated: true)
+        }else{
+            taskTimePicker.setDate(date!, animated: true)
+        }
+        
+    }
 }
 
 //MARK: - Set Up UI
@@ -100,8 +114,16 @@ extension SelectDateViewController{
         selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
         
         calendarVC = CalendarViewController(viewModel: viewModel)
+        calendarVC.setDate(date: date!)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
+    }
+}
+
+//MARK: - Set Date
+extension SelectDateViewController {
+    func setDate(date: Date){
+        self.date = date
     }
 }
 

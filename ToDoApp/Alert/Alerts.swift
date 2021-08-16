@@ -23,4 +23,17 @@ class Alerts : NSObject {
         }))
         controller.present(dialogMessage, animated: true, completion: {})
     }
+    
+    
+    static func showAlert(controller: UIViewController, _ message: String, completion: @escaping () -> Void) {
+         let dialogMessage = UIAlertController(title: NSLocalizedString("Warning", comment: ""), message: message, preferredStyle: .alert)
+         let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) in
+         completion()
+         })
+         okAction.setValue(UIColor.blue, forKey: "titleTextColor")
+         dialogMessage.addAction(okAction)
+         controller.present(dialogMessage, animated: true, completion: {})
+     }
+     
+    
 }

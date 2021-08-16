@@ -11,7 +11,7 @@ import Combine
 class NewAndEditViewModel{
     
     private let coreDataLayer = CoreDataLayer()
-    private let toDoItem: ToDoItem!
+    let toDoItem: ToDoItem!
     private(set) var editTaskVDM: TaskEditVDM?
     private var pageMode: NewAndEditVCState = .newTask
     var pickerDate: Date?

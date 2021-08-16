@@ -30,16 +30,16 @@ class TaskVDMConverter {
 extension TaskVDMConverter {
     static func convertTo12HourPeriod(hour: Int) -> (Int, String) {
         if hour == 0 {
-            return (12, "AM")
+            return (12, NSLocalizedString("AM", comment: ""))
         }
         else if(hour > 12) {
-            return (hour-12, "PM")
+            return (hour-12, NSLocalizedString("PM", comment: ""))
         }
         else if hour == 12 {
-            return (hour, "PM")
+            return (hour, NSLocalizedString("PM", comment: ""))
         }
         else {
-            return (hour, "AM")
+            return (hour, NSLocalizedString("AM", comment: ""))
         }
     }
     
@@ -91,13 +91,13 @@ extension TaskVDMConverter {
 
         var day: String = ""
         if calendar.isDateInToday(taskDate) {
-            day = "Today"
+            day = NSLocalizedString("Today", comment: "")
         }
         else if calendar.isDateInYesterday(taskDate) {
-            day = "Yesterday"
+            day = NSLocalizedString("Yesterday", comment: "")
         }
         else if calendar.isDateInTomorrow(taskDate){
-            day = "Tomorrow"
+            day = NSLocalizedString("Tomarrow", comment: "")
         }
         else {
             let components = calendar.dateComponents([.year, .month, .day], from: taskDate)
@@ -155,6 +155,6 @@ extension TaskVDMConverter{
         let taskDateTime = formatDateForEditTaskVDM(date: taskDate)
         let taskId = "\(toDoItem.taskId)"
         
-        return TaskEditVDM(taskNameTitle: taskNameTitle, taskDescriptionTitle: taskDescriptionTitle, taskCategoryTitle: taskCategoryTitle, taskDateTitle: taskDateTitle, notificationDateTitle: notificationDateTitle, taskName: taskName, taskDescription: taskDescription, taskCategory: taskCategory, taskDate: taskDateTime, notificationDate: notificationDate, taskId: taskId)
+        return TaskEditVDM(taskNameTitle: taskNameTitle, taskDescriptionTitle: taskDescriptionTitle, taskCategoryTitle: taskCategoryTitle, taskDateTitle: taskDateTitle, notificationDateTitle: notificationDateTitle, taskName: taskName, taskDescription: taskDescription, taskCategory: taskCategory, taskDate: taskDate, taskDateFormated: taskDateTime,notificationDate: notificationDate, taskId: taskId)
     }
 }

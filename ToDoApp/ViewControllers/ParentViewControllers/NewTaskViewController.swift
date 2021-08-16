@@ -36,6 +36,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     var delegate: AddNewTaskDelegate!
     var model: NewAndEditViewModel!
     var fetchDelegate: FetchDelegate?
+    private var date: Date?
     
     static let editingColor = UIColor.black
     static let defaultColor = UIColor.lightGray
@@ -241,7 +242,7 @@ extension NewTaskViewController {
         taskNameTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskName
         descriptionTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDescription
         categoryFLTextfield.asFloatingTextfield().text = self.model.editTaskVDM!.taskCategory
-        pickDateFLTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDate
+        pickDateFLTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDateFormated
         notification.asFloatingTextfield().text = self.model.editTaskVDM!.notificationDate
     }
 }
@@ -264,7 +265,6 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
-     //   self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
         self.notification.text = self.model.arrNotificationTime[row]
         
         notification.resignFirstResponder()
@@ -289,6 +289,11 @@ extension NewTaskViewController {
     @objc func pickDateButtonTapped() {
         let vc = SelectDateViewController()
         vc.selectDelegate = self
+        if self.model.pickerDate == nil {
+            vc.setDate(date: model.toDoItem.taskDate!)
+        }else{
+            vc.setDate(date: self.model.pickerDate!)
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

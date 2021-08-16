@@ -8,12 +8,14 @@
 import Foundation
 import UIKit
 import FSCalendar
-
+import Combine
 
 // MARK: - Calendar View Controller
 class CalendarViewController : UIViewController{
     private let calendar = FSCalendar()
     private let viewModel: HomeViewModel
+    private var date: Date?
+    private(set) var selectedDate = CurrentValueSubject<Date,Never>(Date())
 
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
@@ -50,17 +52,34 @@ extension CalendarViewController {
         calendar.appearance.headerTitleColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
         
         calendar.delegate = self
-        self.selectDate(Date())
+        
+        if date == nil {
+            self.setDateToCalendar(date: Date())
+        }
+        else{
+            self.setDateToCalendar(date: date!)
+        }
     }
 }
 
 // MARK: - Public
 extension CalendarViewController {
     func selectDate(_ date: Date) {
+        selectedDate.send(date)
+        if date < Date() {
+            print(date)
+            print(Date())
+            Alerts.showAlert(controller: self, "You cannot select date from past") {}
+        }else{
+            self.calendar.select(date)
+            self.viewModel.updateSelectedDate(date)
+        }
+
+}
+    func setDateToCalendar(date: Date){
         self.calendar.select(date)
-        self.viewModel.updateSelectedDate(date)
     }
-    
+   
     func getSelectedDate() -> Date {
         return self.calendar.selectedDate!
     }
@@ -76,5 +95,13 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDelegateAppearan
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectDate(date)
+    }
+}
+
+//MARK: - Set Date
+extension CalendarViewController {
+    func setDate(date: Date){
+        self.date = date
+        
     }
 }
