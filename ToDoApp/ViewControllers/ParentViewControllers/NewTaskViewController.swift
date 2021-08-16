@@ -287,20 +287,15 @@ extension NewTaskViewController {
     }
     
     @objc func pickDateButtonTapped() {
-        let vc = SelectDateViewController()
-        vc.selectDelegate = self
-        if self.model.pickerDate == nil {
-            vc.setDate(date: model.toDoItem.taskDate!)
-        }else{
-            vc.setDate(date: self.model.pickerDate!)
-        }
+        let date = self.model.pickerDate == nil ? model.toDoItem.taskDate! : self.model.pickerDate!
+        let vc = SelectDateViewController(date: date, selectDateDelegate: self)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 //MARK: - Set Select Date Delegate
 extension NewTaskViewController : SelectDateDelegate {
-    func setSelectTime(date: Date) {
+    func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date) {
         model.pickerDate = date
         pickDateFLTextField.asFloatingTextfield().text = TaskVDMConverter.formatDateForEditTaskVDM(date: date)
     }

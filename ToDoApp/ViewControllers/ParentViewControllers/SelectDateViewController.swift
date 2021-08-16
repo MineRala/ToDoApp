@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 protocol SelectDateDelegate {
-    func setSelectTime(date: Date)
+    func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date)
 }
 
 class SelectDateViewController : BaseVC {
@@ -18,9 +18,10 @@ class SelectDateViewController : BaseVC {
     private let viewModel: HomeViewModel = HomeViewModel()
     private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
     private var calendarVC : CalendarViewController!
-    var selectDelegate: SelectDateDelegate?
-    var date: Date?
+    private var selectDelegate: SelectDateDelegate
+    private var date: Date
     private var cancellables = Set<AnyCancellable>()
+//    private(set) var calenderDate = CurrentValueSubject<Date, Never>(Date())
     
     var taskTimePicker = UIDatePicker()
 
@@ -49,6 +50,17 @@ class SelectDateViewController : BaseVC {
         sb.titleLabel?.font = C.Font.medium.font(21)
         return sb
     }()
+    
+    
+    init(date: Date, selectDateDelegate: SelectDateDelegate) {
+        self.date = date
+        self.selectDelegate = selectDateDelegate
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 //MARK: - Lifecycle
@@ -61,17 +73,17 @@ extension SelectDateViewController {
         } else {
             // Fallback on earlier versions
         }
-            setUpUI()
-        }
+        setUpUI()
+        addListeners()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if date == nil{
             taskTimePicker.setDate(Date(), animated: true)
         }else{
-            taskTimePicker.setDate(date!, animated: true)
+            taskTimePicker.setDate(date, animated: true)
         }
-        
     }
 }
 
@@ -115,10 +127,18 @@ extension SelectDateViewController{
         selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
         
         calendarVC = CalendarViewController(viewModel: viewModel)
-        calendarVC.setDate(date: date!)
-        self.calendarVC.setPickerDate(pickerDate: taskTimePicker.date)
+        calendarVC.setDate(date: date)
+//        self.calendarVC.setPickerDate(pickerDate: taskTimePicker.date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
+    }
+    
+    func addListeners() {
+        self.calendarVC.selectedDate
+            .receive(on: DispatchQueue.main)
+            .sink { date in
+                self.updateDate()
+            }.store(in: &cancellables)
     }
 }
 
@@ -149,14 +169,34 @@ extension SelectDateViewController {
         let userCalendar = Calendar.current
         let selectedDate = userCalendar.date(from: dateComponents)
     
-        self.selectDelegate?.setSelectTime(date:selectedDate!)
+        self.selectDelegate.selectDateViewControllerDidSelectedDate(self, date: selectedDate!)
         navigationController?.popViewController(animated: true)
     }
     
     @objc func datePickerChanged(picker: UIDatePicker) {
-        self.calendarVC.selectedDate.send(picker.date) // important things in date are hours and minutes.
+        self.updateDate()
     }
 }
 
+extension SelectDateViewController {
+    func updateDate() {
+        let date = self.calendarVC.selectedDate.value
+        let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
+        
+        var dateComponents = DateComponents()
+        dateComponents.year = components.year
+        dateComponents.month = components.month
+        dateComponents.day = components.day
+
+        let datePicker = self.taskTimePicker.date
+        let pickerDateComponent = Calendar(identifier: .gregorian).dateComponents([.hour, .minute], from: datePicker)
+        dateComponents.hour = pickerDateComponent.hour
+        dateComponents.minute = pickerDateComponent.minute
+        
+        let userCalendar = Calendar.current
+        self.date = userCalendar.date(from: dateComponents)!
+        print(self.date)
+    }
+}
 
 
