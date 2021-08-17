@@ -13,24 +13,10 @@ import Combine
 // MARK: - Calendar View Controller
 class CalendarViewController : UIViewController{
     private let calendar = FSCalendar()
- //   private let viewModel: HomeViewModel
     private var date: Date?
     private(set) var selectedDate = CurrentValueSubject<Date, Never>(Date())
     private var cancellables = Set<AnyCancellable>()
-//    private var pickerDate : Date?
     
-    
-    // Store hours and minutes here so you will be able to use it whenever you need
-    // Also it will be updated when picker has changed its value.
-    
-    init() {
-       // self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 // MARK: - Lifecycle
@@ -66,6 +52,10 @@ extension CalendarViewController {
             self.setDateToCalendar(date: date!)
         }
     }
+    
+    func changeSelectionColor(to color: UIColor) {
+        self.calendar.appearance.selectionColor = color
+    }
 }
 
 // MARK: - Public
@@ -73,12 +63,7 @@ extension CalendarViewController {
     func selectDate(_ date: Date) {
         self.selectedDate.send(date)
         self.calendar.select(date)
-        //self.viewModel.updateSelectedDate(date)
     }
-//
-//    func setPickerDate(pickerDate: Date) {
-//        self.pickerDate = pickerDate
-//    }
     
     func setDateToCalendar(date: Date){
         self.calendar.select(date)
@@ -93,13 +78,12 @@ extension CalendarViewController {
 // MARK: - FSCalendar Delegate / Datasource
 extension CalendarViewController: FSCalendarDelegate, FSCalendarDelegateAppearance {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-        let newMinDate = calendar.currentPage
-        let newMaxDate = calendar.currentPage + Date.numberOfDays(in: Int(calendar.currentPage.month), year: Int(calendar.currentPage.year)).days
-       // viewModel.updateVisibleDateRange(min: newMinDate, max: newMaxDate)
+//        let newMinDate = calendar.currentPage
+//        let newMaxDate = calendar.currentPage + Date.numberOfDays(in: Int(calendar.currentPage.month), year: Int(calendar.currentPage.year)).days
+//        viewModel.updateVisibleDateRange(min: newMinDate, max: newMaxDate)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        // add hours and minutes(date) from SelectedDateViewController to the date (integration of hours and minutes)
         selectDate(date)
     }
 }
@@ -108,23 +92,5 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDelegateAppearan
 extension CalendarViewController {
     func setDate(date: Date){
         self.date = date
-        
-    }
-}
-
-
-extension Date {
-    func isDateEarlierInHoursAndMinutes(hourDate: Date) -> Bool {
-        if self.hour <= hourDate.hour && self.minute < hourDate.minute {
-            return true
-        }
-        return false
-    }
-    
-    func isDateEarlierInDays(dayDate: Date) -> Bool {
-        if self.day <= dayDate.day && self.month <= dayDate.month && self.year <= dayDate.year {
-            return true
-        }
-        return false
     }
 }

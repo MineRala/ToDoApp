@@ -49,7 +49,7 @@ extension CoreDataLayer {
             try ManagedObjectContext.delete(item)
             do{
                 try ManagedObjectContext.save()
-            }catch{
+            } catch {
                 NSLog("Error: \(error)")
                 let response = CoreDataResponse<T>(error: AppError.coreDataError, success: false, items: [], savedItem: nil)
                 return Just(response).eraseToAnyPublisher()

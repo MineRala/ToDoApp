@@ -21,6 +21,7 @@ class SelectDateViewController : BaseVC {
     private var selectDelegate: SelectDateDelegate
     private var date: Date
     private var cancellables = Set<AnyCancellable>()
+    private var shouldDisplayToast: Bool = false
 //    private(set) var calenderDate = CurrentValueSubject<Date, Never>(Date())
     
     var taskTimePicker = UIDatePicker()
@@ -128,7 +129,6 @@ extension SelectDateViewController{
         
         calendarVC = CalendarViewController()
         calendarVC.setDate(date: date)
-//        self.calendarVC.setPickerDate(pickerDate: taskTimePicker.date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
     }
@@ -136,7 +136,7 @@ extension SelectDateViewController{
     func addListeners() {
         self.calendarVC.selectedDate
             .receive(on: DispatchQueue.main)
-            .sink { date in
+            .sink { _ in
                 self.updateDate()
             }.store(in: &cancellables)
     }
@@ -152,7 +152,12 @@ extension SelectDateViewController {
 //MARK: - Actions
 extension SelectDateViewController {
     @objc func selectButtonTapped(){
-       
+        
+        if self.date < Date() {
+            Alerts.showAlert(controller: self, title: "Invalid date", message: "You cannot select the past date!", completion: {
+                return
+            })
+        }
         let date: Date = calendarVC.getSelectedDate()
         let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
         
@@ -195,7 +200,15 @@ extension SelectDateViewController {
 
         let userCalendar = Calendar.current
         self.date = userCalendar.date(from: dateComponents)!
-        print(self.date)
+        if self.date < Date() {
+            if self.shouldDisplayToast {
+                ToastView.show(with: "Warning: You cannot select the past date!")
+            }
+            self.shouldDisplayToast = true
+            self.calendarVC.changeSelectionColor(to: #colorLiteral(red: 0.462745098, green: 0.3829472341, blue: 0.6060211804, alpha: 1))
+        } else {
+            self.calendarVC.changeSelectionColor(to: #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1))
+        }
     }
 }
 

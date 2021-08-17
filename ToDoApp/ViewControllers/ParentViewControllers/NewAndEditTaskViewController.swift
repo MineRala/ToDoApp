@@ -192,6 +192,9 @@ extension NewAndEditTaskViewController {
         self.notificationPickerView.toolbarDelegate = self
         notification.inputAccessoryView = notificationPickerView.toolbar
         self.notificationPickerView.reloadAllComponents()
+        
+        let notificationTitleRow = self.model.getNotificationTitleAndRow(notificationDate: model.toDoItem.notificationDate, taskDate: model.toDoItem.taskDate!).1
+        self.notificationPickerView.selectRow(notificationTitleRow, inComponent: 0, animated: true)
     }
 }
 
@@ -244,7 +247,8 @@ extension NewAndEditTaskViewController {
         descriptionTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDescription
         categoryFLTextfield.asFloatingTextfield().text = self.model.editTaskVDM!.taskCategory
         pickDateFLTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDateFormated
-        notification.asFloatingTextfield().text = self.model.editTaskVDM!.notificationDate
+        let notificationTimeText = self.model.getNotificationTitleAndRow(notificationDate: self.model.editTaskVDM!.notificationDate, taskDate: self.model.editTaskVDM!.taskDate).0
+        notification.asFloatingTextfield().text = notificationTimeText
     }
 }
 
@@ -266,13 +270,19 @@ extension NewAndEditTaskViewController: ToolbarPickerViewDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
-        self.notification.text = self.model.arrNotificationTime[row]
-        self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
+        let titleInSelectedRow = self.model.arrNotificationTime[row]
+        updateNotificationTime(withTitle: titleInSelectedRow)
         notification.resignFirstResponder()
     }
     
     func didTapCancel() {
         notification.resignFirstResponder()
+    }
+}
+extension NewAndEditTaskViewController {
+    func updateNotificationTime(withTitle notificationTime: String) {
+        self.notification.text = notificationTime
+        self.model.setNotificationTime(notificationTime: notificationTime)
     }
 }
 //MARK: - Action
@@ -288,7 +298,7 @@ extension NewAndEditTaskViewController {
     }
     
     @objc func pickDateButtonTapped() {
-        let date = self.model.pickerDate == nil ? model.toDoItem.taskDate! : self.model.pickerDate!
+        let date = self.model.selectedDate == nil ? model.toDoItem.taskDate! : self.model.selectedDate!
         let vc = SelectDateViewController(date: date, selectDateDelegate: self)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -297,7 +307,7 @@ extension NewAndEditTaskViewController {
 //MARK: - Set Select Date Delegate
 extension NewAndEditTaskViewController : SelectDateDelegate {
     func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date) {
-        model.pickerDate = date
+        model.selectedDate = date
         pickDateFLTextField.asFloatingTextfield().text = TaskVDMConverter.formatDateForEditTaskVDM(date: date)
     }
 }

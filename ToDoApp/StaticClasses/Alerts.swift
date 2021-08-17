@@ -25,8 +25,8 @@ class Alerts : NSObject {
     }
     
     
-    static func showAlert(controller: UIViewController, _ message: String, completion: @escaping () -> Void) {
-         let dialogMessage = UIAlertController(title: NSLocalizedString("Warning", comment: ""), message: message, preferredStyle: .alert)
+    static func showAlert(controller: UIViewController, title: String, message: String, completion: @escaping () -> Void) {
+         let dialogMessage = UIAlertController(title: NSLocalizedString(title, comment: ""), message: message, preferredStyle: .alert)
          let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) in
          completion()
          })

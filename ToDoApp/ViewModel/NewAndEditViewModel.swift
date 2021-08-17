@@ -14,7 +14,7 @@ class NewAndEditViewModel{
     let toDoItem: ToDoItem!
     private(set) var editTaskVDM: TaskEditVDM?
     private var pageMode: NewAndEditVCState = .newTask
-    var pickerDate: Date?
+    var selectedDate: Date?
     private var notificationTime: Int?
     private var cancellables = Set<AnyCancellable>()
     
@@ -34,7 +34,7 @@ class NewAndEditViewModel{
             self.toDoItem = toDoItem!
             self.editTaskVDM = TaskVDMConverter.editTaskViewModel(toDoItem: toDoItem!)
             self.pageMode = .editTask
-            self.pickerDate = toDoItem?.taskDate
+            self.selectedDate = toDoItem?.taskDate
         }
         else{
             self.toDoItem = ToDoItem(context: ManagedObjectContext)
@@ -48,43 +48,25 @@ class NewAndEditViewModel{
    
     
     func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
-        if taskName != nil && taskDescription != nil && taskCategory != nil  && pickerDate != nil {
+        if taskName != nil && taskDescription != nil && taskCategory != nil  && selectedDate != nil {
             toDoItem.taskName = taskName
             toDoItem.taskDescription = taskDescription
             toDoItem.taskCategory = taskCategory
-            toDoItem.taskDate = pickerDate
+            toDoItem.taskDate = selectedDate
            
             if notificationTime == nil {
-                if toDoItem.notificationID != "" && self.pickerDate == nil {
-                                                            // if there is a notification in CoreData, then it
-                                                            // should delete notification
-                    // deleteNotification
-                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
-                    toDoItem.notificationDate = nil
-                    toDoItem.notificationID = ""
-                } else if toDoItem.notificationID == "" && self.pickerDate != nil {
-                                                            // If there is a notifiaction in CoreData and date has been
-                                                            // changed, then notification should changed as well.
-                    // createNotification
-                    toDoItem.notificationID = UUID().uuidString
-                    NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
-                } else if toDoItem.notificationID != "" && self.pickerDate != nil {
-                    // updateNotification
-                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
-                    NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+                if toDoItem.notificationID != "" {
+                    self.removeNotification()
                 }
                 
             } else {
-                toDoItem.notificationDate = pickerDate?.addingTimeInterval(-Double(notificationTime!))
-                // Check CoreData whether there is an existing Notification
-                if toDoItem.notificationID != "" {
-                    // deleteNotification
-                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+                toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
+                
+                if toDoItem.notificationID == "" {
+                    self.createNotification()
                 } else {
-                    toDoItem.notificationID = UUID().uuidString
+                    updateNotification()
                 }
-                // createNotification
-                NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
                 
             }
             switch pageMode {
@@ -122,5 +104,54 @@ class NewAndEditViewModel{
         default:
             self.notificationTime = nil
         }
+    }
+    
+    func getNotificationTitleAndRow(notificationDate fromDate: Date?, taskDate toDate: Date) -> (String, Int) {
+        if fromDate == nil {
+            return (NSLocalizedString("Do Not Send Notification", comment: ""), 0)
+        }
+        
+        let timeDifferenceInSeconds = Int(toDate.timeIntervalSince(fromDate!))
+        
+        switch timeDifferenceInSeconds {
+        case 5*60:
+            return (NSLocalizedString("5 Minutes Before", comment: ""), 1)
+        case 10*60:
+            return (NSLocalizedString("10 Minutes Before", comment: ""), 2)
+        case 15*60:
+            return (NSLocalizedString("15 Minutes Before", comment: ""), 3)
+        case 30*60:
+            return (NSLocalizedString("30 Minutes Before", comment: ""), 4)
+        case 1*60*60:
+            return (NSLocalizedString("1 Hour Before", comment: ""), 5)
+        case 2*60*60:
+            return (NSLocalizedString("2 Hours Before", comment: ""), 6)
+        case 5*60*60:
+            return (NSLocalizedString("5 Hours Before", comment: ""), 7)
+        case 24*60*60:
+            return (NSLocalizedString("1 Day Before", comment: ""), 8)
+        case 2*24*60*60:
+            return (NSLocalizedString("2 Days Before", comment: ""), 9)
+        default:
+            return (NSLocalizedString("Do Not Send Notification", comment: ""), 0)
+        }
+        
+    }
+    
+    
+    private func removeNotification() {
+        NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+        toDoItem.notificationDate = nil
+        toDoItem.notificationID = ""
+    }
+    
+    private func createNotification() {
+        toDoItem.notificationID = UUID().uuidString
+        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+    }
+    
+    private func updateNotification() {
+        NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
 }
