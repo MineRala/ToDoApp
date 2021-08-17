@@ -13,7 +13,7 @@ import Combine
 // MARK: - Calendar View Controller
 class CalendarViewController : UIViewController{
     private let calendar = FSCalendar()
-    private let viewModel: HomeViewModel
+ //   private let viewModel: HomeViewModel
     private var date: Date?
     private(set) var selectedDate = CurrentValueSubject<Date, Never>(Date())
     private var cancellables = Set<AnyCancellable>()
@@ -23,8 +23,8 @@ class CalendarViewController : UIViewController{
     // Store hours and minutes here so you will be able to use it whenever you need
     // Also it will be updated when picker has changed its value.
     
-    init(viewModel: HomeViewModel) {
-        self.viewModel = viewModel
+    init() {
+       // self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -73,7 +73,7 @@ extension CalendarViewController {
     func selectDate(_ date: Date) {
         self.selectedDate.send(date)
         self.calendar.select(date)
-        self.viewModel.updateSelectedDate(date)
+        //self.viewModel.updateSelectedDate(date)
     }
 //
 //    func setPickerDate(pickerDate: Date) {
@@ -95,7 +95,7 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDelegateAppearan
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         let newMinDate = calendar.currentPage
         let newMaxDate = calendar.currentPage + Date.numberOfDays(in: Int(calendar.currentPage.month), year: Int(calendar.currentPage.year)).days
-        viewModel.updateVisibleDateRange(min: newMinDate, max: newMaxDate)
+       // viewModel.updateVisibleDateRange(min: newMinDate, max: newMaxDate)
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {

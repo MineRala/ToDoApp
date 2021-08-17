@@ -126,7 +126,7 @@ extension SelectDateViewController{
         
         selectButton.addTarget(nil, action: #selector(selectButtonTapped), for: .touchUpInside)
         
-        calendarVC = CalendarViewController(viewModel: viewModel)
+        calendarVC = CalendarViewController()
         calendarVC.setDate(date: date)
 //        self.calendarVC.setPickerDate(pickerDate: taskTimePicker.date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
@@ -182,7 +182,7 @@ extension SelectDateViewController {
     func updateDate() {
         let date = self.calendarVC.selectedDate.value
         let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
-        
+
         var dateComponents = DateComponents()
         dateComponents.year = components.year
         dateComponents.month = components.month
@@ -192,7 +192,7 @@ extension SelectDateViewController {
         let pickerDateComponent = Calendar(identifier: .gregorian).dateComponents([.hour, .minute], from: datePicker)
         dateComponents.hour = pickerDateComponent.hour
         dateComponents.minute = pickerDateComponent.minute
-        
+
         let userCalendar = Calendar.current
         self.date = userCalendar.date(from: dateComponents)!
         print(self.date)
