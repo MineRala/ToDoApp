@@ -193,8 +193,9 @@ extension NewAndEditTaskViewController {
         notification.inputAccessoryView = notificationPickerView.toolbar
         self.notificationPickerView.reloadAllComponents()
         
-        let notificationTitleRow = self.model.getNotificationTitleAndRow(notificationDate: model.toDoItem.notificationDate, taskDate: model.toDoItem.taskDate!).1
-        self.notificationPickerView.selectRow(notificationTitleRow, inComponent: 0, animated: true)
+        let notificationTitleAndRow = self.model.getNotificationTitleAndRow(notificationDate: model.toDoItem.notificationDate, taskDate: model.toDoItem.taskDate!)
+        self.notificationPickerView.selectRow(notificationTitleAndRow.1, inComponent: 0, animated: true)
+        self.model.setNotificationTime(notificationTime: notificationTitleAndRow.0)
     }
 }
 

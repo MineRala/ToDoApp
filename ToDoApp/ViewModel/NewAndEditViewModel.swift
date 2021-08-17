@@ -54,14 +54,18 @@ class NewAndEditViewModel{
             toDoItem.taskCategory = taskCategory
             toDoItem.taskDate = selectedDate
            
+            
             if notificationTime == nil {
                 if toDoItem.notificationID != "" {
                     self.removeNotification()
                 }
                 
             } else {
+
                 toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
                 
+                print("Notification time: " + notificationTime!.description)
+
                 if toDoItem.notificationID == "" {
                     self.createNotification()
                 } else {
@@ -147,11 +151,13 @@ class NewAndEditViewModel{
     
     private func createNotification() {
         toDoItem.notificationID = UUID().uuidString
+        toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
         NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
     
     private func updateNotification() {
         NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+        toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
         NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
 }

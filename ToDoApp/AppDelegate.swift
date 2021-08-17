@@ -11,8 +11,6 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.statusBarStyle = .darkContent
@@ -91,23 +89,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         //  - Handle notification
-        let notificationID = response.notification.request.identifier
-        let homeViewController = HomeViewController()
+        // Navigate to TaskDetailView Controller needs to be implemented
         
-        let toDoItem = searchToDoItem(homeViewModel: homeViewController.viewModel, withNotificationID: notificationID)
-        if toDoItem == nil {
-            NSLog("Something wrong in retrival of toDoItem", "")
-        } else {
-            let destinationViewController = TaskDetailsViewController(model: toDoItem!)
-            let window: UIWindow? = (UIApplication.shared.delegate?.window)!
-            let navigationController: UINavigationController = window!.rootViewController as! UINavigationController
-            navigationController.pushViewController(destinationViewController, animated: false)
-        }
         print("Local notification::\(response)")
         completionHandler()
     }
     
     private func searchToDoItem(homeViewModel: HomeViewModel, withNotificationID notificationID: String) -> ToDoItem? {
+        NSLog("homeViewModel.arrTaskListData.count: " + homeViewModel.arrTaskListData.count.description)
         for taskListVDM in homeViewModel.arrTaskListData {
             if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
                 return taskListVDM.toDoItem
