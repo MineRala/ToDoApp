@@ -188,6 +188,26 @@ extension HomeViewController {
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
         
+        notificationCenter.add(request) { (error) in
+            if error != nil {
+                print("Error" + error.debugDescription)
+                return
+            }
+        }
+    }
+    
+    func localNotification(title: String, body: String, date: Date, uuidString: String = UUID().uuidString){
+       
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+        
          notificationCenter.add(request) { (error) in
             if error != nil {
                 print("Error" + error.debugDescription)
