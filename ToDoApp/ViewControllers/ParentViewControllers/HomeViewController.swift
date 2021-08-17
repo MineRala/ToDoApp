@@ -54,6 +54,7 @@ extension HomeViewController {
         viewModel.initializeViewModel()
         
         self.eventVC.fetchDelegate = self
+        ToastView.show(with: "Warning: You cannot select the past tense!")
         
     }
     

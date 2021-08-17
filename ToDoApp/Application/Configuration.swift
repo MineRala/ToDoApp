@@ -35,5 +35,4 @@ struct C {
        case check = "CheckIcon"
         
     }
-    
 }
