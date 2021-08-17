@@ -98,7 +98,7 @@ extension HomeViewController {
         eventVCContainer.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         
         eventVC = EventTableViewController(homeViewModel: viewModel)
-        calendarVC = CalendarViewController(viewModel: viewModel)
+        calendarVC = CalendarViewController()
         searchVC = SearchViewController(viewModel: viewModel)
         
         self.addChildViewController(childController: eventVC, onView: eventVCContainer)
@@ -152,7 +152,12 @@ extension HomeViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-        }.store(in: &cancellables)
+            }.store(in: &cancellables)
+        
+        calendarVC.selectedDate.receive(on: DispatchQueue.main)
+            .sink { date in
+                self.viewModel.updateSelectedDate(date)
+            }.store(in: &cancellables)
     }
 }
 
