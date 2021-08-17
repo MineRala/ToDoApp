@@ -11,6 +11,8 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //        UIApplication.shared.statusBarStyle = .darkContent
@@ -89,20 +91,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         //  - Handle notification
-        // Navigate to TaskDetailView Controller needs to be implemented
+        
+        let notificationID = response.notification.request.identifier
+        
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })  else {
+            completionHandler()
+            return
+        }
+//        let window: UIWindow? = UIApplication.shared.windows.first
+        let navController = window.rootViewController as! UINavigationController
+//
+//        print("NavigationController : \(navController)" )
+        guard let homeViewController = navController.viewControllers.first as? HomeViewController else {
+            completionHandler()
+            return
+        }
+        homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
         
         print("Local notification::\(response)")
         completionHandler()
     }
     
-    private func searchToDoItem(homeViewModel: HomeViewModel, withNotificationID notificationID: String) -> ToDoItem? {
-        NSLog("homeViewModel.arrTaskListData.count: " + homeViewModel.arrTaskListData.count.description)
-        for taskListVDM in homeViewModel.arrTaskListData {
-            if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
-                return taskListVDM.toDoItem
-            }
-        }
-        return nil
-    }
+    
 }
 

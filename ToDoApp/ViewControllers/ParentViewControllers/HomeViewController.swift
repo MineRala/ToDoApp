@@ -9,6 +9,11 @@ import Foundation
 import UIKit
 import Combine
 
+enum HomeViewControllerType {
+    case defaultType
+    case localNotification(value: String)
+}
+
 class HomeViewController : BaseVC {
     
     private(set) var viewModel: HomeViewModel = HomeViewModel()
@@ -23,6 +28,8 @@ class HomeViewController : BaseVC {
     private var searchVC : SearchViewController!
     private var calendarVC : CalendarViewController!
     private var eventVC : EventTableViewController!
+    
+    private var homeViewControllerType: HomeViewControllerType = .defaultType
     
     private let calendarViewHeightRatio: CGFloat = 35/100
     let notificationCenter = UNUserNotificationCenter.current()
@@ -43,6 +50,7 @@ class HomeViewController : BaseVC {
 extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.navigateToTaskDetailViewControllerIfNeeded()
     }
     
     override func viewDidLoad() {
@@ -59,6 +67,25 @@ extension HomeViewController {
         if calendarHeightConstraint == nil {
             calendarHeightConstraint = calendarVCContainer.heightAnchor.constraint(equalToConstant: self.itemsContainerView.frame.size.height * calendarViewHeightRatio)
             calendarHeightConstraint!.isActive = true
+        }
+    }
+}
+
+extension HomeViewController {
+    
+    private func navigateToTaskDetailViewControllerIfNeeded() {
+//        guard case .localNotification(_) = self.homeViewControllerType else {
+//            return
+//        }
+        switch self.homeViewControllerType {
+        case .localNotification(let value):
+            let vc = TaskDetailsViewController(model: self.viewModel.arrTaskListData[0].toDoItem)
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+            self.homeViewControllerType = .defaultType
+        case .defaultType:
+            print("defaultType")
+            return
         }
     }
 }
@@ -179,3 +206,21 @@ extension HomeViewController  {
 //        return self.homeViewModel
 //    }
 //}
+
+// MARK: - Public
+extension HomeViewController {
+    
+    func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
+        for taskListVDM in self.viewModel.arrTaskListData {
+            if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
+                return taskListVDM.toDoItem
+            }
+        }
+        return nil
+    }
+    
+    func updateHomeViewControllerType(_ type: HomeViewControllerType) {
+        self.homeViewControllerType = type
+    }
+    
+}
