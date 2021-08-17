@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A105870226CBA79A009AD1E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A105870126CBA79A009AD1E7 /* NotificationManager.swift */; };
 		A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114683326B844E0002263B3 /* NewAndEditVCState.swift */; };
 		E8027F1926AC66F80071E506 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1826AC66F80071E506 /* AppDelegate.swift */; };
 		E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1A26AC66F80071E506 /* SceneDelegate.swift */; };
@@ -40,7 +41,7 @@
 		E851C0D826AEE0BF003D9CA3 /* Roboto-CondensedItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0C826AEE0BF003D9CA3 /* Roboto-CondensedItalic.ttf */; };
 		E851C0D926AEE0BF003D9CA3 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0C926AEE0BF003D9CA3 /* Roboto-Regular.ttf */; };
 		E851C0DA26AEE0BF003D9CA3 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */; };
-		E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */; };
+		E851C0F026AEE61B003D9CA3 /* NewAndEditTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E851C0EF26AEE61B003D9CA3 /* NewAndEditTaskViewController.swift */; };
 		E85B83E426C138F9008EC7A0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E85B83E626C138F9008EC7A0 /* Localizable.strings */; };
 		E85B83EB26C15712008EC7A0 /* EventTableViewArrayElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85B83EA26C15712008EC7A0 /* EventTableViewArrayElements.swift */; };
 		E863355A26B1B0CF006B2C44 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */; };
@@ -88,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A105870126CBA79A009AD1E7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A114683326B844E0002263B3 /* NewAndEditVCState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAndEditVCState.swift; sourceTree = "<group>"; };
 		E8027F1526AC66F80071E506 /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8027F1826AC66F80071E506 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,7 +130,7 @@
 		E851C0C826AEE0BF003D9CA3 /* Roboto-CondensedItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-CondensedItalic.ttf"; sourceTree = "<group>"; };
 		E851C0C926AEE0BF003D9CA3 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		E851C0CA26AEE0BF003D9CA3 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskViewController.swift; sourceTree = "<group>"; };
+		E851C0EF26AEE61B003D9CA3 /* NewAndEditTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAndEditTaskViewController.swift; sourceTree = "<group>"; };
 		E85B83E526C138F9008EC7A0 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E85B83EA26C15712008EC7A0 /* EventTableViewArrayElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewArrayElements.swift; sourceTree = "<group>"; };
 		E863355926B1B0CF006B2C44 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -212,7 +214,7 @@
 				E8058DAB26B9B89100E66219 /* Localization */,
 				FDAD7E2F26BD60B3004FE394 /* Models */,
 				FDAD7E2E26BD6093004FE394 /* ViewDataModels */,
-				E8058D7526B97FC200E66219 /* Alert */,
+				E8058D7526B97FC200E66219 /* StaticClasses */,
 				E8EA25A626B8462900450E53 /* Enums */,
 				E851C0BA26AEE0A8003D9CA3 /* Fonts */,
 				FDD9480326B075E100E4FA1C /* ViewModel */,
@@ -259,12 +261,13 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		E8058D7526B97FC200E66219 /* Alert */ = {
+		E8058D7526B97FC200E66219 /* StaticClasses */ = {
 			isa = PBXGroup;
 			children = (
 				E8058D7626B9800900E66219 /* Alerts.swift */,
+				A105870126CBA79A009AD1E7 /* NotificationManager.swift */,
 			);
-			path = Alert;
+			path = StaticClasses;
 			sourceTree = "<group>";
 		};
 		E8058DAB26B9B89100E66219 /* Localization */ = {
@@ -303,7 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				E8027F5626ACB24F0071E506 /* HomeViewController.swift */,
-				E851C0EF26AEE61B003D9CA3 /* NewTaskViewController.swift */,
+				E851C0EF26AEE61B003D9CA3 /* NewAndEditTaskViewController.swift */,
 				E8D4AECB26B2AC90003D60BD /* TaskDetailsViewController.swift */,
 				E8074C4426B2F48C00030963 /* SelectDateViewController.swift */,
 			);
@@ -600,6 +603,7 @@
 				E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */,
 				E836DA8026BAFEF90059EF8C /* TaskVDMConverter.swift in Sources */,
 				E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */,
+				A105870226CBA79A009AD1E7 /* NotificationManager.swift in Sources */,
 				E8D2FBE826B02917006D0936 /* TaskCell.swift in Sources */,
 				E8C57ACD26B19DF600E51F6F /* EventTableViewController.swift in Sources */,
 				FD74CCDC26BE01290002A1EC /* Zones.swift in Sources */,
@@ -609,7 +613,7 @@
 				FDC3050B26BD6BD0002833A1 /* ToDoItem+CoreDataClass.swift in Sources */,
 				E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */,
 				E8EA53F226C556AD00D0758B /* NewAndEditViewModel.swift in Sources */,
-				E851C0F026AEE61B003D9CA3 /* NewTaskViewController.swift in Sources */,
+				E851C0F026AEE61B003D9CA3 /* NewAndEditTaskViewController.swift in Sources */,
 				E8C094C126C51B26001A69DC /* ToolbarPickerView.swift in Sources */,
 				FDD9480526B075ED00E4FA1C /* HomeViewModel.swift in Sources */,
 				E8C57AC026B19DC700E51F6F /* SearchViewController.swift in Sources */,

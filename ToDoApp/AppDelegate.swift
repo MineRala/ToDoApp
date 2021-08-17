@@ -91,9 +91,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         //  - Handle notification
+        let notificationID = response.notification.request.identifier
+        let homeViewController = HomeViewController()
         
+        let toDoItem = searchToDoItem(homeViewModel: homeViewController.viewModel, withNotificationID: notificationID)
+        if toDoItem == nil {
+            NSLog("Something wrong in retrival of toDoItem", "")
+        } else {
+            let destinationViewController = TaskDetailsViewController(model: toDoItem!)
+            let window: UIWindow? = (UIApplication.shared.delegate?.window)!
+            let navigationController: UINavigationController = window!.rootViewController as! UINavigationController
+            navigationController.pushViewController(destinationViewController, animated: false)
+        }
         print("Local notification::\(response)")
         completionHandler()
+    }
+    
+    private func searchToDoItem(homeViewModel: HomeViewModel, withNotificationID notificationID: String) -> ToDoItem? {
+        for taskListVDM in homeViewModel.arrTaskListData {
+            if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
+                return taskListVDM.toDoItem
+            }
+        }
+        return nil
     }
 }
 

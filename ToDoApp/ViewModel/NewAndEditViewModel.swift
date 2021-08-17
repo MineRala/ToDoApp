@@ -15,7 +15,6 @@ class NewAndEditViewModel{
     private(set) var editTaskVDM: TaskEditVDM?
     private var pageMode: NewAndEditVCState = .newTask
     var pickerDate: Date?
-    private var notificationDate: Date?
     private var notificationTime: Int?
     private var cancellables = Set<AnyCancellable>()
     
@@ -55,8 +54,38 @@ class NewAndEditViewModel{
             toDoItem.taskCategory = taskCategory
             toDoItem.taskDate = pickerDate
            
-            if notificationDate != nil {
+            if notificationTime == nil {
+                if toDoItem.notificationID != "" && self.pickerDate == nil {
+                                                            // if there is a notification in CoreData, then it
+                                                            // should delete notification
+                    // deleteNotification
+                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+                    toDoItem.notificationDate = nil
+                    toDoItem.notificationID = ""
+                } else if toDoItem.notificationID == "" && self.pickerDate != nil {
+                                                            // If there is a notifiaction in CoreData and date has been
+                                                            // changed, then notification should changed as well.
+                    // createNotification
+                    toDoItem.notificationID = UUID().uuidString
+                    NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+                } else if toDoItem.notificationID != "" && self.pickerDate != nil {
+                    // updateNotification
+                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+                    NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+                }
+                
+            } else {
                 toDoItem.notificationDate = pickerDate?.addingTimeInterval(-Double(notificationTime!))
+                // Check CoreData whether there is an existing Notification
+                if toDoItem.notificationID != "" {
+                    // deleteNotification
+                    NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+                } else {
+                    toDoItem.notificationID = UUID().uuidString
+                }
+                // createNotification
+                NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+                
             }
             switch pageMode {
             case .newTask:
@@ -70,7 +99,7 @@ class NewAndEditViewModel{
         }
     }
     
-    private func setNotificationTime(notificationTime: String) {
+    func setNotificationTime(notificationTime: String) {
         switch notificationTime {
         case NSLocalizedString( "5 Minutes Before", comment: ""):
             self.notificationTime = 5*60

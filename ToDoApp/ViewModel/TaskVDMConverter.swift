@@ -141,6 +141,7 @@ extension TaskVDMConverter{
         }
         
         var notificationDate : String? = nil
+        var notificationID: String? = nil
         
         if toDoItem.notificationDate != nil {
             notificationDate = toDoItem.notificationDate?.description
@@ -155,6 +156,6 @@ extension TaskVDMConverter{
         let taskDateTime = formatDateForEditTaskVDM(date: taskDate)
         let taskId = "\(toDoItem.taskId)"
         
-        return TaskEditVDM(taskNameTitle: taskNameTitle, taskDescriptionTitle: taskDescriptionTitle, taskCategoryTitle: taskCategoryTitle, taskDateTitle: taskDateTitle, notificationDateTitle: notificationDateTitle, taskName: taskName, taskDescription: taskDescription, taskCategory: taskCategory, taskDate: taskDate, taskDateFormated: taskDateTime,notificationDate: notificationDate, taskId: taskId)
+        return TaskEditVDM(taskNameTitle: taskNameTitle, taskDescriptionTitle: taskDescriptionTitle, taskCategoryTitle: taskCategoryTitle, taskDateTitle: taskDateTitle, notificationDateTitle: notificationDateTitle, taskName: taskName, taskDescription: taskDescription, taskCategory: taskCategory, taskDate: taskDate, taskDateFormated: taskDateTime,notificationDate: notificationDate, notificationID: notificationID, taskId: taskId)
     }
 }

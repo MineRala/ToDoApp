@@ -10,7 +10,7 @@ import UIKit
 
 enum ViewControllerType: String {
     case home = "HomeViewController"
-    case newTask = "NewTaskViewController"
+    case newTask = "NewAndEditTaskViewController"
     case taskDetails = "TaskDetailsViewController"
     case selectDate = "SelectDateViewController"
     

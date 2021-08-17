@@ -1,4 +1,5 @@
-//  NewTaskViewController.swift
+//NewAndEditTaskViewController
+//  NewAndEditTaskViewController.swift
 //  ToDoApp
 //
 //  Created by Mine Rala on 26.07.2021.
@@ -25,7 +26,7 @@ protocol FetchDelegate {
     func fetchData()
 }
 
-class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
+class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
     private let stackView = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 32, axis: .vertical)
@@ -129,7 +130,7 @@ class NewTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
 }
 
 //MARK: - Lifecycle
-extension NewTaskViewController {
+extension NewAndEditTaskViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.updateTaskTitle(string: model.getMode().navigationBarTitle)
@@ -143,7 +144,7 @@ extension NewTaskViewController {
 }
 
 //MARK: - Set Up UI
-extension NewTaskViewController {
+extension NewAndEditTaskViewController {
     func setUpUI() {
         view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
         self.scrollViewAddTask = ScrollView(dataSource: self)
@@ -196,7 +197,7 @@ extension NewTaskViewController {
 
    
 //MARK: - ScrollView Elements
-extension NewTaskViewController {
+extension NewAndEditTaskViewController {
     func scrollViewElements(_ scrollView: ScrollView, cell: ScrollViewCell) {
         cell.contentView.addSubview(stackView)
         stackView.leadingAnchor(margin: 8)
@@ -237,7 +238,7 @@ extension NewTaskViewController {
 }
   
 //MARK: - Edit Page Mode
-extension NewTaskViewController {
+extension NewAndEditTaskViewController {
     private func setEditPageMode(){
         taskNameTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskName
         descriptionTextField.asFloatingTextfield().text = self.model.editTaskVDM!.taskDescription
@@ -248,7 +249,7 @@ extension NewTaskViewController {
 }
 
 //MARK: - PickerView Delegate & DataSource
-extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension NewAndEditTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -261,12 +262,12 @@ extension NewTaskViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-extension NewTaskViewController: ToolbarPickerViewDelegate {
+extension NewAndEditTaskViewController: ToolbarPickerViewDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
         self.notification.text = self.model.arrNotificationTime[row]
-        
+        self.model.setNotificationTime(notificationTime: self.model.arrNotificationTime[row])
         notification.resignFirstResponder()
     }
     
@@ -275,7 +276,7 @@ extension NewTaskViewController: ToolbarPickerViewDelegate {
     }
 }
 //MARK: - Action
-extension NewTaskViewController {
+extension NewAndEditTaskViewController {
     @objc func addBtnPressed() {
         let taskName = taskNameTextField.asFloatingTextfield().text
         let description =  descriptionTextField.asFloatingTextfield().text
@@ -294,7 +295,7 @@ extension NewTaskViewController {
 }
 
 //MARK: - Set Select Date Delegate
-extension NewTaskViewController : SelectDateDelegate {
+extension NewAndEditTaskViewController : SelectDateDelegate {
     func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date) {
         model.pickerDate = date
         pickDateFLTextField.asFloatingTextfield().text = TaskVDMConverter.formatDateForEditTaskVDM(date: date)

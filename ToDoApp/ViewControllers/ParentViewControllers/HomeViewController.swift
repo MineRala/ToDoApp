@@ -11,7 +11,7 @@ import Combine
 
 class HomeViewController : BaseVC {
     
-    private let viewModel: HomeViewModel = HomeViewModel()
+    private(set) var viewModel: HomeViewModel = HomeViewModel()
     private var cancellables = Set<AnyCancellable>()  // cancellable değişkeni oluşturduk,elemanları hafızadan atmak için.
    
     private var calendarHeightConstraint: NSLayoutConstraint?
@@ -51,7 +51,6 @@ extension HomeViewController {
         super.viewDidLoad()
         setUpUI()
         addListeners()
-        localNotification()
         viewModel.initializeViewModel()
         
         self.eventVC.fetchDelegate = self
@@ -171,53 +170,15 @@ extension HomeViewController: UITextFieldDelegate {
 // MARK: - Route
 extension HomeViewController  {
     private func routeToNewTasks() {
-        let newViewController = NewTaskViewController()
+        let newViewController = NewAndEditTaskViewController()
         newViewController.fetchDelegate = self
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
-
-//MARK: - Local Notification
-extension HomeViewController {
-    func localNotification(){
-       
-        let content = UNMutableNotificationContent()
-        content.title = "Hey I'am a notification"
-        content.body = "Look at me!"
-        
-        let date =  Date().addingTimeInterval(5)
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-        
-        notificationCenter.add(request) { (error) in
-            if error != nil {
-                print("Error" + error.debugDescription)
-                return
-            }
-        }
-    }
-    
-    func localNotification(title: String, body: String, date: Date, uuidString: String = UUID().uuidString){
-       
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-        
-         notificationCenter.add(request) { (error) in
-            if error != nil {
-                print("Error" + error.debugDescription)
-                return
-            }
-        }
-    }
-}
+//
+//// MARK: - Getter
+//extension HomeViewController {
+//    func getHomeViewModel() -> HomeViewModel {
+//        return self.homeViewModel
+//    }
+//}

@@ -208,7 +208,7 @@ extension TaskDetailsViewController{
     }
     
     @objc func editButtonTapped() {
-        let vc = NewTaskViewController(toDoItem: self.detailModel.getToDoItem())
+        let vc = NewAndEditTaskViewController(toDoItem: self.detailModel.getToDoItem())
         vc.fetchDelegate = self
         self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)

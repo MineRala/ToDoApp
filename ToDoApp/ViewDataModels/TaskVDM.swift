@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskListVDM{
+struct TaskListVDM {
     let toDoItem: ToDoItem
     let taskName: String
     let taskCategory: String
@@ -39,6 +39,7 @@ struct TaskEditVDM {
     let taskDate: Date
     let taskDateFormated: String
     let notificationDate: String?
+    let notificationID: String?
     let taskId: String
 }
 
