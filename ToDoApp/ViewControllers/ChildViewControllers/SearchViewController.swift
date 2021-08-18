@@ -11,6 +11,7 @@ import Combine
 
 class SearchViewController : UIViewController {
     private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
+
     private let viewModel: HomeViewModel
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
@@ -159,6 +160,18 @@ extension SearchViewController : UITextFieldDelegate {
   
     @objc private func searchTextDidChange(){
         
+        if searchTextField.text == "" {
+            self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
+            return
+        }
+            
+        var arrToDoItemFiltered = [TaskListVDM]()
+        for taskList in viewModel.arrTaskListData {
+            if taskList.taskName.lowercased().contains((searchTextField.text?.lowercased())!) {
+                arrToDoItemFiltered.append(taskList)
+            }
+        }
+        self.viewModel.arrTaskListDataFiltered.send(arrToDoItemFiltered)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -169,6 +182,12 @@ extension SearchViewController : UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         NSLog("Did End")
         self.isSearchTextFieldInEditingMode.send(true)
+        if searchTextField.text == "" {
+            self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
+        }
+        else {
+           // self.viewModel.arrTaskListDataFiltered.value.send()
+        }
     }
     
     @objc private func cancelBtnTapped() {
@@ -176,6 +195,7 @@ extension SearchViewController : UITextFieldDelegate {
         self.searchTextField.text = ""
         self.searchTextField.endEditing(true)
         self.isSearchTextFieldInEditingMode.send(true)
+        self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
     }
 }
  

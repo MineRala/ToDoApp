@@ -14,6 +14,7 @@ class HomeViewModel {
     private let coreDataLayer = CoreDataLayer()
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
+    private(set) var arrTaskListDataFiltered = CurrentValueSubject<Array<TaskListVDM>,Never>([])
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
@@ -22,6 +23,10 @@ class HomeViewModel {
     private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
    
     private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        addListeners()
+    }
 }
 
 // MARK: - Public
@@ -95,7 +100,7 @@ extension HomeViewModel {
         
         taskListVDMsPublisher.sink { taskListVDMs in
             self.arrTaskListData = taskListVDMs
-            
+            self.arrTaskListDataFiltered.send(taskListVDMs)
             self.initializeArrAllElemetsEventTableView()
             
             self.shouldUpdateAllData.send()
@@ -108,16 +113,17 @@ extension HomeViewModel {
             self.arrAllElemetsEventTableView.removeAll()
         }
         
-        for index in 0 ..< self.arrTaskListData.count {
-            if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
-                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day)
+        let arrFiltered = arrTaskListDataFiltered.value
+        for index in 0 ..< arrFiltered.count {
+            if index == 0 || arrFiltered[index-1].day != arrFiltered[index].day {
+                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: arrFiltered[index].day)
                 self.arrAllElemetsEventTableView.append(titleCell)
-                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                let taskCell = TaskListVDMArrayElement(taskListVDM: arrFiltered[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
                 continue
             }
             else {
-                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                let taskCell = TaskListVDMArrayElement(taskListVDM: arrFiltered[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
                
             }
@@ -172,5 +178,16 @@ extension HomeViewModel {
         }
         
         return nil
+    }
+}
+
+//MARK: - Listeners
+extension HomeViewModel {
+    private func addListeners() {
+        self.arrTaskListDataFiltered
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.shouldUpdateAllData.send()
+            }.store(in: &cancellables)
     }
 }

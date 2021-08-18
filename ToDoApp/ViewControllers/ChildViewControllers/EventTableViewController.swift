@@ -71,7 +71,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
         let vc = TaskDetailsViewController(model: model.toDoItem)
         vc.delegate = self
-      //  vc.delegateRetriveTaskEdit = self
         vc.fetchDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -112,8 +111,8 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             }
             
             let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
-
-            self.handleTrash(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
+            let arrFiltered = self.viewModel.arrTaskListDataFiltered.value
+            self.handleTrash(toDoItem: arrFiltered[index].toDoItem)
             completionHandler(true)
         }
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
@@ -130,17 +129,19 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         
         let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
         
+        let arrFiltered = self.viewModel.arrTaskListDataFiltered.value
         let done = UIContextualAction(style: .normal,title: nil) { [weak self] (action, view, completionHandler) in
             guard let self = self else{
                 completionHandler(false)
                 return
             }
-            self.handleDone(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
+       
+            self.handleDone(toDoItem: arrFiltered[index].toDoItem)
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
       
-        if viewModel.arrTaskListData[index].isTaskCompleted{
+        if arrFiltered[index].isTaskCompleted{
             done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
                 #imageLiteral(resourceName: "undo").draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
             }
