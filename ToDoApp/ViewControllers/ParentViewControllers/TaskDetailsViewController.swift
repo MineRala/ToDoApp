@@ -62,6 +62,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 0.75)
         tvd.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         tvd.isEditable = false
+        tvd.isUserInteractionEnabled = true
         tvd.isScrollEnabled = true
         return tvd
     }()
@@ -149,7 +150,7 @@ extension TaskDetailsViewController{
             .trailingAnchor(margin: 16)
             .bottomAnchor(margin: 16)
     
-        textViewHeightConstraint = textViewDescription.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
+        textViewHeightConstraint = textViewDescription.heightAnchor.constraint(equalToConstant: 300)
         textViewHeightConstraint.isActive = true
         
         self.view.addSubview(viewBottom)
@@ -190,7 +191,6 @@ extension TaskDetailsViewController{
         let sizeTv = textViewDescription.sizeThatFits(CGSize(width: viewDetail.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         print(textViewDescription)
         print(sizeTv)
-        textViewDescription.isScrollEnabled = false
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }

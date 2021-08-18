@@ -10,7 +10,7 @@ import UIKit
 
 class HeaderTaskCell: UITableViewCell {
     
-    
+    private(set) var date: Date!
     private let dayLabel : UILabel = {
        let dl = UILabel()
         dl.textColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
@@ -44,7 +44,8 @@ extension HeaderTaskCell {
 
 //MARK: - Actions
 extension HeaderTaskCell {
-    func updateHeaderCell(title: String) {
+    func updateHeaderCell(title: String, date: Date) {
         self.dayLabel.text = title
+        self.date = date
     }
 }

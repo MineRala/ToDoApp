@@ -300,6 +300,13 @@ extension NewAndEditTaskViewController {
     }
     
     @objc func pickDateButtonTapped() {
+        
+        if model.getMode() == .newTask {
+            let vc = SelectDateViewController(date: Date(), selectDateDelegate: self)
+            self.navigationController?.pushViewController(vc, animated: true)
+            return
+        }
+        
         let date = self.model.selectedDate == nil ? model.toDoItem.taskDate! : self.model.selectedDate!
         let vc = SelectDateViewController(date: date, selectDateDelegate: self)
         self.navigationController?.pushViewController(vc, animated: true)

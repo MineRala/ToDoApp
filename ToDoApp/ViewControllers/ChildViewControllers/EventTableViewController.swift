@@ -88,13 +88,15 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
             
             if taskListVDMArrayElement.indexAt == viewModel.earliestDayIndexRow {
+                NSLog("Indexpath in eventTableViewController is set.", "")
                 self.indexPath = indexPath
             }
             
             return cell
         } else {
              let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
-            headerCell.updateHeaderCell(title: ((viewModel.arrAllElemetsEventTableView[indexPath.row]as? TaskListVDMHeaderArrayElement)?.getCellDateTitle())!)
+            let currentElement = viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMHeaderArrayElement
+            headerCell.updateHeaderCell(title: currentElement.getCellDateTitle() , date: currentElement.taskDate)
            return headerCell
         }
     }
@@ -162,16 +164,16 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+       // self.eventTableView.scrollToRow(at: <#T##IndexPath#>, at: UITableView.ScrollPosition.top, animated: true)
     }
     
-    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath?, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
-        guard let index = indexPath else {
-            NSLog("Unable to scroll to the row since indexPath is nil.", "")
-            return
-        }
-        tableView.scrollToRow(at: index, at: at, animated: animated)
-    }
+//    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath?, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
+//        guard let index = indexPath else {
+//            NSLog("Unable to scroll to the row since indexPath is nil.", "")
+//            return
+//        }
+//        tableView.scrollToRow(at: index, at: at, animated: animated)
+//    }
 
  
 }
@@ -224,9 +226,7 @@ extension EventTableViewController {
                 self.viewModel.initializeArrAllElemetsEventTableView()
                 self.eventTableView.reloadData()
                 self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
-                
-                self.scrollViewTo(self.eventTableView, scrollTo: self.indexPath!, at: .top, animated: true)
-                print("scrollViewTo is completed.")
+        
         }.store(in: &cancellables)
         
         viewModel.shouldChangeScrollOffsetOfEventsTable
@@ -240,6 +240,18 @@ extension EventTableViewController {
 // MARK: - Scroll Offset Update
 extension EventTableViewController {
     private func changeScrollOffset(to date: Date) {
+        var indexPath: IndexPath?
+        let rowCount = self.tableView(eventTableView, numberOfRowsInSection: 0)
+        for index in 0 ..< rowCount {
+            if  let cell = self.tableView(eventTableView, cellForRowAt: IndexPath(row: index, section: 0)) as? HeaderTaskCell {
+                if cell.date.year == date.year && cell.date.month == date.month && cell.date.day == date.day {
+                    indexPath = IndexPath(row: index, section: 0)
+                }
+            }
+        }
+        if let indexPathCell = indexPath {
+            eventTableView.scrollToRow(at: indexPathCell , at: .top, animated: true)
+        }
         NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
     }
 }

@@ -186,7 +186,6 @@ extension SearchViewController : UITextFieldDelegate {
             self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
         }
         else {
-           // self.viewModel.arrTaskListDataFiltered.value.send()
         }
     }
     

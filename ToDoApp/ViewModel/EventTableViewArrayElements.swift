@@ -11,13 +11,19 @@ protocol TaskListEventTableViewItem {}
 
 struct TaskListVDMHeaderArrayElement: TaskListEventTableViewItem {
     private var cellDateTitle: String = ""
+    private(set) var taskDate: Date
 
-    init(cellDateTitle: String) {
+    init(cellDateTitle: String, date: Date) {
         self.cellDateTitle = cellDateTitle
+        self.taskDate = date
     }
 
     func getCellDateTitle() -> String{
         return cellDateTitle
+    }
+    
+    func checkIsSameDate(with date: Date) -> Bool{
+        return true
     }
 }
 

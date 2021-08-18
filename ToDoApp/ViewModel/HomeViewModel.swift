@@ -12,6 +12,8 @@ class HomeViewModel {
     
     var isNeededToReloadData: Bool = false
     private let coreDataLayer = CoreDataLayer()
+    private var arrAllTaskListData: [TaskListVDM] = []
+    private var filterKeyword: String?
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var arrTaskListDataFiltered = CurrentValueSubject<Array<TaskListVDM>,Never>([])
@@ -96,7 +98,7 @@ extension HomeViewModel {
         let arrFiltered = arrTaskListDataFiltered.value
         for index in 0 ..< arrFiltered.count {
             if index == 0 || arrFiltered[index-1].day != arrFiltered[index].day {
-                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: arrFiltered[index].day)
+                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: arrFiltered[index].day , date: arrFiltered[index].taskDate)
                 self.arrAllElemetsEventTableView.append(titleCell)
                 let taskCell = TaskListVDMArrayElement(taskListVDM: arrFiltered[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
@@ -114,12 +116,14 @@ extension HomeViewModel {
         for (index, date) in arrTaskListData.enumerated() {
             if isEarliestDay(date.taskDate) {
                 self.earliestDayIndexRow = index
+                NSLog("EarliestDay index row is set.", "")
+                return
             }
         }
     }
     
     private func isEarliestDay(_ taskDate: Date) -> Bool {
-        return self.earliestDayIndexRow == nil && taskDate > Date() ? true : false
+        return taskDate > Date() ? true : false
     }
 }
 
@@ -171,6 +175,7 @@ extension HomeViewModel {
             .sink { _ in
                 self.shouldUpdateAllData.send()
             }.store(in: &cancellables)
+        self.initializeEarliestDate()
     }
 }
 

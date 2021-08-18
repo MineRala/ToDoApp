@@ -161,7 +161,7 @@ extension NewAndEditViewModel{
     private func createNotification() {
         toDoItem.notificationID = UUID().uuidString
         toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
-        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskCategory!, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
 
     private func updateNotification() {
