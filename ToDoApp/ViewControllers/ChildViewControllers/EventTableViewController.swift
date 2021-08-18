@@ -13,7 +13,7 @@ class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var fetchDelegate: FetchDelegate?
-    private var earliestDayIndexRow: IndexPath?
+    private var indexPath: IndexPath?
   
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -43,6 +43,11 @@ extension EventTableViewController {
         addListeners()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+       // scrollViewTo(eventTableView, scrollTo: indexPath!, at: .top, animated: true)
+    }
+    
     func reloadData(){
         self.eventTableView.reloadData()
     }
@@ -62,21 +67,19 @@ extension EventTableViewController {
         eventTableView.register(HeaderTaskCell.self, forCellReuseIdentifier: "HeaderTaskCell")
         eventTableView.dataSource = self
         eventTableView.delegate = self
-    
+        
         eventTableView.reloadData()
-        if self.earliestDayIndexRow != nil {
-            self.scrollViewTo(self.eventTableView, scrollTo: self.earliestDayIndexRow!)
-        }
     }
 }
 // MARK: - TableView Delegate / Datasource
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
-        let vc = TaskDetailsViewController(model: model.toDoItem)
-        vc.delegate = self
-        vc.fetchDelegate = self
-        self.navigationController?.pushViewController(vc, animated: true)
+        scrollViewTo(eventTableView, scrollTo: indexPath!, at: .top, animated: true)
+//        let vc = TaskDetailsViewController(model: model.toDoItem)
+//        vc.delegate = self
+//        vc.fetchDelegate = self
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -90,9 +93,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             let model = taskListVDMArrayElement.taskListVDM
             cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
             
-            if isEarliestDay(model.taskDate) {
-                self.earliestDayIndexRow = indexPath
+            if taskListVDMArrayElement.indexAt == viewModel.earliestDayIndexRow {
+                self.indexPath = indexPath
             }
+            
             return cell
         } else {
              let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
@@ -170,10 +174,8 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
         tableView.scrollToRow(at: indexPath, at: at, animated: animated)
     }
-    
-    private func isEarliestDay(_ taskDate: Date) -> Bool {
-        return self.earliestDayIndexRow == nil && taskDate > Date() ? true : false
-    }
+
+ 
 }
 
 

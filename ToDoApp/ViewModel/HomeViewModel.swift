@@ -23,9 +23,11 @@ class HomeViewModel {
     private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
    
     private var cancellables = Set<AnyCancellable>()
+    private(set) var earliestDayIndexRow: Int!
     
     init() {
         addListeners()
+      
     }
 }
 
@@ -77,6 +79,7 @@ extension HomeViewModel {
             self.arrTaskListData = taskListVDMs
             self.arrTaskListDataFiltered.send(taskListVDMs)
             self.initializeArrAllElemetsEventTableView()
+            self.initializeEarliest()
             
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
@@ -107,7 +110,20 @@ extension HomeViewModel {
             }
         }
     }
+    
+    private func initializeEarliest() {
+        for (index, date) in arrTaskListData.enumerated() {
+            if isEarliestDay(date.taskDate) {
+                self.earliestDayIndexRow = index
+            }
+        }
+    }
+    
+    private func isEarliestDay(_ taskDate: Date) -> Bool {
+        return  self.earliestDayIndexRow == nil && taskDate > Date() ? true : false
+    }
 }
+
 //MARK: - Show Error
 extension HomeViewModel {
     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
