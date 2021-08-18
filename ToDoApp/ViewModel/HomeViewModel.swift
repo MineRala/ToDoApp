@@ -81,6 +81,7 @@ extension HomeViewModel {
 }
 
 extension HomeViewModel {
+    
     func fetchEventsData() {
         let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read(filterPredicate: nil)
         let taskListVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
@@ -100,8 +101,8 @@ extension HomeViewModel {
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
     }
-    
-    
+
+
     func initializeArrAllElemetsEventTableView() {
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
@@ -122,8 +123,8 @@ extension HomeViewModel {
             }
         }
     }
-    
-     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
+
+    private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
         if let error = response.error {
            NSLog("Current Error :\(error)")
             return true
@@ -132,108 +133,44 @@ extension HomeViewModel {
             return true
         }
         return false
-     }
-    
-     private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
+    }
+
+    private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
         let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
             return itemA.taskDate! < itemB.taskDate!
         }
         let vdmItems = TaskVDMConverter.taskViewDataModels(from: itemsSorted)
         return Just(vdmItems).eraseToAnyPublisher()
     }
-    
+
     private func convertTodoItemsToEditVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskEditVDM], Never> {
         let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
             return itemA.taskDate! < itemB.taskDate!
         }
         let vdmItems = TaskVDMConverter.editTaskViewDataModels(from: itemsSorted)
         return Just(vdmItems).eraseToAnyPublisher()
-   }
-    
+    }
+
     private func convertTodoItemsToDetailVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskDetailVDM], Never> {
        let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
            return itemA.taskDate! < itemB.taskDate!
        }
         let vdmItems = TaskVDMConverter.detailTaskViewDataModels(from: itemsSorted)
        return Just(vdmItems).eraseToAnyPublisher()
-   }
-    
-}
-
-extension HomeViewModel {
-    func randomString(of length: Int) -> String {
-         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-         var s = ""
-         for _ in 0 ..< length {
-             s.append(letters.randomElement()!)
-         }
-         return s
     }
 }
 
-//
- // TODO
-//private func addSampleData(count: Int) {
-//    for index in 0 ..< count {
-//        let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
-//        let toDoItem = ToDoItem(context: ManagedObjectContext)
-//        print("\(toDoItem.id)")
-//
-//        toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
-//        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
-//        toDoItem.taskId = UUID().uuidString
-//        toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
-//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//        toDoItem.isTaskCompleted = false
-//        coreDataLayer.create(toDoItem).sink { _ in
-//
-//        }.store(in: &cancellables)
-//    }
-//}
 
-//var toDoItem = ToDoItem(context: dataLayer.context)
-//        print("\(toDoItem.id)")
-//        toDoItem.taskName = "Task1"
-//        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(-24*60*60*3)
-//        toDoItem.taskId = UUID().uuidString
-//        toDoItem.taskDescription = "Task Desc"
-//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//        toDoItem.isTaskCompleted = false
-//        dataLayer.createItem(item: toDoItem)
-
-//
-//
-//        toDoItem = ToDoItem(context: dataLayer.context)
-//        print("\(toDoItem.id)")
-//        toDoItem.taskName = "Task2"
-//        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(24*60*60*6)
-//        toDoItem.taskId = UUID().uuidString
-//        toDoItem.taskDescription = "Task Desc2"
-//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//        toDoItem.isTaskCompleted = false
-//        dataLayer.createItem(item: toDoItem)
-//
-//        toDoItem = ToDoItem(context: dataLayer.context)
-//        print("\(toDoItem.id)")
-//        toDoItem.taskName = "Task3"
-//        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(24*60*60*10)
-//        toDoItem.taskId = UUID().uuidString
-//        toDoItem.taskDescription = "Task Desc3"
-//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//        toDoItem.isTaskCompleted = false
-//        dataLayer.createItem(item: toDoItem)
-//
-//        toDoItem = ToDoItem(context: dataLayer.context)
-//        print("\(toDoItem.id)")
-//        toDoItem.taskName = "Task4"
-//        toDoItem.taskCategory = "Official"
-//        toDoItem.taskDate = Date().addingTimeInterval(24*60*60*15)
-//        toDoItem.taskId = UUID().uuidString
-//        toDoItem.taskDescription = "Task Desc4"
-//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-//        toDoItem.isTaskCompleted = false
-//        dataLayer.createItem(item: toDoItem)
+// MARK: - Public
+extension HomeViewModel {
+    
+    func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
+        for taskEditVDM in arrTaskListData {
+            if taskEditVDM.toDoItem.notificationID != "" && taskEditVDM.toDoItem.notificationID == notificationID {
+                return taskEditVDM.toDoItem
+            }
+        }
+        
+        return nil
+    }
+}

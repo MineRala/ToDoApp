@@ -50,7 +50,6 @@ class HomeViewController : BaseVC {
 extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigateToTaskDetailViewControllerIfNeeded()
     }
     
     override func viewDidLoad() {
@@ -74,17 +73,19 @@ extension HomeViewController {
 extension HomeViewController {
     
     private func navigateToTaskDetailViewControllerIfNeeded() {
-//        guard case .localNotification(_) = self.homeViewControllerType else {
-//            return
-//        }
+        
         switch self.homeViewControllerType {
         case .localNotification(let value):
-            let vc = TaskDetailsViewController(model: self.viewModel.arrTaskListData[0].toDoItem)
+            guard let toDoItem = viewModel.searchToDoItem(withNotificationID: value) else {
+                print("Unable to retrieve toDoItem from viewModel")
+                return
+            }
+            let vc = TaskDetailsViewController(model: toDoItem)
             self.navigationController?.pushViewController(vc, animated: true)
-            
+//            self.homeViewControllerTypeTest.send(.defaultType)
             self.homeViewControllerType = .defaultType
         case .defaultType:
-            print("defaultType")
+            print("the HomeViewController type is defaultType.")
             return
         }
     }
@@ -221,6 +222,7 @@ extension HomeViewController {
     
     func updateHomeViewControllerType(_ type: HomeViewControllerType) {
         self.homeViewControllerType = type
+        self.navigateToTaskDetailViewControllerIfNeeded()
     }
     
 }

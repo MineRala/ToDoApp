@@ -90,19 +90,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //  - Handle notification
         
         let notificationID = response.notification.request.identifier
         
         guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })  else {
+            print("Local notification::\(response)")
             completionHandler()
             return
         }
-//        let window: UIWindow? = UIApplication.shared.windows.first
         let navController = window.rootViewController as! UINavigationController
-//
-//        print("NavigationController : \(navController)" )
         guard let homeViewController = navController.viewControllers.first as? HomeViewController else {
+            print("Local notification::\(response)")
             completionHandler()
             return
         }
