@@ -99,13 +99,32 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             return
         }
         let navController = window.rootViewController as! UINavigationController
+        
         guard let homeViewController = navController.viewControllers.first as? HomeViewController else {
             print("Local notification::\(response)")
             completionHandler()
             return
         }
-        homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
         
+        guard let currentViewController = navController.viewControllers.last as? TaskDetailsViewController else {
+            // If the application is not in TaskDetailViewController
+            homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
+            
+            print("Local notification::\(response)")
+            completionHandler()
+            return
+        }
+        
+        if currentViewController.detailModel.getToDoItem().notificationID != nil && currentViewController.detailModel.getToDoItem().notificationID == notificationID {
+            // If user is already in the TaskDetailViewController that containts same toDoItem then do nothing
+            print("Local notification::\(response)")
+            completionHandler()
+            return
+        }
+        
+        // If the current view controller is TaskDetailViewController but displays different toDoItem
+        homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
+
         print("Local notification::\(response)")
         completionHandler()
     }
