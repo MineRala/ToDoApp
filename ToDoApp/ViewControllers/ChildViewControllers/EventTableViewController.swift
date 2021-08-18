@@ -13,6 +13,7 @@ class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var fetchDelegate: FetchDelegate?
+    private var earliestDayIndexRow: IndexPath?
   
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
@@ -63,6 +64,9 @@ extension EventTableViewController {
         eventTableView.delegate = self
     
         eventTableView.reloadData()
+        if self.earliestDayIndexRow != nil {
+            self.scrollViewTo(self.eventTableView, scrollTo: self.earliestDayIndexRow!)
+        }
     }
 }
 // MARK: - TableView Delegate / Datasource
@@ -85,6 +89,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             let taskListVDMArrayElement = (viewModel.arrAllElemetsEventTableView[indexPath.row] as? TaskListVDMArrayElement)!
             let model = taskListVDMArrayElement.taskListVDM
             cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
+            
+            if isEarliestDay(model.taskDate) {
+                self.earliestDayIndexRow = indexPath
+            }
             return cell
         } else {
              let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
@@ -157,6 +165,14 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+    }
+    
+    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
+        tableView.scrollToRow(at: indexPath, at: at, animated: animated)
+    }
+    
+    private func isEarliestDay(_ taskDate: Date) -> Bool {
+        return self.earliestDayIndexRow == nil && taskDate > Date() ? true : false
     }
 }
 
