@@ -79,7 +79,7 @@ extension SelectDateViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if date == nil{
+        if date == nil {
             taskTimePicker.setDate(Date(), animated: true)
         }else{
             taskTimePicker.setDate(date, animated: true)

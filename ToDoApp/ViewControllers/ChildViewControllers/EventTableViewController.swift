@@ -43,11 +43,6 @@ extension EventTableViewController {
         addListeners()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-       // scrollViewTo(eventTableView, scrollTo: indexPath!, at: .top, animated: true)
-    }
-    
     func reloadData(){
         self.eventTableView.reloadData()
     }
@@ -75,11 +70,10 @@ extension EventTableViewController {
 extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, TaskCellDelegate {
     
     func taskCellDidSelected(_ cell: TaskCell, model: TaskListVDM) {
-        scrollViewTo(eventTableView, scrollTo: indexPath!, at: .top, animated: true)
-//        let vc = TaskDetailsViewController(model: model.toDoItem)
-//        vc.delegate = self
-//        vc.fetchDelegate = self
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = TaskDetailsViewController(model: model.toDoItem)
+        vc.delegate = self
+        vc.fetchDelegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -171,8 +165,12 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         
     }
     
-    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
-        tableView.scrollToRow(at: indexPath, at: at, animated: animated)
+    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath?, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
+        guard let index = indexPath else {
+            NSLog("Unable to scroll to the row since indexPath is nil.", "")
+            return
+        }
+        tableView.scrollToRow(at: index, at: at, animated: animated)
     }
 
  
@@ -226,6 +224,9 @@ extension EventTableViewController {
                 self.viewModel.initializeArrAllElemetsEventTableView()
                 self.eventTableView.reloadData()
                 self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
+                
+                self.scrollViewTo(self.eventTableView, scrollTo: self.indexPath!, at: .top, animated: true)
+                print("scrollViewTo is completed.")
         }.store(in: &cancellables)
         
         viewModel.shouldChangeScrollOffsetOfEventsTable
