@@ -22,7 +22,6 @@ class SelectDateViewController : BaseVC {
     private var date: Date
     private var cancellables = Set<AnyCancellable>()
     private var shouldDisplayToast: Bool = false
-//    private(set) var calenderDate = CurrentValueSubject<Date, Never>(Date())
     
     var taskTimePicker = UIDatePicker()
 
@@ -131,6 +130,8 @@ extension SelectDateViewController{
         calendarVC.setDate(date: date)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        
     }
     
     func addListeners() {
@@ -183,6 +184,7 @@ extension SelectDateViewController {
     }
 }
 
+//MARK: - Update Date
 extension SelectDateViewController {
     func updateDate() {
         let date = self.calendarVC.selectedDate.value

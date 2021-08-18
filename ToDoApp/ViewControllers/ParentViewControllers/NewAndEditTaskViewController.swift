@@ -143,7 +143,7 @@ extension NewAndEditTaskViewController {
     }
 }
 
-//MARK: - Set Up UI
+//MARK: - Set Up UI And PickerView
 extension NewAndEditTaskViewController {
     func setUpUI() {
         view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
@@ -184,6 +184,7 @@ extension NewAndEditTaskViewController {
         
         scrollViewAddTask.bottomAnchor(margin: 0)
         
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
     
     func setUpPickerView() {
@@ -286,7 +287,7 @@ extension NewAndEditTaskViewController {
         self.model.setNotificationTime(notificationTime: notificationTime)
     }
 }
-//MARK: - Action
+//MARK: - Actions
 extension NewAndEditTaskViewController {
     @objc func addBtnPressed() {
         let taskName = taskNameTextField.asFloatingTextfield().text

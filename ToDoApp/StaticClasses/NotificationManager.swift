@@ -11,6 +11,10 @@ class NotificationManager {
     
     static let notificationCenter = UNUserNotificationCenter.current()
     
+}
+
+//MARK: - Create Notification
+extension NotificationManager{
     static func createLocalNotification(title: String, body: String, date: Date, uuidString: String = UUID().uuidString){
         
         let content = UNMutableNotificationContent()
@@ -28,11 +32,13 @@ class NotificationManager {
                 print("Error" + error.debugDescription)
                 return
             }
-            
             print("createLocalNotification is done.")
         }
     }
-    
+}
+
+//MARK: - Remove Notification
+extension NotificationManager{
     static func removeLocalNotification(notificationID: String) {
         
         notificationCenter.removeDeliveredNotifications(withIdentifiers: [notificationID])

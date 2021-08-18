@@ -105,8 +105,10 @@ extension TaskCell {
         tap = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped))
         self.addGestureRecognizer(tap)
     }
-    
+}
 
+//MARK: - Update Cell
+extension TaskCell {
     func updateCell(model: TaskListVDM, delegate: TaskCellDelegate, index: Int) {
       
         self.model = model
@@ -127,7 +129,10 @@ extension TaskCell {
         }
         self.layoutIfNeeded()
     }
-    
+}
+
+//MARK: - Actions
+extension TaskCell {
     @objc func tableViewCellTapped() {
         self.delegate?.taskCellDidSelected(self, model: model)
     }

@@ -46,7 +46,7 @@ class HomeViewController : BaseVC {
     }
 }
 
-// MARK: - LifeCycle
+// MARK: - Lifecycle
 extension HomeViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -66,27 +66,6 @@ extension HomeViewController {
         if calendarHeightConstraint == nil {
             calendarHeightConstraint = calendarVCContainer.heightAnchor.constraint(equalToConstant: self.itemsContainerView.frame.size.height * calendarViewHeightRatio)
             calendarHeightConstraint!.isActive = true
-        }
-    }
-}
-
-extension HomeViewController {
-    
-    private func navigateToTaskDetailViewControllerIfNeeded() {
-        
-        switch self.homeViewControllerType {
-        case .localNotification(let value):
-            guard let toDoItem = viewModel.searchToDoItem(withNotificationID: value) else {
-                print("Unable to retrieve toDoItem from viewModel")
-                return
-            }
-            let vc = TaskDetailsViewController(model: toDoItem)
-            self.navigationController?.pushViewController(vc, animated: true)
-//            self.homeViewControllerTypeTest.send(.defaultType)
-            self.homeViewControllerType = .defaultType
-        case .defaultType:
-            print("the HomeViewController type is defaultType.")
-            return
         }
     }
 }
@@ -128,6 +107,8 @@ extension HomeViewController {
         self.addChildViewController(childController: eventVC, onView: eventVCContainer)
         self.addChildViewController(childController: calendarVC, onView: calendarVCContainer)
         self.addChildViewController(childController: searchVC, onView: searchVCContainer)
+       
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
 }
 
@@ -154,6 +135,25 @@ extension HomeViewController: FetchDelegate {
 extension HomeViewController {
     override func baseVCAddOnTap() {
         routeToNewTasks()
+    }
+}
+
+//MARK: - Navigate TaskDetailViewController
+extension HomeViewController {
+    private func navigateToTaskDetailViewControllerIfNeeded() {
+        switch self.homeViewControllerType {
+        case .localNotification(let value):
+            guard let toDoItem = viewModel.searchToDoItem(withNotificationID: value) else {
+                print("Unable to retrieve toDoItem from viewModel")
+                return
+            }
+            let vc = TaskDetailsViewController(model: toDoItem)
+            self.navigationController?.pushViewController(vc, animated: true)
+            self.homeViewControllerType = .defaultType
+        case .defaultType:
+            print("the HomeViewController type is defaultType.")
+            return
+        }
     }
 }
 
@@ -200,17 +200,9 @@ extension HomeViewController  {
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
 }
-//
-//// MARK: - Getter
-//extension HomeViewController {
-//    func getHomeViewModel() -> HomeViewModel {
-//        return self.homeViewModel
-//    }
-//}
 
 // MARK: - Public
 extension HomeViewController {
-    
     func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
         for taskListVDM in self.viewModel.arrTaskListData {
             if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
@@ -224,5 +216,4 @@ extension HomeViewController {
         self.homeViewControllerType = type
         self.navigateToTaskDetailViewControllerIfNeeded()
     }
-    
 }

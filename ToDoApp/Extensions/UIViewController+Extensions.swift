@@ -9,14 +9,16 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-    
+ 
+//MARK: - Add ChildView
  func addChildViewController(childController: UIViewController, onView: UIView) {
     addChild(childController)
     onView.addSubview(childController.view)
     constraintViewEqual(holderView: onView, view: childController.view)
     childController.didMove(toParent: self)
 }
-        
+
+//MARK: - Conatraints
  private func constraintViewEqual(holderView: UIView, view: UIView) {
     view.translatesAutoresizingMaskIntoConstraints = false
     let pinTop = NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal,
@@ -29,7 +31,8 @@ extension UIViewController {
                                           toItem: holderView, attribute: .right, multiplier: 1.0, constant: 0)
         holderView.addConstraints([pinTop, pinBottom, pinLeft, pinRight])
 }
-    
+
+//MARK: - Remove ChildView
     func removeChildViewController() {
         guard parent != nil else { return }
         self.willMove(toParent: nil)

@@ -29,31 +29,6 @@ class HomeViewModel {
     }
 }
 
-// MARK: - Public
-extension HomeViewModel {
-    
-    func removedElement(toDoItem: ToDoItem){
-        coreDataLayer.remove(toDoItem).sink { _ in }.store(in: &cancellables)
-    }
-    
-    func reverseTaskCompletionAtIndex(toDoItem: ToDoItem){
-        toDoItem.isTaskCompleted = !toDoItem.isTaskCompleted
-        coreDataLayer.update(toDoItem)
-    }
-    
-    func initializeViewModel() {
-        //addSampleData(count: 500)
-        selectDate(Date())
-    }
-    
-    func updateSelectedDate(_ date: Date) {
-        selectDate(date)
-    }
-    
-    func updateVisibleDateRange(min: Date, max: Date) {
-        self.setVisibleDateRange(min: min, max: max)
-    }
-}
 
 // MARK: - Date Select
 extension HomeViewModel {
@@ -85,8 +60,8 @@ extension HomeViewModel {
     }
 }
 
+//MARK: - Fetch Event Data
 extension HomeViewModel {
-    
     func fetchEventsData() {
         let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read(filterPredicate: nil)
         let taskListVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
@@ -107,7 +82,10 @@ extension HomeViewModel {
         }.store(in: &cancellables)
     }
 
+}
 
+//MARK: - Initialize Array All Element
+extension HomeViewModel {
     func initializeArrAllElemetsEventTableView() {
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
@@ -129,7 +107,9 @@ extension HomeViewModel {
             }
         }
     }
-
+}
+//MARK: - Show Error
+extension HomeViewModel {
     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
         if let error = response.error {
            NSLog("Current Error :\(error)")
@@ -140,7 +120,10 @@ extension HomeViewModel {
         }
         return false
     }
+}
 
+//MARK: - Convert ToDoItem To VDMs
+extension HomeViewModel {
     private func convertTodoItemsToVDMs(_ items: [ToDoItem]) -> AnyPublisher<[TaskListVDM], Never> {
         let itemsSorted = items.sorted { (itemA, itemB) -> Bool in
             return itemA.taskDate! < itemB.taskDate!
@@ -165,22 +148,6 @@ extension HomeViewModel {
        return Just(vdmItems).eraseToAnyPublisher()
     }
 }
-
-
-// MARK: - Public
-extension HomeViewModel {
-    
-    func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
-        for taskEditVDM in arrTaskListData {
-            if taskEditVDM.toDoItem.notificationID != "" && taskEditVDM.toDoItem.notificationID == notificationID {
-                return taskEditVDM.toDoItem
-            }
-        }
-        
-        return nil
-    }
-}
-
 //MARK: - Listeners
 extension HomeViewModel {
     private func addListeners() {
@@ -189,5 +156,39 @@ extension HomeViewModel {
             .sink { _ in
                 self.shouldUpdateAllData.send()
             }.store(in: &cancellables)
+    }
+}
+
+// MARK: - Public
+extension HomeViewModel {
+    func removedElement(toDoItem: ToDoItem){
+        coreDataLayer.remove(toDoItem).sink { _ in }.store(in: &cancellables)
+    }
+
+    func reverseTaskCompletionAtIndex(toDoItem: ToDoItem){
+        toDoItem.isTaskCompleted = !toDoItem.isTaskCompleted
+        coreDataLayer.update(toDoItem)
+    }
+
+    func initializeViewModel() {
+        //addSampleData(count: 500)
+        selectDate(Date())
+    }
+
+    func updateSelectedDate(_ date: Date) {
+        selectDate(date)
+    }
+
+    func updateVisibleDateRange(min: Date, max: Date) {
+        self.setVisibleDateRange(min: min, max: max)
+    }
+
+    func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
+        for taskEditVDM in arrTaskListData {
+            if taskEditVDM.toDoItem.notificationID != "" && taskEditVDM.toDoItem.notificationID == notificationID {
+                return taskEditVDM.toDoItem
+            }
+        }
+        return nil
     }
 }

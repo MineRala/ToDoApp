@@ -45,8 +45,10 @@ class NewAndEditViewModel{
         return pageMode
     }
     
-   
-    
+}
+
+//MARK: - Create New Item
+extension NewAndEditViewModel{
     func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
         if taskName != nil && taskDescription != nil && taskCategory != nil  && selectedDate != nil {
             toDoItem.taskName = taskName
@@ -84,7 +86,10 @@ class NewAndEditViewModel{
             }
         }
     }
-    
+}
+
+//MARK: - Set Notification
+extension NewAndEditViewModel{
     func setNotificationTime(notificationTime: String) {
         switch notificationTime {
         case NSLocalizedString( "5 Minutes Before", comment: ""):
@@ -109,7 +114,10 @@ class NewAndEditViewModel{
             self.notificationTime = nil
         }
     }
-    
+}
+
+//MARK: - Get Notfication Title
+extension NewAndEditViewModel{
     func getNotificationTitleAndRow(notificationDate fromDate: Date?, taskDate toDate: Date) -> (String, Int) {
         if fromDate == nil {
             return (NSLocalizedString("Do Not Send Notification", comment: ""), 0)
@@ -141,23 +149,25 @@ class NewAndEditViewModel{
         }
         
     }
-    
-    
+}
+//MARK: - Specific Notification Function
+extension NewAndEditViewModel{
     private func removeNotification() {
         NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
         toDoItem.notificationDate = nil
         toDoItem.notificationID = ""
     }
-    
+
     private func createNotification() {
         toDoItem.notificationID = UUID().uuidString
         toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
         NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
-    
+
     private func updateNotification() {
         NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
         toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
         NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
 }
+

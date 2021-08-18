@@ -191,6 +191,8 @@ extension TaskDetailsViewController{
         print(textViewDescription)
         print(sizeTv)
         textViewDescription.isScrollEnabled = false
+        
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
 }
 
@@ -219,7 +221,8 @@ extension TaskDetailsViewController{
         self.navigationController?.popViewController(animated: true)
     }
 }
-    
+   
+//MARK: - Fetch Delegate
 extension TaskDetailsViewController: FetchDelegate {
     func fetchData() {
         self.fetchDelegate?.fetchData()

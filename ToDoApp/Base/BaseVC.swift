@@ -23,9 +23,7 @@ enum ViewControllerType: String {
             case .selectDate: return NSLocalizedString("Select Date", comment: "")
         }
     }
-    
 
-    
     var leftButtonImage: UIImage? {
         switch self {
         case .home:
@@ -51,10 +49,8 @@ enum ViewControllerType: String {
             return nil
         }
     }
-    
-    
-    
 }
+
 //MARK: - Public
 class BaseVC: UIViewController {
     private var type: ViewControllerType = .home
@@ -116,18 +112,20 @@ extension BaseVC: CustomNavigationBarDelegate {
     
     @objc func baseVCAddOnTap() { }
 }
+
 //MARK: - Hide Keyboard
 extension BaseVC{
-func hideKeyboardWhenTappedAround() {
-    let tap = UITapGestureRecognizer(target: self, action: #selector(BaseVC.dismissKeyboard))
-    tap.cancelsTouchesInView = false
-    view.addGestureRecognizer(tap)
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(BaseVC.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
-@objc func dismissKeyboard() {
-    view.endEditing(true)
-}
-}
 //MARK: - Update UI
 extension BaseVC {
     private func updateUI() {

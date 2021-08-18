@@ -28,8 +28,7 @@ class CoreDataLayer {
    
 }
 
-// NSFetchRequest<ToDoItem>(entityName: "ToDoItem")
-// MARK: - CRUD
+// MARK: - CRUD Functions
 extension CoreDataLayer {
     func update<T: CoreDataManagableObject>(_ item: T) -> AnyPublisher<CoreDataResponse<T>, Never> {
         return self.save(item)
@@ -90,6 +89,4 @@ extension CoreDataLayer {
             return Just(response).eraseToAnyPublisher()
         }
     }
-    
-    
 }

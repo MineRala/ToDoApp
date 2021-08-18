@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class ToastView: UIView {
-    
+
     private var message: String = ""
     private let lblToast: UILabel = {
         let toastLbl = UILabel()
@@ -21,7 +21,7 @@ class ToastView: UIView {
         toastLbl.numberOfLines = 0
         return toastLbl
     }()
-    
+
     init(message: String) {
         super.init(frame: .zero)
         self.message = message
@@ -57,7 +57,7 @@ extension ToastView {
     }
 }
 
-// MARK: - Public
+// MARK: - Show
 extension ToastView {
     static func show(with message: String) {
         guard let window = UIApplication.shared.keyWindow else { return }

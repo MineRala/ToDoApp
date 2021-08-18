@@ -21,7 +21,10 @@ class ToolbarPickerView: UIPickerView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+}
 
+//MARK: - Common Init
+extension ToolbarPickerView {
     private func commonInit() {
         let toolBar = UIToolbar()
         toolBar.barStyle = .black
@@ -39,7 +42,10 @@ class ToolbarPickerView: UIPickerView {
 
         self.toolbar = toolBar
     }
+}
 
+//MARK: - Done And Cancel Button Tapped
+extension ToolbarPickerView {
     @objc func doneTapped() {
         self.toolbarDelegate?.didTapDone()
     }

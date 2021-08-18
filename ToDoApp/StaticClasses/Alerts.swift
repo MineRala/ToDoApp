@@ -34,6 +34,4 @@ class Alerts : NSObject {
          dialogMessage.addAction(okAction)
          controller.present(dialogMessage, animated: true, completion: {})
      }
-     
-    
 }

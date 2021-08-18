@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 extension UIView {
+    
+//MARK: - Task Detail Shadow
     func taskDetailsShadow() {
         self.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
         self.layer.shadowOpacity = 1
@@ -17,7 +19,7 @@ extension UIView {
         self.layer.shouldRasterize = true
         self.layer.masksToBounds = false
     }
-    
+//MARK: - Select Date Shadow
     func selectDateShadow() {
         self.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
         self.layer.shadowOpacity = 1

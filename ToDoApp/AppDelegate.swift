@@ -11,11 +11,8 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//        UIApplication.shared.statusBarStyle = .darkContent
         
         UNUserNotificationCenter.current().delegate = self
                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (accepted, _) in
@@ -88,20 +85,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+//MARK: - Notification Center Delegate
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         let notificationID = response.notification.request.identifier
         
         guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })  else {
-            print("Local notification::\(response)")
             completionHandler()
             return
         }
         let navController = window.rootViewController as! UINavigationController
         
         guard let homeViewController = navController.viewControllers.first as? HomeViewController else {
-            print("Local notification::\(response)")
             completionHandler()
             return
         }
@@ -109,26 +105,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         guard let currentViewController = navController.viewControllers.last as? TaskDetailsViewController else {
             // If the application is not in TaskDetailViewController
             homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
-            
-            print("Local notification::\(response)")
             completionHandler()
             return
         }
         
         if currentViewController.detailModel.getToDoItem().notificationID != nil && currentViewController.detailModel.getToDoItem().notificationID == notificationID {
             // If user is already in the TaskDetailViewController that containts same toDoItem then do nothing
-            print("Local notification::\(response)")
             completionHandler()
             return
         }
         
         // If the current view controller is TaskDetailViewController but displays different toDoItem
         homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
-
-        print("Local notification::\(response)")
         completionHandler()
     }
-    
-    
 }
 
