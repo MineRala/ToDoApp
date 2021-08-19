@@ -21,4 +21,8 @@ class DetailTaskViewModel {
     func getToDoItem() -> ToDoItem{
         return toDoItem
     }
+    
+    func updateDetailTaskVDM() {
+        self.detailTaskVDM = TaskVDMConverter.detailTaskViewModel(toDoItem: toDoItem)
+    }
 }

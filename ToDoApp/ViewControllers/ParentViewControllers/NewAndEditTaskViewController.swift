@@ -13,10 +13,6 @@ protocol SetPageModeToNewTaskViewControllerDelegate {
     func setPageMode(mode: NewAndEditVCState)
 }
 
-protocol AddNewTaskDelegate {
-    func passTask(toDoItem: ToDoItem)
-}
-
 protocol ToolbarPickerViewDelegate {
     func didTapDone()
     func didTapCancel()
@@ -26,6 +22,10 @@ protocol FetchDelegate {
     func fetchData()
 }
 
+protocol UpdateTaskDetailVDMToTaskDetailViewController {
+    func updateTaskDetailVDM()
+}
+
 class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataSource {
     
     private var scrollViewAddTask: ScrollView!
@@ -33,10 +33,9 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     
   
     var notificationPickerView =  ToolbarPickerView()
-    
-    var delegate: AddNewTaskDelegate!
     var model: NewAndEditViewModel!
     var fetchDelegate: FetchDelegate?
+    var updateTaskDetailVDMDelegate: UpdateTaskDetailVDMToTaskDetailViewController?
     private var date: Date?
     
     static let editingColor = UIColor.black
@@ -294,6 +293,7 @@ extension NewAndEditTaskViewController {
         let description =  descriptionTextField.asFloatingTextfield().text
         let category =  categoryFLTextfield.asFloatingTextfield().text
         model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+        self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
         self.navigationController?.popViewController(animated: true)
         self.fetchDelegate?.fetchData()
         

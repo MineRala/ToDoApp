@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-
+ 
 protocol TaskCellDeleteAndDoneDelegate {
     func taskCellDeleted(toDoItem: ToDoItem)
     func taskCellDoneTapped(toDoItem: ToDoItem)
@@ -24,7 +24,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
     var detailModel: DetailTaskViewModel!
     
-    let messageTextViewMaxHeight: CGFloat = 500
+    let messageTextViewMaxHeight: CGFloat = 300
     
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
@@ -66,8 +66,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         tvd.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         tvd.isEditable = false
         tvd.isUserInteractionEnabled = true
-        tvd.isScrollEnabled = true
-      //  tvd.sizeToFit()
+        tvd.isScrollEnabled = false
         return tvd
     }()
 
@@ -105,7 +104,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
 extension TaskDetailsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  textViewDescription.delegate = self
         setUpUI()
     }
     
@@ -117,31 +115,16 @@ extension TaskDetailsViewController {
         
         labelTaskName.text = detailModel.detailTaskVDM!.taskName
         textViewDescription.text = detailModel.detailTaskVDM!.taskDescription
-        resizeTextView(textView: textViewDescription)
-        self.loadViewIfNeeded()
+        resize(textView: textViewDescription)
     }
     
-    fileprivate func resizeTextView(textView: UITextView) {
-        var newFrame = textView.frame
-        let width = newFrame.size.width
-        
-        if newFrame.size.height >= self.messageTextViewMaxHeight {
-            textView.isScrollEnabled = true
-            newFrame.size.height = self.messageTextViewMaxHeight
-        } else {
-            textView.isScrollEnabled = false
-        }
-       // let newSize = textView.sizeThatFits(CGSize(width: width,
-     //                                             height: CGFloat.greatestFiniteMagnitude))
-      //  newFrame.size = CGSize(width: width, height: newSize.height)
-      //  textView.frame = newFrame
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setScollability(textView: self.textViewDescription)
     }
-    
-    
-    
 }
     
-//MARK: - Set Up UI
+//MARK: - Set Up UI Components
 extension TaskDetailsViewController{
     private func setUpUI() {
         self.view.addSubview(viewContinue)
@@ -183,7 +166,7 @@ extension TaskDetailsViewController{
         viewBottom.addSubview(stackBottom)
         stackBottom.heightAnchor(60).leadingAnchor(margin: 0).trailingAnchor(margin: 0).topAnchor(margin: 0)
         
-        viewDetail.bottomAnchor.constraint(greaterThanOrEqualTo: viewBottom.topAnchor, constant: -16).isActive = true
+        viewDetail.bottomAnchor.constraint(lessThanOrEqualTo: viewBottom.topAnchor, constant: -16).isActive = true
         
         viewBottom.taskDetailsShadow()
         
@@ -215,20 +198,24 @@ extension TaskDetailsViewController{
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
-}
-
-//MARK: - TextView Delegate
-extension TaskDetailsViewController: UITextViewDelegate {
-
-//    func textViewDidChange (_ textView: UITextView) {
-//        if textView.frame.size.height >= self.messageTextViewMaxHeight {
-//                textView.isScrollEnabled = true
-//                textView.frame.size.height = self.messageTextViewMaxHeight
-//            } else {
-//                textView.isScrollEnabled = false
-//            }
-//
-//    }
+    
+    fileprivate func resize(textView: UITextView) {
+        let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        let heightOfText = sizeThatFitsTextView.height
+        if heightOfText >= self.messageTextViewMaxHeight {
+            textView.frame.size.height = self.messageTextViewMaxHeight
+        }
+    }
+    
+    fileprivate func setScollability(textView: UITextView) {
+        let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        let heightOfText = sizeThatFitsTextView.height
+        if heightOfText >= self.messageTextViewMaxHeight {
+            textView.isScrollEnabled = true
+        } else {
+            textView.isScrollEnabled = false
+        }
+    }
 }
 
 //MARK: - Actions
@@ -247,6 +234,7 @@ extension TaskDetailsViewController{
     @objc func editButtonTapped() {
         let vc = NewAndEditTaskViewController(toDoItem: self.detailModel.getToDoItem())
         vc.fetchDelegate = self
+        vc.updateTaskDetailVDMDelegate = self
         self.delegateModeSelection?.setPageMode(mode: .editTask)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -261,5 +249,12 @@ extension TaskDetailsViewController{
 extension TaskDetailsViewController: FetchDelegate {
     func fetchData() {
         self.fetchDelegate?.fetchData()
+    }
+}
+
+// MARK: - UpdateTaskDetailVDMToTaskDetailViewController {
+extension TaskDetailsViewController : UpdateTaskDetailVDMToTaskDetailViewController {
+    func updateTaskDetailVDM() {
+        detailModel.updateDetailTaskVDM()
     }
 }
