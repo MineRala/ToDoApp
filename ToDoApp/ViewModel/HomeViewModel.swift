@@ -16,20 +16,17 @@ class HomeViewModel {
     private var filterKeyword: String?
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
-    private(set) var arrTaskListDataFiltered = CurrentValueSubject<Array<TaskListVDM>,Never>([])
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
     
     private(set) var shouldUpdateAllData = PassthroughSubject<Void, Never>()
     private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
-   
+    private(set) var shouldUpdateAllDateWithFilter = CurrentValueSubject<String?, Never>("")
+    
     private var cancellables = Set<AnyCancellable>()
     private(set) var earliestDayIndexRow: Int!
     
-    init() {
-        addListeners()
-    }
 }
 
 
@@ -74,15 +71,12 @@ extension HomeViewModel {
             return self.convertTodoItemsToVDMs(response.items)
         }.eraseToAnyPublisher()
         
-        shouldUpdateAllData.send()
+//        shouldUpdateAllData.send()
         
         taskListVDMsPublisher.sink { taskListVDMs in
             self.arrTaskListData = taskListVDMs
-            self.arrTaskListDataFiltered.send(taskListVDMs)
-            self.initializeArrAllElemetsEventTableView()
-    //        self.initializeEarliestDate()
-            
-            self.shouldUpdateAllData.send()
+            self.initializeArrAllElementsWithFilter(with: self.filterKeyword)
+//            self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
     }
 
@@ -91,23 +85,61 @@ extension HomeViewModel {
 //MARK: - Initialize Array All Element
 extension HomeViewModel {
     func initializeArrAllElemetsEventTableView() {
+        
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
         }
         
-        let arrFiltered = arrTaskListDataFiltered.value
-        for index in 0 ..< arrFiltered.count {
-            if index == 0 || arrFiltered[index-1].day != arrFiltered[index].day {
-                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: arrFiltered[index].day , date: arrFiltered[index].taskDate)
+        for index in 0 ..< arrTaskListData.count {
+            if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
+                // Append TitleCell
+                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day , date: self.arrTaskListData[index].taskDate)
                 self.arrAllElemetsEventTableView.append(titleCell)
-                let taskCell = TaskListVDMArrayElement(taskListVDM: arrFiltered[index], indexAt: index)
+                // Append TaskCell
+                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
                 continue
-            }
-            else {
-                let taskCell = TaskListVDMArrayElement(taskListVDM: arrFiltered[index], indexAt: index)
+            } else {
+                // Append TaskCell
+                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)
-               
+            }
+        }
+    }
+    
+    func initializeArrAllElementsWithFilter(with filterKeyword: String? = nil) {
+        if self.arrAllElemetsEventTableView.count > 0 {
+            self.arrAllElemetsEventTableView.removeAll()
+        }
+
+        guard let filterWord = filterKeyword, filterKeyword != "" else {
+            if self.filterKeyword == nil {
+                self.initializeArrAllElemetsEventTableView()
+                return
+            } else {
+                self.initializeArrAllElementsWithFilter(with: self.filterKeyword)
+                return
+            }
+        }
+        
+        self.filterKeyword = filterWord
+        
+        var indexOfLastAddedItem : Int = -1
+        
+        for (index, taskListVDM) in arrTaskListData.enumerated() {
+            if taskListVDM.taskName.lowercased().contains(filterWord.lowercased()) {
+                if self.arrAllElemetsEventTableView.count == 0 || self.arrTaskListData[indexOfLastAddedItem].day != self.arrTaskListData[index].day{
+                    let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day , date: self.arrTaskListData[index].taskDate)
+                    self.arrAllElemetsEventTableView.append(titleCell)
+
+                    let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                    self.arrAllElemetsEventTableView.append(taskCell)
+        
+                } else {
+                    let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
+                    self.arrAllElemetsEventTableView.append(taskCell)
+                }
+                indexOfLastAddedItem = index
             }
         }
     }
@@ -153,17 +185,17 @@ extension HomeViewModel {
        return Just(vdmItems).eraseToAnyPublisher()
     }
 }
-//MARK: - Listeners
-extension HomeViewModel {
-    private func addListeners() {
-        self.arrTaskListDataFiltered
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.shouldUpdateAllData.send()
-            }.store(in: &cancellables)
-      //  self.initializeEarliestDate()
-    }
-}
+////MARK: - Listeners
+//extension HomeViewModel {
+//    private func addListeners() {
+//        self.arrTaskListDataFiltered
+//            .receive(on: DispatchQueue.main)
+//            .sink { _ in
+//                self.shouldUpdateAllData.send()
+//            }.store(in: &cancellables)
+//      //  self.initializeEarliestDate()
+//    }
+//}
 
 // MARK: - Public
 extension HomeViewModel {
@@ -196,5 +228,9 @@ extension HomeViewModel {
             }
         }
         return nil
+    }
+    
+    func removeFilterKeyword() {
+        self.filterKeyword = nil
     }
 }

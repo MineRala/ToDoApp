@@ -13,8 +13,8 @@ class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var fetchDelegate: FetchDelegate?
-    private var indexPath: IndexPath?
-  
+    private var cancellables = Set<AnyCancellable>()
+    
     private let eventTableView : UITableView = {
         let etv = UITableView(frame: .zero,style: .plain)
         etv.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +23,6 @@ class EventTableViewController : UIViewController {
         return etv
     }()
     
-    private var cancellables = Set<AnyCancellable>()
     
     init(homeViewModel: HomeViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -43,7 +42,7 @@ extension EventTableViewController {
         addListeners()
     }
     
-    func reloadData(){
+    func reloadData() {
         self.eventTableView.reloadData()
     }
 }
@@ -87,14 +86,9 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             let model = taskListVDMArrayElement.taskListVDM
             cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
             
-            if taskListVDMArrayElement.indexAt == viewModel.earliestDayIndexRow {
-                NSLog("Indexpath in eventTableViewController is set.", "")
-                self.indexPath = indexPath
-            }
-            
             return cell
         } else {
-             let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
+            let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
             let currentElement = viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMHeaderArrayElement
             headerCell.updateHeaderCell(title: currentElement.getCellDateTitle() , date: currentElement.taskDate)
            return headerCell
@@ -119,8 +113,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             }
             
             let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
-            let arrFiltered = self.viewModel.arrTaskListDataFiltered.value
-            self.handleTrash(toDoItem: arrFiltered[index].toDoItem)
+            self.handleTrash(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
         trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
@@ -137,19 +130,18 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         
         let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
         
-        let arrFiltered = self.viewModel.arrTaskListDataFiltered.value
         let done = UIContextualAction(style: .normal,title: nil) { [weak self] (action, view, completionHandler) in
             guard let self = self else{
                 completionHandler(false)
                 return
             }
        
-            self.handleDone(toDoItem: arrFiltered[index].toDoItem)
+            self.handleDone(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
         done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
       
-        if arrFiltered[index].isTaskCompleted{
+        if self.viewModel.arrTaskListData[index].isTaskCompleted {
             done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
                 #imageLiteral(resourceName: "undo").draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
             }
@@ -215,6 +207,15 @@ extension EventTableViewController {
         
         }.store(in: &cancellables)
         
+        viewModel.shouldUpdateAllDateWithFilter
+            .receive(on: DispatchQueue.main)
+            .sink { filterKeyword in
+                self.viewModel.initializeArrAllElementsWithFilter(with: filterKeyword)
+                self.eventTableView.reloadData()
+                self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
+        
+        }.store(in: &cancellables)
+        
         viewModel.shouldChangeScrollOffsetOfEventsTable
             .receive(on: DispatchQueue.main)
             .sink { _ in
@@ -226,19 +227,25 @@ extension EventTableViewController {
 // MARK: - Scroll Offset Update
 extension EventTableViewController {
     private func changeScrollOffset(to date: Date) {
-        var indexPath: IndexPath?
+//        var indexPath: IndexPath?
         let rowCount = self.tableView(eventTableView, numberOfRowsInSection: 0)
         for index in 0 ..< rowCount {
             if  let cell = self.tableView(eventTableView, cellForRowAt: IndexPath(row: index, section: 0)) as? HeaderTaskCell {
-                if cell.date.year == date.year && cell.date.month == date.month && cell.date.day == date.day {
-                    indexPath = IndexPath(row: index, section: 0)
+                if cell.date >= date {
+                    let indexPath = IndexPath(row: index, section: 0)
+                    eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                    NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
+                    return
                 }
+//                if cell.date.year == date.year && cell.date.month == date.month && cell.date.day == date.day {
+//                    indexPath = IndexPath(row: index, section: 0)
+//                }
             }
         }
-        if let indexPathCell = indexPath {
-            eventTableView.scrollToRow(at: indexPathCell , at: .top, animated: true)
-        }
-        NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
+//        if let indexPathCell = indexPath {
+//            eventTableView.scrollToRow(at: indexPathCell , at: .top, animated: true)
+//        }
+//        NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
     }
 }
 

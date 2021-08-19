@@ -159,19 +159,10 @@ extension SearchViewController {
 extension SearchViewController : UITextFieldDelegate {
   
     @objc private func searchTextDidChange(){
-        
         if searchTextField.text == "" {
-            self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
-            return
+            self.viewModel.removeFilterKeyword()
         }
-            
-        var arrToDoItemFiltered = [TaskListVDM]()
-        for taskList in viewModel.arrTaskListData {
-            if taskList.taskName.lowercased().contains((searchTextField.text?.lowercased())!) {
-                arrToDoItemFiltered.append(taskList)
-            }
-        }
-        self.viewModel.arrTaskListDataFiltered.send(arrToDoItemFiltered)
+        self.viewModel.shouldUpdateAllDateWithFilter.send(searchTextField.text)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -182,11 +173,7 @@ extension SearchViewController : UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         NSLog("Did End")
         self.isSearchTextFieldInEditingMode.send(true)
-        if searchTextField.text == "" {
-            self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
-        }
-        else {
-        }
+        self.viewModel.shouldUpdateAllDateWithFilter.send(searchTextField.text)
     }
     
     @objc private func cancelBtnTapped() {
@@ -194,7 +181,8 @@ extension SearchViewController : UITextFieldDelegate {
         self.searchTextField.text = ""
         self.searchTextField.endEditing(true)
         self.isSearchTextFieldInEditingMode.send(true)
-        self.viewModel.arrTaskListDataFiltered.send(self.viewModel.arrTaskListData)
+        self.viewModel.removeFilterKeyword()
+        self.viewModel.shouldUpdateAllData.send()
     }
 }
  

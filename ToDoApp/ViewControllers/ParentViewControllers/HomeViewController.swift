@@ -178,6 +178,11 @@ extension HomeViewController {
             .sink { _ in
             }.store(in: &cancellables)
         
+        viewModel.shouldUpdateAllDateWithFilter
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+            }.store(in: &cancellables)
+        
         calendarVC.selectedDate.receive(on: DispatchQueue.main)
             .sink { date in
                 self.viewModel.updateSelectedDate(date)
