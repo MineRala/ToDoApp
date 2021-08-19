@@ -24,6 +24,8 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
     var detailModel: DetailTaskViewModel!
     
+    let messageTextViewMaxHeight: CGFloat = 500
+    
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
         vc.translatesAutoresizingMaskIntoConstraints = false
@@ -36,6 +38,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         vd.translatesAutoresizingMaskIntoConstraints = false
         vd.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         vd.layer.cornerRadius = 4
+        vd.sizeToFit()
         vd.taskDetailsShadow()
         return vd
     }()
@@ -56,14 +59,15 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
         return ld
     }()
     
-    private let textViewDescription : UITextView = {
+    private var textViewDescription : UITextView = {
         let tvd = UITextView(frame: .zero)
-        tvd.translatesAutoresizingMaskIntoConstraints = false
+        tvd.translatesAutoresizingMaskIntoConstraints = true
         tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 0.75)
         tvd.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         tvd.isEditable = false
         tvd.isUserInteractionEnabled = true
         tvd.isScrollEnabled = true
+      //  tvd.sizeToFit()
         return tvd
     }()
 
@@ -101,6 +105,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
 extension TaskDetailsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+      //  textViewDescription.delegate = self
         setUpUI()
     }
     
@@ -112,8 +117,27 @@ extension TaskDetailsViewController {
         
         labelTaskName.text = detailModel.detailTaskVDM!.taskName
         textViewDescription.text = detailModel.detailTaskVDM!.taskDescription
-        
+        resizeTextView(textView: textViewDescription)
+        self.loadViewIfNeeded()
     }
+    
+    fileprivate func resizeTextView(textView: UITextView) {
+        var newFrame = textView.frame
+        let width = newFrame.size.width
+        
+        if newFrame.size.height >= self.messageTextViewMaxHeight {
+            textView.isScrollEnabled = true
+            newFrame.size.height = self.messageTextViewMaxHeight
+        } else {
+            textView.isScrollEnabled = false
+        }
+       // let newSize = textView.sizeThatFits(CGSize(width: width,
+     //                                             height: CGFloat.greatestFiniteMagnitude))
+      //  newFrame.size = CGSize(width: width, height: newSize.height)
+      //  textView.frame = newFrame
+    }
+    
+    
     
 }
     
@@ -129,8 +153,9 @@ extension TaskDetailsViewController{
         self.view.addSubview(viewDetail)
         viewDetail.topAnchor.constraint(equalTo: viewContinue.topAnchor, constant: 16).isActive = true
         viewDetail.leadingAnchor(margin: 20).trailingAnchor(margin: 20)
-        viewDetailHeightConstriant = viewDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
-        viewDetailHeightConstriant.isActive = true
+       
+        //viewDetailHeightConstriant = viewDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
+    //    viewDetailHeightConstriant.isActive = true
         
         self.viewDetail.addSubview(labelTaskName)
         labelTaskName.topAnchor(margin: 36)
@@ -148,10 +173,8 @@ extension TaskDetailsViewController{
         textViewDescription.topAnchor.constraint(equalTo: labelDate.bottomAnchor, constant: 16).isActive = true
         textViewDescription.leadingAnchor(margin: 16)
             .trailingAnchor(margin: 16)
-            .bottomAnchor(margin: 16)
-    
-        textViewHeightConstraint = textViewDescription.heightAnchor.constraint(equalToConstant: 300)
-        textViewHeightConstraint.isActive = true
+        textViewDescription.bottomAnchor.constraint(equalTo: viewDetail.bottomAnchor, constant: -16).isActive = true
+
         
         self.view.addSubview(viewBottom)
         viewBottom.leadingAnchor(margin: 0).trailingAnchor(margin: 0).bottomAnchor(margin: 0).heightAnchor(view.frame.width/6)
@@ -159,6 +182,8 @@ extension TaskDetailsViewController{
         let stackBottom = UIStackView.stackView(alignment: .fill, distribution: .fillEqually, spacing: 0, axis: .horizontal)
         viewBottom.addSubview(stackBottom)
         stackBottom.heightAnchor(60).leadingAnchor(margin: 0).trailingAnchor(margin: 0).topAnchor(margin: 0)
+        
+        viewDetail.bottomAnchor.constraint(greaterThanOrEqualTo: viewBottom.topAnchor, constant: -16).isActive = true
         
         viewBottom.taskDetailsShadow()
         
@@ -183,17 +208,27 @@ extension TaskDetailsViewController{
         buttonEdit.addTarget(nil, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
         buttonDone.addTarget(nil, action: #selector(doneButtonTapped), for: UIControl.Event.touchUpInside)
     
+      
         textViewDescription.layoutManager.delegate = self
         
         textViewDescription.textContainerInset = UIEdgeInsets.fill(with: -4)
         
-        textViewDescription.sizeToFit()
-        let sizeTv = textViewDescription.sizeThatFits(CGSize(width: viewDetail.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
-        print(textViewDescription)
-        print(sizeTv)
-        
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
+}
+
+//MARK: - TextView Delegate
+extension TaskDetailsViewController: UITextViewDelegate {
+
+//    func textViewDidChange (_ textView: UITextView) {
+//        if textView.frame.size.height >= self.messageTextViewMaxHeight {
+//                textView.isScrollEnabled = true
+//                textView.frame.size.height = self.messageTextViewMaxHeight
+//            } else {
+//                textView.isScrollEnabled = false
+//            }
+//
+//    }
 }
 
 //MARK: - Actions

@@ -80,7 +80,7 @@ extension HomeViewModel {
             self.arrTaskListData = taskListVDMs
             self.arrTaskListDataFiltered.send(taskListVDMs)
             self.initializeArrAllElemetsEventTableView()
-            self.initializeEarliestDate()
+    //        self.initializeEarliestDate()
             
             self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
@@ -110,20 +110,6 @@ extension HomeViewModel {
                
             }
         }
-    }
-    
-    private func initializeEarliestDate() {
-        for (index, date) in arrTaskListData.enumerated() {
-            if isEarliestDay(date.taskDate) {
-                self.earliestDayIndexRow = index
-                NSLog("EarliestDay index row is set.", "")
-                return
-            }
-        }
-    }
-    
-    private func isEarliestDay(_ taskDate: Date) -> Bool {
-        return taskDate > Date() ? true : false
     }
 }
 
@@ -175,7 +161,7 @@ extension HomeViewModel {
             .sink { _ in
                 self.shouldUpdateAllData.send()
             }.store(in: &cancellables)
-        self.initializeEarliestDate()
+      //  self.initializeEarliestDate()
     }
 }
 

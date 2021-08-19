@@ -224,7 +224,7 @@
 				FDD947F426B063D400E4FA1C /* Application */,
 				FD26B05D26B06262009F056C /* Base */,
 				FD26B03526B050E8009F056C /* Views */,
-				E8D2FBE626B02905006D0936 /* Cells */,
+				E8D2FBE626B02905006D0936 /* EventTableCells */,
 				E8027F5526ACB2320071E506 /* ViewControllers */,
 				E8027F1826AC66F80071E506 /* AppDelegate.swift */,
 				E8027F1A26AC66F80071E506 /* SceneDelegate.swift */,
@@ -334,13 +334,13 @@
 			path = ChildViewControllers;
 			sourceTree = "<group>";
 		};
-		E8D2FBE626B02905006D0936 /* Cells */ = {
+		E8D2FBE626B02905006D0936 /* EventTableCells */ = {
 			isa = PBXGroup;
 			children = (
 				E8D2FBE726B02917006D0936 /* TaskCell.swift */,
 				E8D7BE4B26BD8B13006BB384 /* HeaderTaskCell.swift */,
 			);
-			path = Cells;
+			path = EventTableCells;
 			sourceTree = "<group>";
 		};
 		E8EA25A626B8462900450E53 /* Enums */ = {

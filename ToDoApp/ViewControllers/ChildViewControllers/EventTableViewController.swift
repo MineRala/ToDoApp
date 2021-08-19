@@ -162,20 +162,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         let configuration = UISwipeActionsConfiguration(actions: [done])
         return configuration
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-       // self.eventTableView.scrollToRow(at: <#T##IndexPath#>, at: UITableView.ScrollPosition.top, animated: true)
-    }
-    
-//    private func scrollViewTo(_ tableView: UITableView, scrollTo indexPath: IndexPath?, at: UITableView.ScrollPosition = .top, animated: Bool = false) {
-//        guard let index = indexPath else {
-//            NSLog("Unable to scroll to the row since indexPath is nil.", "")
-//            return
-//        }
-//        tableView.scrollToRow(at: index, at: at, animated: animated)
-//    }
-
- 
 }
 
 
