@@ -32,6 +32,10 @@ class EventTableViewController : UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+    }
 }
 
 //MARK: - Lifecycle
@@ -50,7 +54,7 @@ extension EventTableViewController {
 //MARK: - Set Up UI
 extension EventTableViewController {
     func setUpUI(){
-        eventTableView.backgroundColor = .clear
+        eventTableView.backgroundColor = C.BackgroundColor.clearColor
         self.view.addSubview(eventTableView)
         eventTableView.topAnchor(margin: 0)
             .leadingAnchor(margin: 0)
@@ -85,7 +89,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             let taskListVDMArrayElement = (viewModel.arrAllElemetsEventTableView[indexPath.row] as? TaskListVDMArrayElement)!
             let model = taskListVDMArrayElement.taskListVDM
             cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
-            
             return cell
         } else {
             let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
@@ -116,8 +119,10 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             self.handleTrash(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
-        trash.backgroundColor = #colorLiteral(red: 1, green: 0.2571013272, blue: 0.3761356473, alpha: 1)
-        trash.image = #imageLiteral(resourceName: "DeleteIcon")
+        trash.backgroundColor =  C.BackgroundColor.trashBackgroundColor
+        trash.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
+            C.ImageIcon.trashIcon.draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
+        }
         
         let configuration = UISwipeActionsConfiguration(actions: [trash])
         return configuration
@@ -139,15 +144,15 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
             self.handleDone(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
             completionHandler(true)
         }
-        done.backgroundColor = #colorLiteral(red: 0.2980392157, green: 0.7960784314, blue: 0.2549019608, alpha: 1)
+        done.backgroundColor = C.BackgroundColor.doneBackgroundColor
       
         if self.viewModel.arrTaskListData[index].isTaskCompleted {
             done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
-                #imageLiteral(resourceName: "undo").draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
+                C.ImageIcon.undoIcon.draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
             }
         } else {
             done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
-                #imageLiteral(resourceName: "DoneIcon").draw(in: CGRect(x: 0, y: 0, width: 24, height: 31))
+                C.ImageIcon.doneIcon.draw(in: CGRect(x: 0, y: 0, width: 24, height: 31))
             }
         }
 

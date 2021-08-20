@@ -95,6 +95,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             completionHandler()
             return
         }
+        
         let navController = window.rootViewController as! UINavigationController
         
         guard let homeViewController = navController.viewControllers.first as? HomeViewController else {

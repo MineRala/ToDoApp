@@ -28,7 +28,7 @@ class TaskCell: UITableViewCell {
 
     private let hourLabel : UILabel = {
        let hl = UILabel()
-        hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        hl.textColor = C.BackgroundColor.hourLabelTextColor
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
         hl.font = UIFont(name: C.Font.medium.rawValue, size: 18)
@@ -37,7 +37,7 @@ class TaskCell: UITableViewCell {
     
     private let hourPeriodLabel : UILabel = {
        let hl = UILabel()
-        hl.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        hl.textColor = C.BackgroundColor.hourPeriodLabelTextColor
         hl.textAlignment = .center
         hl.translatesAutoresizingMaskIntoConstraints = false
         hl.font = UIFont(name: C.Font.bold.rawValue, size: 16)
@@ -46,7 +46,7 @@ class TaskCell: UITableViewCell {
     
     private let taskName : UILabel = {
         let tn = UILabel()
-        tn.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        tn.textColor = C.BackgroundColor.taskNameTextColor
         tn.lineBreakMode = .byWordWrapping
         tn.numberOfLines = 0
         tn.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +56,7 @@ class TaskCell: UITableViewCell {
     
     private let taskCatagory : UILabel = {
         let tc = UILabel()
-        tc.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        tc.textColor = C.BackgroundColor.taskCategoryTextColor
         tc.translatesAutoresizingMaskIntoConstraints = false
         tc.font = UIFont(name: C.Font.light.rawValue, size: 12)
         return tc
@@ -79,7 +79,7 @@ class TaskCell: UITableViewCell {
 //MARK: - Set Up UI
 extension TaskCell {
     func setUpUI(){
-        self.contentView.backgroundColor = .clear
+        self.contentView.backgroundColor = C.BackgroundColor.clearColor
         
         contentView.addSubview(hourInfo)
         hourInfo.addArrangedSubview(hourLabel)

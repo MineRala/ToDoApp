@@ -20,7 +20,7 @@ class ScrollViewCell: UITableViewCell {
     }
     
     private func setUpUI() {
-        self.backgroundColor = .clear
+        self.backgroundColor = C.BackgroundColor.clearColor
     }
 }
 

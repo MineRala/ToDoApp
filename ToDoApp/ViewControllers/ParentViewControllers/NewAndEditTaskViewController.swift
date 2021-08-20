@@ -38,8 +38,8 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     var updateTaskDetailVDMDelegate: UpdateTaskDetailVDMToTaskDetailViewController?
     private var date: Date?
     
-    static let editingColor = UIColor.black
-    static let defaultColor = UIColor.lightGray
+    static let editingColor = C.BackgroundColor.editingColor
+    static let defaultColor = C.BackgroundColor.defaultColor
     
     private let taskNameTextField = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
@@ -47,7 +47,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         .editingBottomLineColor(editingColor)
         .defaultTitleColor(defaultColor)
         .editingTitleColor(editingColor)
-        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let descriptionTextField = FloatingTextfield()
@@ -56,7 +56,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         .editingBottomLineColor(editingColor)
         .defaultTitleColor(defaultColor)
         .editingTitleColor(editingColor)
-        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let categoryFLTextfield = FloatingTextfield()
@@ -65,7 +65,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         .editingBottomLineColor(editingColor)
         .defaultTitleColor(defaultColor)
         .editingTitleColor(editingColor)
-        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let pickDateFLTextField = FloatingTextfield()
@@ -74,7 +74,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         .editingBottomLineColor(editingColor)
         .defaultTitleColor(defaultColor)
         .editingTitleColor(editingColor)
-        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private  let notification = FloatingTextfield()
@@ -83,16 +83,16 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         .editingBottomLineColor(editingColor)
         .defaultTitleColor(defaultColor)
         .editingTitleColor(editingColor)
-        .backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
 
     private let addBtn: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
-        ab.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        ab.setTitleColor(C.BackgroundColor.addButtonSetTitleColor, for: .normal)
         ab.titleLabel?.font = UIFont(name: C.Font.medium.rawValue, size: 20)
-        ab.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
-        ab.tintColor = .white
+        ab.backgroundColor = C.BackgroundColor.addButtonBackgroundColor
+        ab.tintColor = C.BackgroundColor.addButtonTintColor
         return ab
     }()
     
@@ -145,9 +145,9 @@ extension NewAndEditTaskViewController {
 //MARK: - Set Up UI And PickerView
 extension NewAndEditTaskViewController {
     func setUpUI() {
-        view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
+        view.backgroundColor = C.BackgroundColor.newAndEditViewBackgroundColor
         self.scrollViewAddTask = ScrollView(dataSource: self)
-        self.scrollViewAddTask.backgroundColor = .clear
+        self.scrollViewAddTask.backgroundColor = C.BackgroundColor.clearColor
         self.scrollViewAddTask.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(self.scrollViewAddTask)
@@ -167,8 +167,8 @@ extension NewAndEditTaskViewController {
             return false
         }
         
-        notificationPickerView.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
-        notificationPickerView.setValue(UIColor.white, forKey: "textColor")
+        notificationPickerView.backgroundColor = C.BackgroundColor.notificationPicerViewBackgroundColor
+        notificationPickerView.setValue(C.BackgroundColor.notificationPicerViewSetValueColor, forKey: "textColor")
         
         self.view.addSubview(addBtn)
         addBtn.bottomAnchor(margin: 0)
@@ -211,9 +211,9 @@ extension NewAndEditTaskViewController {
         
         let textfieldDefaultHeight: CGFloat = 44
        
-        stackView.backgroundColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        stackView.backgroundColor(C.BackgroundColor.stackViewBackgroundColor)
         
-        let viewTop = UIView().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)).heightAnchor(0)
+        let viewTop = UIView().backgroundColor(C.BackgroundColor.viewTopBackgroundColor).heightAnchor(0)
         stackView.addArrangedSubview(viewTop)
         
         stackView.addArrangedSubview(taskNameTextField)
@@ -229,7 +229,7 @@ extension NewAndEditTaskViewController {
         stackView.setCustomSpacing(0, after: pickDateFLTextField)
         pickDateFLTextField.heightAnchor(textfieldDefaultHeight)
         
-        let view = UIView().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)).heightAnchor(30)
+        let view = UIView().backgroundColor(C.BackgroundColor.viewBackgroundColor).heightAnchor(30)
         stackView.addArrangedSubview(view)
         
         stackView.addArrangedSubview(notification)

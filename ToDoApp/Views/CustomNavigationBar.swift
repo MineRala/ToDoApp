@@ -23,10 +23,10 @@ class CustomNavigationBar: UIView {
         .alignment(.center)
         .font(C.Font.bold.font(20))
         .numberOfLines(1)
-        .textColor(.white)
+        .textColor(C.BackgroundColor.labelTitleTextColor)
     
-    private let btnRight = UIButton.button().backgroundColor(.clear).asButton()
-    private let btnLeft = UIButton.button().backgroundColor(.clear).asButton()
+    private let btnRight = UIButton.button().backgroundColor(C.BackgroundColor.clearColor).asButton()
+    private let btnLeft = UIButton.button().backgroundColor(C.BackgroundColor.clearColor).asButton()
     
     
     init(delegate: CustomNavigationBarDelegate) {
@@ -45,7 +45,7 @@ class CustomNavigationBar: UIView {
 extension CustomNavigationBar {
     private func setUpUI() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
+        self.backgroundColor = C.BackgroundColor.customNavigationBarBackgroundColor
         
         self.addSubview(self.lblTitle)
         self.lblTitle

@@ -16,7 +16,7 @@ protocol SelectDateDelegate {
 class SelectDateViewController : BaseVC {
     
     private let viewModel: HomeViewModel = HomeViewModel()
-    private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
+    private let calendarVCContainer = UIView.view().backgroundColor(C.BackgroundColor.calendarVCContainerBackgroundColor)
     private var calendarVC : CalendarViewController!
     private var selectDelegate: SelectDateDelegate
     private var date: Date
@@ -30,7 +30,7 @@ class SelectDateViewController : BaseVC {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = .clear
         tv.taskDetailsShadow()
-        tv.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tv.backgroundColor = C.BackgroundColor.timeViewBackgroundColor
         tv.layer.cornerRadius = 8
         return tv
     }()
@@ -45,7 +45,7 @@ class SelectDateViewController : BaseVC {
     private let selectButton : UIButton = {
         let sb = UIButton(frame: .zero)
         sb.translatesAutoresizingMaskIntoConstraints = false
-        sb.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
+        sb.backgroundColor = C.BackgroundColor.selectButtonBackgroundColor
         sb.setTitle(NSLocalizedString("Select", comment: ""), for: .normal)
         sb.titleLabel?.font = C.Font.medium.font(21)
         return sb
@@ -60,6 +60,10 @@ class SelectDateViewController : BaseVC {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
     }
 }
 
@@ -90,7 +94,7 @@ extension SelectDateViewController {
 //MARK: - Set Up UI
 extension SelectDateViewController{
     private func setUpUI(){
-        self.view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
+        self.view.backgroundColor = C.BackgroundColor.selectDateViewBackgroundColor
         self.view.addSubview(itemContainerView)
         itemContainerView.leadingAnchor(margin: 0)
             .trailingAnchor(margin: 0)
@@ -207,9 +211,9 @@ extension SelectDateViewController {
                 ToastView.show(with: "Warning: You cannot select the past date!")
             }
             self.shouldDisplayToast = true
-            self.calendarVC.changeSelectionColor(to: #colorLiteral(red: 0.462745098, green: 0.3829472341, blue: 0.6060211804, alpha: 1))
+            self.calendarVC.changeSelectionColor(to: C.BackgroundColor.changeSelectionPastDateColor)
         } else {
-            self.calendarVC.changeSelectionColor(to: #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1))
+            self.calendarVC.changeSelectionColor(to: C.BackgroundColor.changeSelectionColor)
         }
     }
 }

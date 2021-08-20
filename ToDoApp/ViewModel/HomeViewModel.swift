@@ -70,13 +70,10 @@ extension HomeViewModel {
             }
             return self.convertTodoItemsToVDMs(response.items)
         }.eraseToAnyPublisher()
-        
-//        shouldUpdateAllData.send()
-        
+
         taskListVDMsPublisher.sink { taskListVDMs in
             self.arrTaskListData = taskListVDMs
             self.initializeArrAllElementsWithFilter(with: self.filterKeyword)
-//            self.shouldUpdateAllData.send()
         }.store(in: &cancellables)
     }
 
@@ -185,17 +182,6 @@ extension HomeViewModel {
        return Just(vdmItems).eraseToAnyPublisher()
     }
 }
-////MARK: - Listeners
-//extension HomeViewModel {
-//    private func addListeners() {
-//        self.arrTaskListDataFiltered
-//            .receive(on: DispatchQueue.main)
-//            .sink { _ in
-//                self.shouldUpdateAllData.send()
-//            }.store(in: &cancellables)
-//      //  self.initializeEarliestDate()
-//    }
-//}
 
 // MARK: - Public
 extension HomeViewModel {

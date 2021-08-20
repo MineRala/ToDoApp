@@ -16,8 +16,8 @@ class ToastView: UIView {
         toastLbl.translatesAutoresizingMaskIntoConstraints = false
         toastLbl.textAlignment = .center
         toastLbl.font = C.Font.medium.font(20)
-        toastLbl.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        toastLbl.backgroundColor = .clear
+        toastLbl.textColor = C.BackgroundColor.toastLabelTextColor
+        toastLbl.backgroundColor = C.BackgroundColor.clearColor
         toastLbl.numberOfLines = 0
         return toastLbl
     }()
@@ -37,7 +37,7 @@ class ToastView: UIView {
 extension ToastView {
     private func setUpUI() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.8)
+        self.backgroundColor = C.BackgroundColor.toastViewBackgroundColor.withAlphaComponent(0.8)
         
         self.layer.cornerRadius = 8
         self.layer.masksToBounds = false
@@ -53,7 +53,7 @@ extension ToastView {
         self.lblToast.text = message
         
         self.alpha = 1
-        self.lblToast.backgroundColor = .clear
+        self.lblToast.backgroundColor = C.BackgroundColor.clearColor
     }
 }
 

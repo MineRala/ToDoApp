@@ -17,6 +17,9 @@ class CalendarViewController : UIViewController{
     private(set) var selectedDate = CurrentValueSubject<Date, Never>(Date())
     private var cancellables = Set<AnyCancellable>()
     
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+    }
 }
 
 // MARK: - Lifecycle
@@ -25,7 +28,6 @@ extension CalendarViewController {
         super.viewDidLoad()
         setUpUI()
     }
-    
 }
 
 // MARK: - Set Up UI
@@ -37,11 +39,11 @@ extension CalendarViewController {
         
         calendar.appearance.titleFont = C.Font.medium.font(14)
         calendar.appearance.weekdayFont = C.Font.medium.font(16)
-        calendar.appearance.weekdayTextColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.75)
-        calendar.appearance.todayColor = .clear
-        calendar.appearance.titleTodayColor = .black
-        calendar.appearance.selectionColor = #colorLiteral(red: 0.462745098, green: 0.2745098039, blue: 1, alpha: 1)
-        calendar.appearance.headerTitleColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        calendar.appearance.weekdayTextColor = C.BackgroundColor.weekdayTextColor
+        calendar.appearance.todayColor = C.BackgroundColor.clearColor
+        calendar.appearance.titleTodayColor = C.BackgroundColor.titleTodayColor
+        calendar.appearance.selectionColor = C.BackgroundColor.selectionColor
+        calendar.appearance.headerTitleColor = C.BackgroundColor.headerTitleColor
         
         calendar.delegate = self
         

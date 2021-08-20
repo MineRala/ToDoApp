@@ -29,18 +29,18 @@ enum ViewControllerType: String {
         case .home:
             return nil
         case .newTask:
-            return #imageLiteral(resourceName: "BackIcon")
+            return C.ImageIcon.backIcon
         case .taskDetails:
-            return #imageLiteral(resourceName: "BackIcon")
+            return C.ImageIcon.backIcon
         case .selectDate:
-            return #imageLiteral(resourceName: "BackIcon")
+            return C.ImageIcon.backIcon
         }
     }
     
     var rightButtonImage: UIImage? {
         switch self {
         case .home:
-            return #imageLiteral(resourceName: "AddIcon")
+            return C.ImageIcon.addIcon
         case .newTask:
             return nil
         case .taskDetails:
@@ -60,7 +60,7 @@ class BaseVC: UIViewController {
     private let viewStatus : UIView = {
         let vw = UIView(frame: .zero)
         vw.translatesAutoresizingMaskIntoConstraints = false
-        vw.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
+        vw.backgroundColor = C.BackgroundColor.viewStatusBackgroundColor
         return vw
     }()
 }
@@ -81,7 +81,7 @@ extension BaseVC{
 // MARK: - Set Up UI
 extension BaseVC {
     private func setUpUI() {
-        view.backgroundColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1)
+        view.backgroundColor = C.BackgroundColor.baseVCBackgroundColor
         self.customNavigationBar = CustomNavigationBar(delegate: self)
         self.view.addSubview(self.customNavigationBar)
         self.customNavigationBar.leadingAnchor(margin: 0).topAnchor(margin: C.statusBarHeight).trailingAnchor(margin: 0)

@@ -21,9 +21,9 @@ class HomeViewController : BaseVC {
    
     private var calendarHeightConstraint: NSLayoutConstraint?
     
-    private let searchVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1))
-    private let calendarVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
-    private let eventVCContainer = UIView.view().backgroundColor(#colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9725490196, alpha: 1))
+    private let searchVCContainer = UIView.view().backgroundColor(C.BackgroundColor.searchVCContainerBackgroundColor)
+    private let calendarVCContainer = UIView.view().backgroundColor(C.BackgroundColor.calendarVCContainerBackgroundColor)
+    private let eventVCContainer = UIView.view().backgroundColor(C.BackgroundColor.eventVCContainerBackgroundColor)
     
     private var searchVC : SearchViewController!
     private var calendarVC : CalendarViewController!
@@ -37,7 +37,7 @@ class HomeViewController : BaseVC {
     private let itemsContainerView : UIView = {
         let icv = UIView(frame: .zero)
         icv.translatesAutoresizingMaskIntoConstraints = false
-        icv.backgroundColor = .clear
+        icv.backgroundColor = C.BackgroundColor.clearColor
         return icv
     }()
     

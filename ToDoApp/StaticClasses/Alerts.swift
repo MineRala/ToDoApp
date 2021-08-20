@@ -15,7 +15,7 @@ class Alerts : NSObject {
         let deleteAction = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .default, handler: { (action) in
         deletion()
         })
-        deleteAction.setValue(UIColor.red, forKey: "titleTextColor")
+    deleteAction.setValue(C.BackgroundColor.deleteActionColor, forKey: "titleTextColor")
         dialogMessage.addAction(deleteAction)
    
         dialogMessage.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { (action) in
@@ -30,7 +30,7 @@ class Alerts : NSObject {
          let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) in
          completion()
          })
-         okAction.setValue(UIColor.blue, forKey: "titleTextColor")
+        okAction.setValue(C.BackgroundColor.okActionColor, forKey: "titleTextColor")
          dialogMessage.addAction(okAction)
          controller.present(dialogMessage, animated: true, completion: {})
      }

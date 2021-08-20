@@ -20,7 +20,7 @@ class SearchViewController : UIViewController {
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
         sw.translatesAutoresizingMaskIntoConstraints = false
-        sw.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        sw.backgroundColor = C.BackgroundColor.searchViewBackgroundColor
         sw.layer.cornerRadius = 8
         return sw
     }()
@@ -29,7 +29,7 @@ class SearchViewController : UIViewController {
         let st = UITextField(frame: .zero)
         st.translatesAutoresizingMaskIntoConstraints = false
         st.returnKeyType = .search
-        st.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        st.backgroundColor = C.BackgroundColor.searchTextFieldBackgroundColor
         st.layer.cornerRadius = 8
         st.placeholder = NSLocalizedString("Search Task", comment: "")
         let leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16, height: 2.0))
@@ -66,7 +66,7 @@ class SearchViewController : UIViewController {
     }
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
     }
 }
 

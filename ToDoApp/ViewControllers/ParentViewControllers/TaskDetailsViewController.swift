@@ -15,7 +15,7 @@ protocol TaskCellDeleteAndDoneDelegate {
 
 class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
    
-    private let viewBottom = UIView.view().backgroundColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+    private let viewBottom = UIView.view().backgroundColor(C.BackgroundColor.viewBottomBackgroundColor)
     private var textViewHeightConstraint: NSLayoutConstraint!
     private var viewDetailHeightConstriant: NSLayoutConstraint!
 
@@ -29,14 +29,14 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
         vc.translatesAutoresizingMaskIntoConstraints = false
-        vc.backgroundColor = #colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)
+        vc.backgroundColor = C.BackgroundColor.viewContinueBackgroundColor
         return vc
     }()
     
     private let viewDetail: UIView = {
         let vd = UIView(frame: .zero)
         vd.translatesAutoresizingMaskIntoConstraints = false
-        vd.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        vd.backgroundColor = C.BackgroundColor.viewDetailBackgroundColor
         vd.layer.cornerRadius = 4
         vd.sizeToFit()
         vd.taskDetailsShadow()
@@ -54,7 +54,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let labelDate: UILabel = {
         let ld = UILabel(frame: .zero)
         ld.translatesAutoresizingMaskIntoConstraints = false
-        ld.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 1)
+        ld.textColor = C.BackgroundColor.labelDateTextColor
         ld.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         return ld
     }()
@@ -62,7 +62,7 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private var textViewDescription : UITextView = {
         let tvd = UITextView(frame: .zero)
         tvd.translatesAutoresizingMaskIntoConstraints = true
-        tvd.textColor = #colorLiteral(red: 0.09019607843, green: 0.1529411765, blue: 0.2078431373, alpha: 0.75)
+        tvd.textColor = C.BackgroundColor.textViewDescriptionTextColor
         tvd.font = UIFont(name: C.Font.regular.rawValue, size: 16)
         tvd.isEditable = false
         tvd.isUserInteractionEnabled = true
@@ -73,20 +73,20 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     private let buttonDelete : UIButton = {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
-        bd.setImage(UIImage(named: C.ImageName.trash.rawValue), for: .normal)
+        bd.setImage(C.ImageIcon.trashIcon, for: .normal)
         return bd
     }()
     
     private let buttonEdit : UIButton = {
         let be = UIButton(frame: .zero)
         be.translatesAutoresizingMaskIntoConstraints = false
-        be.setImage(UIImage(named: C.ImageName.edit.rawValue), for: .normal)
+        be.setImage(C.ImageIcon.editIcon, for: .normal)
         return be
     }()
     private let buttonDone : UIButton = {
         let bd = UIButton(frame: .zero)
         bd.translatesAutoresizingMaskIntoConstraints = false
-        bd.setImage(UIImage(named: C.ImageName.check.rawValue), for: .normal)
+        bd.setImage(C.ImageIcon.checkIcon, for: .normal)
         return bd
     }()
     
@@ -110,7 +110,7 @@ extension TaskDetailsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if detailModel.detailTaskVDM!.isTaskCompleted {
-            self.buttonDone.setImage(UIImage(named:C.ImageName.undo.rawValue), for: .normal)
+            self.buttonDone.setImage(C.ImageIcon.undoIcon, for: .normal)
         }
         
         labelTaskName.text = detailModel.detailTaskVDM!.taskName
@@ -136,10 +136,7 @@ extension TaskDetailsViewController{
         self.view.addSubview(viewDetail)
         viewDetail.topAnchor.constraint(equalTo: viewContinue.topAnchor, constant: 16).isActive = true
         viewDetail.leadingAnchor(margin: 20).trailingAnchor(margin: 20)
-       
-        //viewDetailHeightConstriant = viewDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 1)
-    //    viewDetailHeightConstriant.isActive = true
-        
+
         self.viewDetail.addSubview(labelTaskName)
         labelTaskName.topAnchor(margin: 36)
             .leadingAnchor(margin: 16)
@@ -170,9 +167,9 @@ extension TaskDetailsViewController{
         
         viewBottom.taskDetailsShadow()
         
-        let deleteButtonContainer = UIView.view().backgroundColor(.clear)
-        let editButtonContainer = UIView.view().backgroundColor(.clear)
-        let doneButtonContainer = UIView.view().backgroundColor(.clear)
+        let deleteButtonContainer = UIView.view().backgroundColor(C.BackgroundColor.clearColor)
+        let editButtonContainer = UIView.view().backgroundColor(C.BackgroundColor.clearColor)
+        let doneButtonContainer = UIView.view().backgroundColor(C.BackgroundColor.clearColor)
         
         deleteButtonContainer.addSubview(buttonDelete)
         editButtonContainer.addSubview(buttonEdit)
