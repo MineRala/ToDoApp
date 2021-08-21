@@ -32,7 +32,6 @@ class HomeViewController : BaseVC {
     private var homeViewControllerType: HomeViewControllerType = .defaultType
     
     private let calendarViewHeightRatio: CGFloat = 35/100
-    let notificationCenter = UNUserNotificationCenter.current()
     
     private let itemsContainerView : UIView = {
         let icv = UIView(frame: .zero)
@@ -131,13 +130,6 @@ extension HomeViewController: FetchDelegate {
     }
 }
 
-// MARK: - Actions
-extension HomeViewController {
-    override func baseVCAddOnTap() {
-        routeToNewTasks()
-    }
-}
-
 //MARK: - Navigate TaskDetailViewController
 extension HomeViewController {
     private func navigateToTaskDetailViewControllerIfNeeded() {
@@ -197,26 +189,22 @@ extension HomeViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: - Route
-extension HomeViewController  {
+// MARK: - Actions
+extension HomeViewController {
+    override func baseVCAddOnTap() {
+        routeToNewTasks()
+    }
+    
     private func routeToNewTasks() {
         let newViewController = NewAndEditTaskViewController()
         newViewController.fetchDelegate = self
         self.navigationController?.pushViewController(newViewController, animated: true)
     }
+    
 }
 
 // MARK: - Public
 extension HomeViewController {
-    func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
-        for taskListVDM in self.viewModel.arrTaskListData {
-            if taskListVDM.toDoItem.notificationID != nil && taskListVDM.toDoItem.notificationID == notificationID {
-                return taskListVDM.toDoItem
-            }
-        }
-        return nil
-    }
-    
     func updateHomeViewControllerType(_ type: HomeViewControllerType) {
         self.homeViewControllerType = type
         self.navigateToTaskDetailViewControllerIfNeeded()

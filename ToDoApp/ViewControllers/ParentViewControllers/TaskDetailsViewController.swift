@@ -24,8 +24,6 @@ class TaskDetailsViewController : BaseVC, NSLayoutManagerDelegate {
     var delegateModeSelection: SetPageModeToNewTaskViewControllerDelegate?
     var detailModel: DetailTaskViewModel!
     
-    let messageTextViewMaxHeight: CGFloat = 300
-    
     private let viewContinue: UIView = {
         let vc = UIView(frame: .zero)
         vc.translatesAutoresizingMaskIntoConstraints = false
@@ -115,7 +113,6 @@ extension TaskDetailsViewController {
         
         labelTaskName.text = detailModel.detailTaskVDM!.taskName
         textViewDescription.text = detailModel.detailTaskVDM!.taskDescription
-        resize(textView: textViewDescription)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -196,18 +193,10 @@ extension TaskDetailsViewController{
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil 
     }
     
-    fileprivate func resize(textView: UITextView) {
+    private func setScollability(textView: UITextView) {
         let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         let heightOfText = sizeThatFitsTextView.height
-        if heightOfText >= self.messageTextViewMaxHeight {
-            textView.frame.size.height = self.messageTextViewMaxHeight
-        }
-    }
-    
-    fileprivate func setScollability(textView: UITextView) {
-        let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
-        let heightOfText = sizeThatFitsTextView.height
-        if heightOfText >= self.messageTextViewMaxHeight {
+        if heightOfText >= self.textViewDescription.frame.size.height {
             textView.isScrollEnabled = true
         } else {
             textView.isScrollEnabled = false

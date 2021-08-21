@@ -82,7 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
 }
 
 //MARK: - Notification Center Delegate

@@ -11,6 +11,7 @@ import UIKit
 class HeaderTaskCell: UITableViewCell {
     
     private(set) var date: Date!
+    
     private let dayLabel : UILabel = {
        let dl = UILabel()
         dl.textColor = C.BackgroundColor.dayLabelTextColor

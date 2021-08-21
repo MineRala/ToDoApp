@@ -232,7 +232,7 @@ extension EventTableViewController {
 // MARK: - Scroll Offset Update
 extension EventTableViewController {
     private func changeScrollOffset(to date: Date) {
-//        var indexPath: IndexPath?
+
         let rowCount = self.tableView(eventTableView, numberOfRowsInSection: 0)
         for index in 0 ..< rowCount {
             if  let cell = self.tableView(eventTableView, cellForRowAt: IndexPath(row: index, section: 0)) as? HeaderTaskCell {
@@ -242,15 +242,8 @@ extension EventTableViewController {
                     NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
                     return
                 }
-//                if cell.date.year == date.year && cell.date.month == date.month && cell.date.day == date.day {
-//                    indexPath = IndexPath(row: index, section: 0)
-//                }
             }
         }
-//        if let indexPathCell = indexPath {
-//            eventTableView.scrollToRow(at: indexPathCell , at: .top, animated: true)
-//        }
-//        NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
     }
 }
 

@@ -41,6 +41,7 @@ open class FloatingTextfield: UITextField {
         super.init(frame: frame)
         setUpUI()
         updateUI(animated: false)
+        self.returnKeyType = UIReturnKeyType.done
     }
     
     required public init?(coder: NSCoder) {
@@ -161,6 +162,7 @@ extension FloatingTextfield: UITextFieldDelegate {
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if self.dismissWithReturnKey { self.resignFirstResponder() }
+        self.view.endEditing(true)
         return true
     }
     
@@ -168,6 +170,7 @@ extension FloatingTextfield: UITextFieldDelegate {
         guard let closure = textFieldShouldChangeCharactersCallback else { return true }
         return closure(self, range, string)
     }
+
 }
 
 // MARK: - Public

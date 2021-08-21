@@ -439,9 +439,9 @@
 			children = (
 				FDD9480426B075ED00E4FA1C /* HomeViewModel.swift */,
 				E8EA53F126C556AD00D0758B /* NewAndEditViewModel.swift */,
-				E836DA7F26BAFEF90059EF8C /* TaskVDMConverter.swift */,
-				E85B83EA26C15712008EC7A0 /* EventTableViewArrayElements.swift */,
 				E8EA53F626C556C200D0758B /* DetailTaskViewModel.swift */,
+				E85B83EA26C15712008EC7A0 /* EventTableViewArrayElements.swift */,
+				E836DA7F26BAFEF90059EF8C /* TaskVDMConverter.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";

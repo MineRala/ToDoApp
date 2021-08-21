@@ -199,7 +199,6 @@ extension HomeViewModel {
     }
 
     func initializeViewModel() {
-        //addSampleData(count: 500)
         selectDate(Date())
     }
 

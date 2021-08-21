@@ -129,8 +129,6 @@ extension TaskVDMConverter{
         
         return TaskDetailVDM(taskName: taskName, taskDescription: taskDescription, taskDate: taskDateTime, taskId: taskId, isTaskCompleted: isTaskCompleted)
     }
-    
-    
 }
     
 //MARK: - Edit Task View Model Converter

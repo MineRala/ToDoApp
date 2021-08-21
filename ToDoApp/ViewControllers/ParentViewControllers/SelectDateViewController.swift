@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-protocol SelectDateDelegate {
+protocol SelectDateViewControllerDelegate {
     func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date)
 }
 
@@ -18,7 +18,7 @@ class SelectDateViewController : BaseVC {
     private let viewModel: HomeViewModel = HomeViewModel()
     private let calendarVCContainer = UIView.view().backgroundColor(C.BackgroundColor.calendarVCContainerBackgroundColor)
     private var calendarVC : CalendarViewController!
-    private var selectDelegate: SelectDateDelegate
+    private var selectDelegate: SelectDateViewControllerDelegate
     private var date: Date
     private var cancellables = Set<AnyCancellable>()
     private var shouldDisplayToast: Bool = false
@@ -28,7 +28,7 @@ class SelectDateViewController : BaseVC {
     private let timeView: UIView = {
         let tv = UIView(frame: .zero)
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .clear
+        tv.backgroundColor = C.BackgroundColor.clearColor
         tv.taskDetailsShadow()
         tv.backgroundColor = C.BackgroundColor.timeViewBackgroundColor
         tv.layer.cornerRadius = 8
@@ -38,7 +38,7 @@ class SelectDateViewController : BaseVC {
     private let itemContainerView : UIView = {
         let icv = UIView(frame: .zero)
         icv.translatesAutoresizingMaskIntoConstraints = false
-        icv.backgroundColor = .clear
+        icv.backgroundColor = C.BackgroundColor.clearColor
         return icv
     }()
     
@@ -52,7 +52,7 @@ class SelectDateViewController : BaseVC {
     }()
     
     
-    init(date: Date, selectDateDelegate: SelectDateDelegate) {
+    init(date: Date, selectDateDelegate: SelectDateViewControllerDelegate) {
         self.date = date
         self.selectDelegate = selectDateDelegate
         super.init(nibName: nil, bundle: nil)
@@ -83,11 +83,7 @@ extension SelectDateViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if date == nil {
-            taskTimePicker.setDate(Date(), animated: true)
-        }else{
-            taskTimePicker.setDate(date, animated: true)
-        }
+        taskTimePicker.setDate(date, animated: true)
     }
 }
 
@@ -159,7 +155,7 @@ extension SelectDateViewController {
     @objc func selectButtonTapped(){
         
         if self.date < Date() {
-            Alerts.showAlertInvalidDate(controller: self, title: "Invalid date", message: "You cannot select the past date!", completion: {
+            Alerts.showAlertInvalidDate(controller: self, title: NSLocalizedString("Invalid date", comment: ""), message: NSLocalizedString("You cannot select the past date!", comment: ""), completion: {
                 return
             })
         }
@@ -208,7 +204,7 @@ extension SelectDateViewController {
         self.date = userCalendar.date(from: dateComponents)!
         if self.date < Date() {
             if self.shouldDisplayToast {
-                ToastView.show(with: "Warning: You cannot select the past date!")
+                ToastView.show(with: NSLocalizedString("Warning: You cannot select the past date!", comment: ""))
             }
             self.shouldDisplayToast = true
             self.calendarVC.changeSelectionColor(to: C.BackgroundColor.changeSelectionPastDateColor)

@@ -15,12 +15,10 @@ protocol TaskCellDelegate {
 class TaskCell: UITableViewCell {
     
     private let hourInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 0, axis: .vertical)
-    
     private let taskInfo = UIStackView.stackView(alignment: .fill, distribution: .fill, spacing: 8, axis: .vertical)
     
     private var tap: UITapGestureRecognizer!
     private var model: TaskListVDM!
-    
     var delegate: TaskCellDelegate?
     private var index: Int!
     
@@ -89,8 +87,8 @@ extension TaskCell {
             .centerYAnchor(margin: 0)
             .widthAnchor(60)
 
-        hourInfo.backgroundColor = .clear
-        hourPeriodLabel.backgroundColor = .clear
+        hourInfo.backgroundColor = C.BackgroundColor.clearColor
+        hourPeriodLabel.backgroundColor = C.BackgroundColor.clearColor
         
         contentView.addSubview(taskInfo)
         taskInfo.addArrangedSubview(taskName)

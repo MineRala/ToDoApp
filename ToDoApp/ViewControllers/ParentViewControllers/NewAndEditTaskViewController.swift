@@ -13,7 +13,7 @@ protocol SetPageModeToNewTaskViewControllerDelegate {
     func setPageMode(mode: NewAndEditVCState)
 }
 
-protocol ToolbarPickerViewDelegate {
+protocol AddActionsInPickerViewNewAndEditViewControllerDelegate {
     func didTapDone()
     func didTapCancel()
 }
@@ -36,53 +36,49 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     var model: NewAndEditViewModel!
     var fetchDelegate: FetchDelegate?
     var updateTaskDetailVDMDelegate: UpdateTaskDetailVDMToTaskDetailViewController?
-    private var date: Date?
-    
-    static let editingColor = C.BackgroundColor.editingColor
-    static let defaultColor = C.BackgroundColor.defaultColor
-    
+        
     private let taskNameTextField = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
-        .defaultBottomLineColor(defaultColor)
-        .editingBottomLineColor(editingColor)
-        .defaultTitleColor(defaultColor)
-        .editingTitleColor(editingColor)
+        .defaultBottomLineColor(C.BackgroundColor.defaultColor)
+        .editingBottomLineColor(C.BackgroundColor.editingColor)
+        .defaultTitleColor(C.BackgroundColor.defaultColor)
+        .editingTitleColor(C.BackgroundColor.editingColor)
         .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let descriptionTextField = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
-        .defaultBottomLineColor(defaultColor)
-        .editingBottomLineColor(editingColor)
-        .defaultTitleColor(defaultColor)
-        .editingTitleColor(editingColor)
+        .defaultBottomLineColor(C.BackgroundColor.defaultColor)
+        .editingBottomLineColor(C.BackgroundColor.editingColor)
+        .defaultTitleColor(C.BackgroundColor.defaultColor)
+        .editingTitleColor(C.BackgroundColor.editingColor)
         .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let categoryFLTextfield = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
-        .defaultBottomLineColor(defaultColor)
-        .editingBottomLineColor(editingColor)
-        .defaultTitleColor(defaultColor)
-        .editingTitleColor(editingColor)
+        .defaultBottomLineColor(C.BackgroundColor.defaultColor)
+        .editingBottomLineColor(C.BackgroundColor.editingColor)
+        .defaultTitleColor(C.BackgroundColor.defaultColor)
+        .editingTitleColor(C.BackgroundColor.editingColor)
         .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private let pickDateFLTextField = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
-        .defaultBottomLineColor(defaultColor)
-        .editingBottomLineColor(editingColor)
-        .defaultTitleColor(defaultColor)
-        .editingTitleColor(editingColor)
+        .defaultBottomLineColor(C.BackgroundColor.defaultColor)
+        .editingBottomLineColor(C.BackgroundColor.editingColor)
+        .defaultTitleColor(C.BackgroundColor.defaultColor)
+        .editingTitleColor(C.BackgroundColor.editingColor)
         .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
     
     private  let notification = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
-        .defaultBottomLineColor(defaultColor)
-        .editingBottomLineColor(editingColor)
-        .defaultTitleColor(defaultColor)
-        .editingTitleColor(editingColor)
+        .defaultBottomLineColor(C.BackgroundColor.defaultColor)
+        .editingBottomLineColor(C.BackgroundColor.editingColor)
+        .defaultTitleColor(C.BackgroundColor.defaultColor)
+        .editingTitleColor(C.BackgroundColor.editingColor)
         .backgroundColor(C.BackgroundColor.floatingTextFieldBackgroundColor)
         .asFloatingTextfield()
 
@@ -99,7 +95,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     private let pickDateButton: UIButton = {
         let ab = UIButton(frame: .zero)
         ab.translatesAutoresizingMaskIntoConstraints = false
-        ab.backgroundColor = .clear
+        ab.backgroundColor = C.BackgroundColor.clearColor
         return ab
     }()
 
@@ -108,11 +104,11 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
         self.model = NewAndEditViewModel(toDoItem: toDoItem)
         
         if model.getMode() ==  .newTask { //New Task
-            taskNameTextField.title("Task Name")
-            descriptionTextField.title("Description")
-            categoryFLTextfield.title("Category")
-            pickDateFLTextField.title("Pick Date & Time")
-            notification.title("Notification")
+            taskNameTextField.title(NSLocalizedString("Task Name", comment: ""))
+            descriptionTextField.title(NSLocalizedString("Description", comment: ""))
+            categoryFLTextfield.title(NSLocalizedString("Category", comment: ""))
+            pickDateFLTextField.title(NSLocalizedString("Pick Date & Time", comment: ""))
+            notification.title(NSLocalizedString("Pick Date & Time", comment: ""))
         }
         else{
             taskNameTextField.title(model.editTaskVDM!.taskNameTitle)
@@ -139,8 +135,10 @@ extension NewAndEditTaskViewController {
         super.viewDidLoad()
         setUpUI()
         setUpPickerView()
+        addObservers()
     }
 }
+
 
 //MARK: - Set Up UI And PickerView
 extension NewAndEditTaskViewController {
@@ -192,13 +190,38 @@ extension NewAndEditTaskViewController {
         self.notificationPickerView.toolbarDelegate = self
         notification.inputAccessoryView = notificationPickerView.toolbar
         self.notificationPickerView.reloadAllComponents()
-        
+
         let notificationTitleAndRow = self.model.getNotificationTitleAndRow(notificationDate: model.toDoItem.notificationDate, taskDate: model.toDoItem.taskDate!)
         self.notificationPickerView.selectRow(notificationTitleAndRow.1, inComponent: 0, animated: true)
         self.model.setNotificationTime(notificationTime: notificationTitleAndRow.0)
     }
 }
 
+//MARK: - Observers
+extension NewAndEditTaskViewController {
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(NewAndEditTaskViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NewAndEditTaskViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+       
+        self.hideKeyboardWhenTappedAround()
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+      guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+      else {
+        return
+      }
+      let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height , right: 0.0)
+        scrollViewAddTask.contentInset = contentInsets
+        scrollViewAddTask.scrollIndicatorInsets = contentInsets
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+      let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        scrollViewAddTask.contentInset = contentInsets
+        scrollViewAddTask.scrollIndicatorInsets = contentInsets
+    }
+}
    
 //MARK: - ScrollView Elements
 extension NewAndEditTaskViewController {
@@ -237,7 +260,7 @@ extension NewAndEditTaskViewController {
         
         if model.getMode() == .editTask {
            setEditPageMode()
-          }
+        }
     }
 }
   
@@ -267,7 +290,7 @@ extension NewAndEditTaskViewController: UIPickerViewDelegate, UIPickerViewDataSo
     }
 }
 
-extension NewAndEditTaskViewController: ToolbarPickerViewDelegate {
+extension NewAndEditTaskViewController: AddActionsInPickerViewNewAndEditViewControllerDelegate {
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
@@ -314,7 +337,7 @@ extension NewAndEditTaskViewController {
 }
 
 //MARK: - Set Select Date Delegate
-extension NewAndEditTaskViewController : SelectDateDelegate {
+extension NewAndEditTaskViewController : SelectDateViewControllerDelegate {
     func selectDateViewControllerDidSelectedDate(_ viewController: SelectDateViewController, date: Date) {
         model.selectedDate = date
         pickDateFLTextField.asFloatingTextfield().text = TaskVDMConverter.formatDateForEditTaskVDM(date: date)

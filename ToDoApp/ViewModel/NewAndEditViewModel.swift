@@ -48,7 +48,6 @@ class NewAndEditViewModel{
     deinit {
         self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
     }
-    
 }
 
 //MARK: - Create New Item
@@ -151,9 +150,9 @@ extension NewAndEditViewModel{
         default:
             return (NSLocalizedString("Do Not Send Notification", comment: ""), 0)
         }
-        
     }
 }
+
 //MARK: - Specific Notification Function
 extension NewAndEditViewModel{
     private func removeNotification() {
@@ -164,14 +163,14 @@ extension NewAndEditViewModel{
 
     private func createNotification() {
         toDoItem.notificationID = UUID().uuidString
-        callNotification()
+        pushNotification()
     }
 
     private func updateNotification() {
         NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
-        callNotification()
+        pushNotification()
     }
-    func callNotification() {
+    func pushNotification() {
         toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
         NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskCategory!, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }

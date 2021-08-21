@@ -45,3 +45,7 @@
 "Yesterday" = "Yesterday";
 "Today" = "Today";
 "Tomarrow" = "Tomarrow";
+
+"Invalid date" = "Invalid date";
+"You cannot select the past date!" = "You cannot select the past date!";
+"Warning: You cannot select the past date!" = "Warning: You cannot select the past date!";

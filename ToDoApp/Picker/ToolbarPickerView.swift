@@ -11,7 +11,7 @@ import UIKit
 class ToolbarPickerView: UIPickerView {
 
     private(set) var toolbar: UIToolbar?
-    var toolbarDelegate: ToolbarPickerViewDelegate?
+    var toolbarDelegate: AddActionsInPickerViewNewAndEditViewControllerDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

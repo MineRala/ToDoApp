@@ -42,3 +42,7 @@
 "Yesterday" = "Dün";
 "Today" = "Bugün";
 "Tomarrow" = "Yarın";
+
+"Invalid date" = "Geçersiz tarih";
+"You cannot select the past date!" = "Geçmiş tarih seçemezsiniz!";
+"Warning: You cannot select the past date!" = "Uyarı: Geçmiş tarih seçemezsiniz! ";
