@@ -159,7 +159,7 @@ extension SelectDateViewController {
     @objc func selectButtonTapped(){
         
         if self.date < Date() {
-            Alerts.showAlert(controller: self, title: "Invalid date", message: "You cannot select the past date!", completion: {
+            Alerts.showAlertInvalidDate(controller: self, title: "Invalid date", message: "You cannot select the past date!", completion: {
                 return
             })
         }

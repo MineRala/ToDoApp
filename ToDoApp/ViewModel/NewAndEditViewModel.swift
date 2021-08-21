@@ -45,6 +45,10 @@ class NewAndEditViewModel{
         return pageMode
     }
     
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+    }
+    
 }
 
 //MARK: - Create New Item
@@ -160,14 +164,16 @@ extension NewAndEditViewModel{
 
     private func createNotification() {
         toDoItem.notificationID = UUID().uuidString
-        toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
-        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskCategory!, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+        callNotification()
     }
 
     private func updateNotification() {
         NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+        callNotification()
+    }
+    func callNotification() {
         toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
-        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskDate!.description, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
+        NotificationManager.createLocalNotification(title: toDoItem.taskName!, body: toDoItem.taskCategory!, date: toDoItem.notificationDate!, uuidString: toDoItem.notificationID!)
     }
 }
 

@@ -27,6 +27,10 @@ class HomeViewModel {
     private var cancellables = Set<AnyCancellable>()
     private(set) var earliestDayIndexRow: Int!
     
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+    }
+    
 }
 
 
