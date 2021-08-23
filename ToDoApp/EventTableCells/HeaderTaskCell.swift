@@ -11,6 +11,7 @@ import UIKit
 class HeaderTaskCell: UITableViewCell {
     
     private(set) var date: Date!
+    private(set) var indexPath: IndexPath!
     
     private let dayLabel : UILabel = {
        let dl = UILabel()
@@ -45,8 +46,9 @@ extension HeaderTaskCell {
 
 //MARK: - Actions
 extension HeaderTaskCell {
-    func updateHeaderCell(title: String, date: Date) {
+    func updateHeaderCell(title: String, date: Date, indexPath: IndexPath) {
         self.dayLabel.text = title
         self.date = date
+        self.indexPath = indexPath
     }
 }

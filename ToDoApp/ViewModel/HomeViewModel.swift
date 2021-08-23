@@ -12,13 +12,13 @@ class HomeViewModel {
     
     var isNeededToReloadData: Bool = false
     private let coreDataLayer = CoreDataLayer()
-    private var arrAllTaskListData: [TaskListVDM] = []
     private var filterKeyword: String?
     private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
+    private var dctHeaderCells: [Date: IndexPath] = [:]
     
     private(set) var shouldUpdateAllData = PassthroughSubject<Void, Never>()
     private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
@@ -85,17 +85,43 @@ extension HomeViewModel {
 
 //MARK: - Initialize Array All Element
 extension HomeViewModel {
+    private func findClosestDate(for date: Date, from arrDates: [Date]) -> Date {
+        var minDate: Date?
+        var timeInterval: TimeInterval = TimeInterval(Int.max)
+        for index in 0 ..< arrDates.count {
+            let currentDate = arrDates[index]
+            let diff = fabs(currentDate.timeIntervalSince1970 - date.timeIntervalSince1970)
+            if diff < timeInterval {
+                timeInterval = diff
+                minDate = currentDate
+            }
+        }
+        return minDate!
+    }
+    
+    func findClosestIndexPath(for date: Date) -> IndexPath? {
+        guard self.dctHeaderCells.keys.count > 0 else { return nil }
+        let arrDates = dctHeaderCells.compactMap { (key, element) -> Date in
+            return key
+        }
+        let minDate = self.findClosestDate(for: date, from: arrDates)
+        NSLog("Min Date: \(minDate)")
+        let indexPath = dctHeaderCells[minDate]!
+        return indexPath
+    }
+    
     func initializeArrAllElemetsEventTableView() {
         
         if self.arrAllElemetsEventTableView.count > 0 {
             self.arrAllElemetsEventTableView.removeAll()
         }
-        
+        dctHeaderCells = [:]
         for index in 0 ..< arrTaskListData.count {
             if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
                 // Append TitleCell
                 let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day , date: self.arrTaskListData[index].taskDate)
                 self.arrAllElemetsEventTableView.append(titleCell)
+                dctHeaderCells[self.arrTaskListData[index].taskDate] = IndexPath(row: self.arrAllElemetsEventTableView.count - 1, section: 0)
                 // Append TaskCell
                 let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
                 self.arrAllElemetsEventTableView.append(taskCell)

@@ -13,6 +13,7 @@ class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var fetchDelegate: FetchDelegate?
+
     private var cancellables = Set<AnyCancellable>()
     
     private let eventTableView : UITableView = {
@@ -93,7 +94,8 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         } else {
             let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
             let currentElement = viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMHeaderArrayElement
-            headerCell.updateHeaderCell(title: currentElement.getCellDateTitle() , date: currentElement.taskDate)
+            headerCell.updateHeaderCell(title: currentElement.getCellDateTitle() , date: currentElement.taskDate, indexPath: indexPath)
+            
            return headerCell
         }
     }
@@ -217,7 +219,7 @@ extension EventTableViewController {
             .sink { filterKeyword in
                 self.viewModel.initializeArrAllElementsWithFilter(with: filterKeyword)
                 self.eventTableView.reloadData()
-                self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
+              //  self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
         
         }.store(in: &cancellables)
         
@@ -232,18 +234,9 @@ extension EventTableViewController {
 // MARK: - Scroll Offset Update
 extension EventTableViewController {
     private func changeScrollOffset(to date: Date) {
-
-        let rowCount = self.tableView(eventTableView, numberOfRowsInSection: 0)
-        for index in 0 ..< rowCount {
-            if  let cell = self.tableView(eventTableView, cellForRowAt: IndexPath(row: index, section: 0)) as? HeaderTaskCell {
-                if cell.date >= date {
-                    let indexPath = IndexPath(row: index, section: 0)
-                    eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
-                    NSLog("Scrolling to Offset for selected Date: \(date.toString(with: "dd/MM"))")
-                    return
-                }
-            }
-        }
+        guard let indexPath = viewModel.findClosestIndexPath(for: date) else { return }
+        eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
+    
 }
 
