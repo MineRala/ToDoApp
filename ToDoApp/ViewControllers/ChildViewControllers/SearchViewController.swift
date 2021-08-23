@@ -8,14 +8,18 @@
 import Foundation
 import UIKit
 import Combine
+import JGProgressHUD
 
 class SearchViewController : UIViewController {
     private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
-
+    private(set) var isViewLoadding = CurrentValueSubject<Bool, Never>(false)
+    
     private let viewModel: HomeViewModel
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
     private var searchBtnWidthConstraint: NSLayoutConstraint?
+        
+    private let hud = JGProgressHUD()
     
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
@@ -72,14 +76,16 @@ class SearchViewController : UIViewController {
 
 //MARK: - Lifecycle
 extension SearchViewController {
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        addListeners()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
+        hud.textLabel.text = "Loading"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addListeners()
     }
     
     override func viewDidLayoutSubviews() {
@@ -162,12 +168,16 @@ extension SearchViewController : UITextFieldDelegate {
         if searchTextField.text == "" {
             self.viewModel.removeFilterKeyword()
         }
+        isViewLoadding.send(true)
         self.viewModel.shouldUpdateAllDateWithFilter.send(searchTextField.text)
+        isViewLoadding.send(false)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         NSLog("Did Begin")
+        isViewLoadding.send(true)
         self.isSearchTextFieldInEditingMode.send(false)
+        isViewLoadding.send(false)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

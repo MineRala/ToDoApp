@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import JGProgressHUD
 
 enum HomeViewControllerType {
     case defaultType
@@ -32,6 +33,8 @@ class HomeViewController : BaseVC {
     private var homeViewControllerType: HomeViewControllerType = .defaultType
     
     private let calendarViewHeightRatio: CGFloat = 35/100
+    
+    private let hud = JGProgressHUD()
     
     private let itemsContainerView : UIView = {
         let icv = UIView(frame: .zero)
@@ -58,6 +61,12 @@ extension HomeViewController {
         viewModel.initializeViewModel()
         
         self.eventVC.fetchDelegate = self
+        let homeViewControllerType = (UIApplication.shared.delegate as! AppDelegate).homeViewControllerType
+        if homeViewControllerType != nil {
+            self.updateHomeViewControllerType(homeViewControllerType!)
+        }
+        
+        hud.textLabel.text = "Loading"
     }
     
     override func viewDidLayoutSubviews() {
@@ -125,8 +134,10 @@ extension HomeViewController {
 //MARK: - Fetch Data Protocol Delegate
 extension HomeViewController: FetchDelegate {
     func fetchData() {
+        searchVC.isViewLoadding.send(true)
         viewModel.fetchEventsData()
         eventVC.reloadData()
+        searchVC.isViewLoadding.send(false)
     }
 }
 
@@ -175,10 +186,22 @@ extension HomeViewController {
             .sink { _ in
             }.store(in: &cancellables)
         
-        calendarVC.selectedDate.receive(on: DispatchQueue.main)
+        calendarVC.selectedDate
+            .receive(on: DispatchQueue.main)
             .sink { date in
                 self.viewModel.updateSelectedDate(date)
             }.store(in: &cancellables)
+        
+        searchVC.isViewLoadding
+            .receive(on: DispatchQueue.main)
+            .sink { isSpinning in
+                if isSpinning {
+                    self.hud.show(in: self.view)
+                } else {
+                    self.hud.dismiss()
+                }
+            }.store(in: &cancellables)
+
     }
 }
 

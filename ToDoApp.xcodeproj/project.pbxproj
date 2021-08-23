@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A105870226CBA79A009AD1E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A105870126CBA79A009AD1E7 /* NotificationManager.swift */; };
 		A114683426B844E0002263B3 /* NewAndEditVCState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114683326B844E0002263B3 /* NewAndEditVCState.swift */; };
+		A1BCD70A26D3CCA000F8C035 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = A1BCD70926D3CCA000F8C035 /* JGProgressHUD */; };
+		A1BCD70C26D3CCD400F8C035 /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BCD70B26D3CCD400F8C035 /* Spinner.swift */; };
 		E8027F1926AC66F80071E506 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1826AC66F80071E506 /* AppDelegate.swift */; };
 		E8027F1B26AC66F80071E506 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8027F1A26AC66F80071E506 /* SceneDelegate.swift */; };
 		E8027F2326AC66F80071E506 /* ToDoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8027F2126AC66F80071E506 /* ToDoApp.xcdatamodeld */; };
@@ -92,6 +94,7 @@
 /* Begin PBXFileReference section */
 		A105870126CBA79A009AD1E7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		A114683326B844E0002263B3 /* NewAndEditVCState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAndEditVCState.swift; sourceTree = "<group>"; };
+		A1BCD70B26D3CCD400F8C035 /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		E8027F1526AC66F80071E506 /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8027F1826AC66F80071E506 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E8027F1A26AC66F80071E506 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -166,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1BCD70A26D3CCA000F8C035 /* JGProgressHUD in Frameworks */,
 				FD4CB0EC26BDE3A700276A39 /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +236,7 @@
 				E8027F2626AC67010071E506 /* LaunchScreen.storyboard */,
 				E8027F2926AC67010071E506 /* Info.plist */,
 				E8027F2126AC66F80071E506 /* ToDoApp.xcdatamodeld */,
+				A1BCD70B26D3CCD400F8C035 /* Spinner.swift */,
 			);
 			path = ToDoApp;
 			sourceTree = "<group>";
@@ -464,6 +469,7 @@
 			name = ToDoApp;
 			packageProductDependencies = (
 				FD4CB0EB26BDE3A700276A39 /* FSCalendar */,
+				A1BCD70926D3CCA000F8C035 /* JGProgressHUD */,
 			);
 			productName = ToDoApp;
 			productReference = E8027F1526AC66F80071E506 /* ToDoApp.app */;
@@ -539,6 +545,7 @@
 			mainGroup = E8027F0C26AC66F80071E506;
 			packageReferences = (
 				FD4CB0EA26BDE3A700276A39 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				A1BCD70826D3CCA000F8C035 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 			);
 			productRefGroup = E8027F1626AC66F80071E506 /* Products */;
 			projectDirPath = "";
@@ -612,6 +619,7 @@
 				FD74CCDC26BE01290002A1EC /* Zones.swift in Sources */,
 				E8074C4526B2F48C00030963 /* SelectDateViewController.swift in Sources */,
 				FDD947FF26B06B8400E4FA1C /* UIDevice+Extensions.swift in Sources */,
+				A1BCD70C26D3CCD400F8C035 /* Spinner.swift in Sources */,
 				E8D4AECC26B2AC90003D60BD /* TaskDetailsViewController.swift in Sources */,
 				FDC3050B26BD6BD0002833A1 /* ToDoItem+CoreDataClass.swift in Sources */,
 				E8027F5726ACB24F0071E506 /* HomeViewController.swift in Sources */,
@@ -987,6 +995,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A1BCD70826D3CCA000F8C035 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
 		FD4CB0EA26BDE3A700276A39 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
@@ -998,6 +1014,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A1BCD70926D3CCA000F8C035 /* JGProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1BCD70826D3CCA000F8C035 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
 		FD4CB0EB26BDE3A700276A39 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FD4CB0EA26BDE3A700276A39 /* XCRemoteSwiftPackageReference "FSCalendar" */;

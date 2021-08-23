@@ -188,7 +188,7 @@ extension TaskDetailsViewController{
       
         textViewDescription.layoutManager.delegate = self
         
-        textViewDescription.textContainerInset = UIEdgeInsets.fill(with: -4)
+        textViewDescription.textContainerInset = UIEdgeInsets.fill(with: 0)
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         

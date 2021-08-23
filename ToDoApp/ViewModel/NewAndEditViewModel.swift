@@ -51,7 +51,7 @@ class NewAndEditViewModel{
 }
 
 //MARK: - Create New Item
-extension NewAndEditViewModel{
+extension NewAndEditViewModel {
     func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
         if taskName != nil && taskDescription != nil && taskCategory != nil  && selectedDate != nil {
             toDoItem.taskName = taskName
@@ -59,7 +59,7 @@ extension NewAndEditViewModel{
             toDoItem.taskCategory = taskCategory
             toDoItem.taskDate = selectedDate
            
-            
+            // if notification date is invalid, then set it to nil
             if notificationTime == nil {
                 if toDoItem.notificationID != "" {
                     self.removeNotification()
@@ -67,9 +67,8 @@ extension NewAndEditViewModel{
                 
             } else {
 
-                toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
                 
-                print("Notification time: " + notificationTime!.description)
+                toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
 
                 if toDoItem.notificationID == "" {
                     self.createNotification()
@@ -88,6 +87,16 @@ extension NewAndEditViewModel{
                 coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables)
             }
         }
+    }
+    func isNotificationDateValid() -> Bool {
+        if notificationTime == nil {
+            return true
+        }
+        if selectedDate == nil {
+            return true
+        }
+        return self.selectedDate!.addingTimeInterval(-Double(notificationTime!)) > Date()
+
     }
 }
 
@@ -116,6 +125,10 @@ extension NewAndEditViewModel{
         default:
             self.notificationTime = nil
         }
+    }
+    
+    func removeNotificationTime() {
+        self.notificationTime = nil
     }
 }
 

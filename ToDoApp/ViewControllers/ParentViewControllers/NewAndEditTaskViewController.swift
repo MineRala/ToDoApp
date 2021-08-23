@@ -108,7 +108,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
             descriptionTextField.title(NSLocalizedString("Description", comment: ""))
             categoryFLTextfield.title(NSLocalizedString("Category", comment: ""))
             pickDateFLTextField.title(NSLocalizedString("Pick Date & Time", comment: ""))
-            notification.title(NSLocalizedString("Pick Date & Time", comment: ""))
+            notification.title(NSLocalizedString("Notification", comment: ""))
         }
         else{
             taskNameTextField.title(model.editTaskVDM!.taskNameTitle)
@@ -117,6 +117,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
             pickDateFLTextField.title(model.editTaskVDM!.taskDateTitle)
             notification.title(model.editTaskVDM!.notificationDateTitle)
         }
+        self.closeAutoCorrection()
     }
     
     required init?(coder: NSCoder) {
@@ -194,6 +195,12 @@ extension NewAndEditTaskViewController {
         let notificationTitleAndRow = self.model.getNotificationTitleAndRow(notificationDate: model.toDoItem.notificationDate, taskDate: model.toDoItem.taskDate!)
         self.notificationPickerView.selectRow(notificationTitleAndRow.1, inComponent: 0, animated: true)
         self.model.setNotificationTime(notificationTime: notificationTitleAndRow.0)
+    }
+    
+    private func closeAutoCorrection() {
+        taskNameTextField.autoCorrectionType(.no)
+        descriptionTextField.autoCorrectionType(.no)
+        categoryFLTextfield.autoCorrectionType(.no)
     }
 }
 
@@ -315,10 +322,26 @@ extension NewAndEditTaskViewController {
         let taskName = taskNameTextField.asFloatingTextfield().text
         let description =  descriptionTextField.asFloatingTextfield().text
         let category =  categoryFLTextfield.asFloatingTextfield().text
-        model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
-        self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
-        self.navigationController?.popViewController(animated: true)
-        self.fetchDelegate?.fetchData()
+        if !model.isNotificationDateValid() {
+            Alerts.showAlertInvalidNotificationDate(controller: self, title: "Invalid Notification Date", message: "If you press Yes, notification will not be set.", completion: { isAnswerYes in
+                if isAnswerYes {
+                    self.model.removeNotificationTime()
+                    self.model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+                    self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
+                    self.navigationController?.popViewController(animated: true)
+                    self.fetchDelegate?.fetchData()
+                    return
+                } else {
+                    return
+                }
+            })
+            
+        } else {
+            model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+            self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
+            self.navigationController?.popViewController(animated: true)
+            self.fetchDelegate?.fetchData()
+        }
         
     }
     
@@ -334,6 +357,8 @@ extension NewAndEditTaskViewController {
         let vc = SelectDateViewController(date: date, selectDateDelegate: self)
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    
 }
 
 //MARK: - Set Select Date Delegate

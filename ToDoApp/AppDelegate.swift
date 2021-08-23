@@ -11,6 +11,8 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var homeViewControllerType: HomeViewControllerType?
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -89,8 +91,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         let notificationID = response.notification.request.identifier
-        
+
         guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })  else {
+            self.homeViewControllerType = .localNotification(value: notificationID)
             completionHandler()
             return
         }
@@ -98,13 +101,14 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let navController = window.rootViewController as! UINavigationController
         
         guard let homeViewController = navController.viewControllers.first as? HomeViewController else {
+            self.homeViewControllerType = .localNotification(value: notificationID)
             completionHandler()
             return
         }
         
         guard let currentViewController = navController.viewControllers.last as? TaskDetailsViewController else {
-            // If the application is not in TaskDetailViewController
-            homeViewController.updateHomeViewControllerType(.localNotification(value: notificationID))
+            // If the application is not in TaskDetailViewController (probably in HomeViewController)
+            self.homeViewControllerType = .localNotification(value: notificationID)
             completionHandler()
             return
         }
