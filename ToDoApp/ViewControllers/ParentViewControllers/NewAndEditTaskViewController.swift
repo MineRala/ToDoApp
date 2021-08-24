@@ -36,6 +36,7 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     var model: NewAndEditViewModel!
     var fetchDelegate: FetchDelegate?
     var updateTaskDetailVDMDelegate: UpdateTaskDetailVDMToTaskDetailViewController?
+    private var cancellables = Set<AnyCancellable>()
         
     private let taskNameTextField = FloatingTextfield()
         .textInsets(dx: 2, dy: 0)
@@ -123,6 +124,10 @@ class NewAndEditTaskViewController: BaseVC, UITextFieldDelegate, ScrollViewDataS
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+    }
 }
 
 //MARK: - Lifecycle
@@ -137,6 +142,7 @@ extension NewAndEditTaskViewController {
         setUpUI()
         setUpPickerView()
         addObservers()
+        addListeners()
     }
 }
 
@@ -204,7 +210,7 @@ extension NewAndEditTaskViewController {
     }
 }
 
-//MARK: - Observers
+//MARK: - Observers & Listeners
 extension NewAndEditTaskViewController {
     private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(NewAndEditTaskViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -227,6 +233,29 @@ extension NewAndEditTaskViewController {
       let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         scrollViewAddTask.contentInset = contentInsets
         scrollViewAddTask.scrollIndicatorInsets = contentInsets
+    }
+    
+    private func addListeners() {
+        
+        self.model.shouldDisplayAlertForInvalidNotification
+            .receive(on: DispatchQueue.main)
+            .sink { dict in
+                guard let title = dict["title"] else { return }
+                guard let message = dict["message"] else { return }
+                guard let taskName = dict["taskName"] else { return }
+                guard let description = dict["description"] else { return }
+                guard let category = dict["category"] else { return }
+                Alerts.showAlertInvalidNotificationDate(controller: self, title: title, message: message, completion: { isAnswerYes in
+                    if isAnswerYes {
+                        self.model.removeNotificationTime()
+                        self.model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+                        self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
+                        self.navigationController?.popViewController(animated: true)
+                        self.fetchDelegate?.fetchData()
+                        return
+                    }
+                })
+            }.store(in: &cancellables)
     }
 }
    
@@ -301,8 +330,7 @@ extension NewAndEditTaskViewController: AddActionsInPickerViewNewAndEditViewCont
     func didTapDone() {
         let row = self.notificationPickerView.selectedRow(inComponent: 0)
         self.notificationPickerView.selectRow(row, inComponent: 0, animated: false)
-        let titleInSelectedRow = self.model.arrNotificationTime[row]
-        updateNotificationTime(withTitle: titleInSelectedRow)
+        updateNotificationTime(withTitle: self.model.arrNotificationTime[row])
         notification.resignFirstResponder()
     }
     

@@ -125,6 +125,9 @@ extension HomeViewModel {
     }
     
     func initializeArrAllElemetsEventTableView(taskListArr: [TaskListVDM])  {
+        
+        self.dctTaskListData.removeAll()
+        
         let dct: [Date: [TaskListVDM]] = Dictionary(grouping: taskListArr) {
             let day = Int($0.taskDate.day)
             let month = Int($0.taskDate.month)

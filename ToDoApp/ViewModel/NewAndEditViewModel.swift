@@ -11,11 +11,16 @@ import Combine
 class NewAndEditViewModel{
     
     private let coreDataLayer = CoreDataLayer()
+    
     let toDoItem: ToDoItem!
     private(set) var editTaskVDM: TaskEditVDM?
+    
     private var pageMode: NewAndEditVCState = .newTask
+    
     var selectedDate: Date?
     private var notificationTime: Int?
+    
+    private(set) var shouldDisplayAlertForInvalidNotification = CurrentValueSubject<[String:String], Never>([:])
     private var cancellables = Set<AnyCancellable>()
     
     let arrNotificationTime = [NSLocalizedString("Do Not Send Notification", comment: ""),
@@ -52,7 +57,19 @@ class NewAndEditViewModel{
 
 //MARK: - Create New Item
 extension NewAndEditViewModel {
-    func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?){
+    func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?) {
+        
+        if !isNotificationDateValid() {
+            var dict: [String: String] = [:]
+            dict["title"] = "Invalid Notification Date"
+            dict["message"] = "If you press Yes, notification will not be set."
+            dict["taskName"] = taskName
+            dict["description"] = taskDescription
+            dict["category"] = taskCategory
+            shouldDisplayAlertForInvalidNotification.send(dict)
+            return
+        }
+        
         if taskName != nil && taskDescription != nil && taskCategory != nil  && selectedDate != nil {
             toDoItem.taskName = taskName
             toDoItem.taskDescription = taskDescription
@@ -66,28 +83,20 @@ extension NewAndEditViewModel {
                 }
                 
             } else {
-
-                
                 toDoItem.notificationDate = selectedDate?.addingTimeInterval(-Double(notificationTime!))
-
-                if toDoItem.notificationID == "" {
-                    self.createNotification()
-                } else {
-                    updateNotification()
-                }
-                
+                toDoItem.notificationID == "" ? self.createNotification() : updateNotification()
             }
             switch pageMode {
             case .newTask:
                 toDoItem.isTaskCompleted = false
                 toDoItem.taskId = UUID().uuidString
-                coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables)
-                
+                coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables) // Why .sink and store the publisher here?
             case .editTask:
-                coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables)
+                coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables) // Why .sink and store the publisher here?
             }
         }
     }
+    
     func isNotificationDateValid() -> Bool {
         if notificationTime == nil {
             return true
@@ -96,7 +105,6 @@ extension NewAndEditViewModel {
             return true
         }
         return self.selectedDate!.addingTimeInterval(-Double(notificationTime!)) > Date()
-
     }
 }
 
