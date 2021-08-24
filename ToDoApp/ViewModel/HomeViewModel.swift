@@ -246,7 +246,6 @@ extension HomeViewModel {
 extension HomeViewModel {
     func updateSearchKeyword(with text: String?) {
         self.filterKeyword = text
-        
     }
     
     func removedElement(toDoItem: ToDoItem){
@@ -271,7 +270,16 @@ extension HomeViewModel {
     }
 
     func searchToDoItem(withNotificationID notificationID: String) -> ToDoItem? {
+        for value in self.dctTaskListData.values {
+            for taskListVDM in value {
+                if taskListVDM.toDoItem.notificationID != "" && taskListVDM.toDoItem.notificationID == notificationID {
+                    return taskListVDM.toDoItem
+                }
+            }
+        }
+        
         return nil
+        
 //        for taskEditVDM in arrTaskListData {
 //            if taskEditVDM.toDoItem.notificationID != "" && taskEditVDM.toDoItem.notificationID == notificationID {
 //                return taskEditVDM.toDoItem
