@@ -82,7 +82,7 @@ extension TaskVDMConverter {
 //MARK: - Task View Data Model Converter
 extension TaskVDMConverter {
     static func taskViewDataModel(toDoItem: ToDoItem) -> TaskListVDM? {
-        guard var taskName = toDoItem.taskName, let category = toDoItem.taskCategory, let taskDate = toDoItem.taskDate else { return nil }
+        guard let taskName = toDoItem.taskName, let category = toDoItem.taskCategory, let taskDate = toDoItem.taskDate else { return nil }
         
         let calendar = Calendar.current
         var hour = calendar.component(.hour, from: taskDate)

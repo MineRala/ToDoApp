@@ -79,6 +79,7 @@ struct C {
         static var toolBarBackgroundColor: UIColor {#colorLiteral(red: 0.3764705882, green: 0.2078431373, blue: 0.8156862745, alpha: 1)}
         static var deleteActionColor: UIColor {UIColor.red}
         static var okActionColor: UIColor {UIColor.blue}
+        static var noActionColor: UIColor {UIColor.red}
         static var toastLabelTextColor: UIColor {#colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)}
         static var toastViewBackgroundColor: UIColor {#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)}
         static var shadowColor: UIColor {UIColor.black}

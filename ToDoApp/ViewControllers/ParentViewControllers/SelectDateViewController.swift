@@ -63,7 +63,7 @@ class SelectDateViewController : BaseVC {
     }
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }
     }
 }
 
@@ -74,8 +74,6 @@ extension SelectDateViewController {
         taskTimePicker.datePickerMode = .time
         if #available(iOS 13.4, *) {
             taskTimePicker.preferredDatePickerStyle = .wheels
-        } else {
-            // Fallback on earlier versions
         }
         setUpUI()
         addListeners()
@@ -133,20 +131,24 @@ extension SelectDateViewController{
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
     }
-    
-    func addListeners() {
-        self.calendarVC.selectedDate
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.updateDate()
-            }.store(in: &cancellables)
-    }
 }
 
 //MARK: - Set Date
 extension SelectDateViewController {
     func setDate(date: Date){
         self.date = date
+    }
+}
+
+
+//MARK: - AddListeners
+extension SelectDateViewController {
+    func addListeners() {
+        self.calendarVC.selectedDate
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.updateDate()
+            }.store(in: &cancellables)
     }
 }
 
@@ -187,21 +189,7 @@ extension SelectDateViewController {
 //MARK: - Update Date
 extension SelectDateViewController {
     func updateDate() {
-        let date = self.calendarVC.selectedDate.value
-        let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
-
-        var dateComponents = DateComponents()
-        dateComponents.year = components.year
-        dateComponents.month = components.month
-        dateComponents.day = components.day
-
-        let datePicker = self.taskTimePicker.date
-        let pickerDateComponent = Calendar(identifier: .gregorian).dateComponents([.hour, .minute], from: datePicker)
-        dateComponents.hour = pickerDateComponent.hour
-        dateComponents.minute = pickerDateComponent.minute
-
-        let userCalendar = Calendar.current
-        self.date = userCalendar.date(from: dateComponents)!
+        self.date = self.viewModel.combineJoinedDate(selectedDate: self.calendarVC.selectedDate.value, taskTimePickerDate: self.taskTimePicker.date)
         if self.date < Date() {
             if self.shouldDisplayToast {
                 ToastView.show(with: NSLocalizedString("Warning: You cannot select the past date!", comment: ""))
@@ -213,5 +201,3 @@ extension SelectDateViewController {
         }
     }
 }
-
-

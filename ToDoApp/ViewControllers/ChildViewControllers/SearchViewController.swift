@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Combine
-//import JGProgressHUD
 
 class SearchViewController : UIViewController {
    
@@ -17,8 +16,6 @@ class SearchViewController : UIViewController {
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
     private var searchBtnWidthConstraint: NSLayoutConstraint?
         
-   // private let hud = JGProgressHUD()
-    
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
         sw.translatesAutoresizingMaskIntoConstraints = false
@@ -69,7 +66,7 @@ class SearchViewController : UIViewController {
     }
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }
     }
 }
 
@@ -81,12 +78,7 @@ extension SearchViewController {
         setUpUI()
         addListeners()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if cancelBtnWidthConstraint == nil {
@@ -163,7 +155,6 @@ extension SearchViewController : UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // set viewModel.searchKeyword
         self.view.endEditing(true)
         return true
     }
@@ -179,11 +170,9 @@ extension SearchViewController : UITextFieldDelegate {
         viewModel.updateSearchEditingMode(.idle)
         self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0)
         self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30)
-       // self.viewModel.updateSearchKeyword(with: nil)
     }
     
     @objc private func cancelBtnTapped() {
-        NSLog("Cancel Button Tapped")
         self.searchTextField.text = ""
         self.searchTextField.endEditing(true)
     }

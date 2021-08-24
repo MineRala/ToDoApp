@@ -17,6 +17,7 @@
 "Delete" = "Delete";
 "Cancel" = "Cancel";
 "OK" = "OK";
+"Continue" = "Continue";
 "Are you sure you want to delete the task?" =  "Are you sure you want to delete the task?";
 "Loading" = "Loading";
 
@@ -50,3 +51,6 @@
 "Invalid date" = "Invalid date";
 "You cannot select the past date!" = "You cannot select the past date!";
 "Warning: You cannot select the past date!" = "Warning: You cannot select the past date!";
+
+"Invalid Notification Date" = "Invalid Notification Date";
+"If you press Continue, notification will not be set." = "If you press Continue, notification will not be set." ;

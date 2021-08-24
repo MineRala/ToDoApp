@@ -191,8 +191,6 @@ extension TaskDetailsViewController{
         textViewDescription.textContainerInset = UIEdgeInsets.fill(with: 0)
         
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        
-       
     }
     
     private func setScollability(textView: UITextView) {

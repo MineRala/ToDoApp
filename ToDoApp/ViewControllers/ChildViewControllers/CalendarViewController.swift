@@ -18,7 +18,7 @@ class CalendarViewController : UIViewController{
     private var cancellables = Set<AnyCancellable>()
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }  
     }
 }
 

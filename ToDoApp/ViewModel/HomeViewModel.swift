@@ -26,7 +26,6 @@ class HomeViewModel {
     
     private var dctAllTaskListData: [Date: [TaskListVDM]] = [:]
     private(set) var dctTaskListData: [Date: [TaskListVDM]] = [:]
-   // private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
@@ -40,7 +39,7 @@ class HomeViewModel {
     private var cancellables = Set<AnyCancellable>()
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() } 
     }
 }
 
@@ -94,9 +93,6 @@ extension HomeViewModel {
             self.dctTaskListData = taskListVDMDct
             self.shouldUpdateAllData.send()
             self.currentLoadingMode.send(LoadingMode.idle)
-            self.shouldChangeScrollOffsetOfEventsTable.send()
-            
-           // self.addSampleData(count: 10000000)
         }.store(in: &cancellables)
     }
 }
@@ -165,6 +161,7 @@ extension HomeViewModel {
     }
 }
 
+
 //MARK: - Show Error
 extension HomeViewModel {
     private func showErrorIfNeeded<T: CoreDataManagableObject>(from response: CoreDataResponse<T>) -> Bool {
@@ -213,7 +210,6 @@ extension HomeViewModel {
     }
     
     func updateSearchKeyword(with text: String?) {
-      //  self.currentLoadingMode.send(.loading)
         self.filterKeyword = text
         let filterPublisher = self.filterDictionary(with: self.filterKeyword, allElementsDct: dctAllTaskListData)
         filterPublisher.sink { dctTaskListDatas in
@@ -224,6 +220,9 @@ extension HomeViewModel {
     }
     
     func removedElement(toDoItem: ToDoItem){
+        if toDoItem.notificationID != "" {
+            NotificationManager.removeLocalNotification(notificationID: toDoItem.notificationID!)
+        }
         coreDataLayer.remove(toDoItem).sink { _ in }.store(in: &cancellables)
     }
 
@@ -252,41 +251,56 @@ extension HomeViewModel {
                 }
             }
         }
-        
         return nil
     }
-}
-
-
-extension HomeViewModel {
-    func randomString(of length: Int) -> String {
-         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-         var s = ""
-         for _ in 0 ..< length {
-             s.append(letters.randomElement()!)
-         }
-         return s
-    }
     
-    private func addSampleData(count: Int) {
-        for index in 0 ..< count {
-            let rndTime = Int.random(in: (-365*60*60*24) ..< (365*60*60*24))
-            let toDoItem = ToDoItem(context: ManagedObjectContext)
-            //print("\(toDoItem.id)")
+    func combineJoinedDate(selectedDate date: Date, taskTimePickerDate datePicker: Date) -> Date{
+        let components = Calendar.current.dateComponents([.day, .year, .month], from: date)
+
+        var dateComponents = DateComponents()
+        dateComponents.year = components.year
+        dateComponents.month = components.month
+        dateComponents.day = components.day
         
-            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 100))
-            toDoItem.taskCategory = "Official"
-            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
-            toDoItem.taskId = UUID().uuidString
-            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 1500))
-            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
-            toDoItem.isTaskCompleted = false
-            coreDataLayer.create(toDoItem).sink { _ in
-                NSLog("Created: \(toDoItem.taskId)")
-            }.store(in: &cancellables)
-        }
+        let pickerDateComponent = Calendar(identifier: .gregorian).dateComponents([.hour, .minute], from: datePicker)
+        dateComponents.hour = pickerDateComponent.hour
+        dateComponents.minute = pickerDateComponent.minute
+
+        let userCalendar = Calendar.current
+        return  userCalendar.date(from: dateComponents)!
     }
 }
+
+////MARK: Random
+//extension HomeViewModel {
+//    func randomString(of length: Int) -> String {
+//         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+//         var s = ""
+//         for _ in 0 ..< length {
+//             s.append(letters.randomElement()!)
+//         }
+//         return s
+//    }
+//
+//    private func addSampleData(count: Int) {
+//        for index in 0 ..< count {
+//            let rndTime = Int.random(in: (-365*60*60*24) ..< (365*60*60*24))
+//            let toDoItem = ToDoItem(context: ManagedObjectContext)
+//            //print("\(toDoItem.id)")
+//
+//            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 100))
+//            toDoItem.taskCategory = "Official"
+//            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+//            toDoItem.taskId = UUID().uuidString
+//            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 1500))
+//            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+//            toDoItem.isTaskCompleted = false
+//            coreDataLayer.create(toDoItem).sink { _ in
+//                NSLog("Created: \(toDoItem.taskId)")
+//            }.store(in: &cancellables)
+//        }
+//    }
+//}
 
 //
  // TODO

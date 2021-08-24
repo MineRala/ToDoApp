@@ -16,6 +16,7 @@
 "Delete" = "Sil";
 "Cancel" = "İptal";
 "OK" = "Tamam";
+"Continue" = "Devam Et";
 "Are you sure you want to delete the task?" =  "Görevi silmek istediğinizden emin misiniz?";
 "Loading" = "Yükleniyor";
 
@@ -47,3 +48,7 @@
 "Invalid date" = "Geçersiz tarih";
 "You cannot select the past date!" = "Geçmiş tarih seçemezsiniz!";
 "Warning: You cannot select the past date!" = "Uyarı: Geçmiş tarih seçemezsiniz! ";
+
+
+"Invalid Notification Date" = "Geçersiz Bildirim Tarihi";
+"If you press Continue, notification will not be set." = "Eğer Devam Et butonuna basarsanız, bildirim eklenmeyecek. ";

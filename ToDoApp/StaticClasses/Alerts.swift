@@ -38,14 +38,13 @@ class Alerts : NSObject {
     
     static func showAlertInvalidNotificationDate(controller: UIViewController, title: String, message: String, completion: @escaping (Bool) -> Void) {
         let dialogMessage = UIAlertController(title: NSLocalizedString(title, comment: ""), message: message, preferredStyle: .alert)
-        let yesAction = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .default, handler: { (action) in
+        let yesAction = UIAlertAction(title: NSLocalizedString("Continue", comment: ""), style: .default, handler: { (action) in
             completion(true)
         })
-        let noAction = UIAlertAction(title: NSLocalizedString("No", comment: ""), style: .default, handler: { (action) in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default, handler: { (action) in
             completion(false)
         })
-        yesAction.setValue(C.BackgroundColor.okActionColor, forKey: "titleTextColor")
-        dialogMessage.addAction(noAction)
+        dialogMessage.addAction(cancelAction)
         dialogMessage.addAction(yesAction)
         controller.present(dialogMessage, animated: true, completion: {})
      }

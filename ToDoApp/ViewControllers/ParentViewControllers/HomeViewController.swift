@@ -18,7 +18,7 @@ enum HomeViewControllerType {
 class HomeViewController : BaseVC {
     
     private(set) var viewModel: HomeViewModel = HomeViewModel()
-    private var cancellables = Set<AnyCancellable>()  // cancellable değişkeni oluşturduk,elemanları hafızadan atmak için.
+    private var cancellables = Set<AnyCancellable>()
    
     private var calendarHeightConstraint: NSLayoutConstraint?
     
@@ -44,7 +44,7 @@ class HomeViewController : BaseVC {
     }()
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }  
     }
 }
 
@@ -176,7 +176,6 @@ extension HomeViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                //self.viewModel.fetchEventsData()
                 self.eventVC.reloadData()
             }.store(in: &cancellables)
         

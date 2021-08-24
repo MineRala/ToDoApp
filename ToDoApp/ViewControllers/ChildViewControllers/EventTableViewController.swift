@@ -13,7 +13,7 @@ class EventTableViewController : UIViewController {
   
     private var viewModel : HomeViewModel!
     var fetchDelegate: FetchDelegate?
-
+    private var sortedKeys: [Date] = []
     private var cancellables = Set<AnyCancellable>()
     
     private let eventTableView : UITableView = {
@@ -23,8 +23,6 @@ class EventTableViewController : UIViewController {
         etv.isUserInteractionEnabled = true
         return etv
     }()
-    
-    private var sortedKeys: [Date] = []
     
     init(homeViewModel: HomeViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -36,7 +34,7 @@ class EventTableViewController : UIViewController {
     }
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }
     }
 }
 
@@ -46,6 +44,11 @@ extension EventTableViewController {
         super.viewDidLoad()
         setUpUI()
         addListeners()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.changeScrollOffset(to: Date())
     }
     
     func reloadData() {
@@ -106,7 +109,6 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         let currentKey = sortedKeys[section]
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "TaskHeaderView") as! TaskHeaderView
         headerView.updateHeaderCell(title: currentKey.toString(with: "dd/MM/yyyy"), date: currentKey)
-      //  headerView.isUserInteractionEnabled = false
         return headerView
     }
     
@@ -121,13 +123,14 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
                 completionHandler(false)
                 return
             }
-            let currentKey = Array(self.viewModel.dctTaskListData.keys)[indexPath.section]
+            let currentKey = Array(self.viewModel.dctTaskListData.keys).sorted()[indexPath.section]
             let arrTaskList = self.viewModel.dctTaskListData[currentKey] ?? []
             let taskVDM = arrTaskList[indexPath.row]
             self.handleTrash(toDoItem: taskVDM.toDoItem)
             completionHandler(true)
         }
         trash.backgroundColor =  C.BackgroundColor.trashBackgroundColor
+        
         trash.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
             C.ImageIcon.trashIcon.draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
         }
@@ -137,7 +140,7 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let currentKey = Array(self.viewModel.dctTaskListData.keys)[indexPath.section]
+        let currentKey = Array(self.viewModel.dctTaskListData.keys).sorted()[indexPath.section]
         let arrTaskList = self.viewModel.dctTaskListData[currentKey] ?? []
         let taskVDM = arrTaskList[indexPath.row]
         
@@ -251,6 +254,4 @@ extension EventTableViewController {
         let indexPath = IndexPath(row: 0, section: Int(index))
         eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
-    
 }
-

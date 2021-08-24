@@ -21,6 +21,7 @@ class NewAndEditViewModel{
     private var notificationTime: Int?
     
     private(set) var shouldDisplayAlertForInvalidNotification = CurrentValueSubject<[String:String], Never>([:])
+    
     private var cancellables = Set<AnyCancellable>()
     
     let arrNotificationTime = [NSLocalizedString("Do Not Send Notification", comment: ""),
@@ -51,7 +52,7 @@ class NewAndEditViewModel{
     }
     
     deinit {
-        self.cancellables.forEach { $0.cancel() }  // cancellabes ile hafızadan çıkardık
+        self.cancellables.forEach { $0.cancel() }
     }
 }
 
@@ -61,8 +62,8 @@ extension NewAndEditViewModel {
         
         if !isNotificationDateValid() {
             var dict: [String: String] = [:]
-            dict["title"] = "Invalid Notification Date"
-            dict["message"] = "If you press Yes, notification will not be set."
+            dict["title"] = NSLocalizedString( "Invalid Notification Date", comment: "")
+            dict["message"] = NSLocalizedString("If you press Continue, notification will not be set.", comment: "")
             dict["taskName"] = taskName
             dict["description"] = taskDescription
             dict["category"] = taskCategory
@@ -76,7 +77,7 @@ extension NewAndEditViewModel {
             toDoItem.taskCategory = taskCategory
             toDoItem.taskDate = selectedDate
            
-            // if notification date is invalid, then set it to nil
+
             if notificationTime == nil {
                 if toDoItem.notificationID != "" {
                     self.removeNotification()
@@ -90,9 +91,9 @@ extension NewAndEditViewModel {
             case .newTask:
                 toDoItem.isTaskCompleted = false
                 toDoItem.taskId = UUID().uuidString
-                coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables) // Why .sink and store the publisher here?
+                coreDataLayer.create(toDoItem).sink { _ in}.store(in: &cancellables)
             case .editTask:
-                coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables) // Why .sink and store the publisher here?
+                coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables)
             }
             return true
         }
