@@ -176,6 +176,8 @@ extension HomeViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
+                self.viewModel.fetchEventsData()
+                self.eventVC.reloadData()
             }.store(in: &cancellables)
         
      

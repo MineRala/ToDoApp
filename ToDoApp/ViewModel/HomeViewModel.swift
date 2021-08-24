@@ -26,7 +26,7 @@ class HomeViewModel {
     private var dctHeaderCells: [Date: IndexPath] = [:]
     
     
-   //private(set) var arrTaskListData: [TaskListVDM] = []
+// private(set) var arrTaskListData: [TaskListVDM] = []
     private(set) var dctTaskListData: [Date: [TaskListVDM]] = [:]
    // private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
@@ -124,11 +124,28 @@ extension HomeViewModel {
         return indexPath
     }
     
-    func initializeArrAllElemetsEventTableView(taskListArr: [TaskListVDM])  {
+    func initializeArrAllElemetsEventTableView(allTaskListVDM: [TaskListVDM]?)  {
         
         self.dctTaskListData.removeAll()
         
-        let dct: [Date: [TaskListVDM]] = Dictionary(grouping: taskListArr) {
+//        var allTaskListVDM : [TaskListVDM] = []
+//
+//        if taskListArr == nil {
+//            if self.dctTaskListData.isEmpty {
+//                return
+//            }
+//            allTaskListVDM = self.dctTaskListData.values.flatMap({ (element: [TaskListVDM]) -> [TaskListVDM] in
+//                return element
+//            })
+//        } else {
+//            allTaskListVDM = taskListArr!
+//        }
+        
+        let filteredTaskListArr = self.filterKeyword == nil || self.filterKeyword == "" ?
+            allTaskListVDM! :
+            allTaskListVDM!.filter({ $0.taskName.contains(self.filterKeyword!)})
+        
+        let dct: [Date: [TaskListVDM]] = Dictionary(grouping: filteredTaskListArr) {
             let day = Int($0.taskDate.day)
             let month = Int($0.taskDate.month)
             let year = Int($0.taskDate.year)
@@ -141,7 +158,7 @@ extension HomeViewModel {
         keysArr.forEach {
             self.dctTaskListData[$0] = dct[$0]
         }
-    
+        
 //        if self.arrAllElemetsEventTableView.count > 0 {
 //            self.arrAllElemetsEventTableView.removeAll()
 //        }
@@ -249,6 +266,8 @@ extension HomeViewModel {
 extension HomeViewModel {
     func updateSearchKeyword(with text: String?) {
         self.filterKeyword = text
+        self.shouldUpdateAllData.send()
+        // TODO: Initialize table view content.
     }
     
     func removedElement(toDoItem: ToDoItem){

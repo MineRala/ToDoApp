@@ -38,6 +38,7 @@ class SearchViewController : UIViewController {
         st.leftView = leftView
         st.leftViewMode = .always
         st.clearButtonMode = .whileEditing
+        st.autoCorrectionType(.no)
         return st
     }()
     
@@ -133,12 +134,6 @@ extension SearchViewController{
 
 //MARK: - Change Constraint
 extension SearchViewController {
-//    isSearchTextFieldEditingMode ?
-//        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0) :
-//        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
-//    isSearchTextFieldEditingMode ?
-//        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30) :
-//        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
     private func changeConstraint(viewConstraint constaint: NSLayoutConstraint?, to value: CGFloat) {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
             constaint!.constant = value
@@ -159,7 +154,7 @@ extension SearchViewController {
 extension SearchViewController : UITextFieldDelegate {
   
     @objc private func searchTextDidChange(){
-        // set viewModel.searchKeyword
+        self.viewModel.updateSearchKeyword(with: self.searchTextField.text)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -176,6 +171,7 @@ extension SearchViewController : UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0)
         self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30)
+        self.viewModel.updateSearchKeyword(with: nil)
     }
     
     @objc private func cancelBtnTapped() {

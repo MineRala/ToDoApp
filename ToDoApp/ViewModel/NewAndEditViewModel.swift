@@ -57,7 +57,7 @@ class NewAndEditViewModel{
 
 //MARK: - Create New Item
 extension NewAndEditViewModel {
-    func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?) {
+    func createNewItem(taskName: String?, taskDescription: String?, taskCategory: String?) -> Bool{
         
         if !isNotificationDateValid() {
             var dict: [String: String] = [:]
@@ -67,7 +67,7 @@ extension NewAndEditViewModel {
             dict["description"] = taskDescription
             dict["category"] = taskCategory
             shouldDisplayAlertForInvalidNotification.send(dict)
-            return
+            return false
         }
         
         if taskName != nil && taskDescription != nil && taskCategory != nil  && selectedDate != nil {
@@ -94,7 +94,9 @@ extension NewAndEditViewModel {
             case .editTask:
                 coreDataLayer.update(toDoItem).sink { _ in}.store(in: &cancellables) // Why .sink and store the publisher here?
             }
+            return true
         }
+        return false
     }
     
     func isNotificationDateValid() -> Bool {

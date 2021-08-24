@@ -248,11 +248,12 @@ extension NewAndEditTaskViewController {
                 Alerts.showAlertInvalidNotificationDate(controller: self, title: title, message: message, completion: { isAnswerYes in
                     if isAnswerYes {
                         self.model.removeNotificationTime()
-                        self.model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
-                        self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
-                        self.navigationController?.popViewController(animated: true)
-                        self.fetchDelegate?.fetchData()
-                        return
+                        let isSuccess = self.model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+                        if isSuccess{
+                            self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
+                            self.navigationController?.popViewController(animated: true)
+                            self.fetchDelegate?.fetchData()
+                        }
                     }
                 })
             }.store(in: &cancellables)
@@ -350,27 +351,12 @@ extension NewAndEditTaskViewController {
         let taskName = taskNameTextField.asFloatingTextfield().text
         let description =  descriptionTextField.asFloatingTextfield().text
         let category =  categoryFLTextfield.asFloatingTextfield().text
-        if !model.isNotificationDateValid() {
-            Alerts.showAlertInvalidNotificationDate(controller: self, title: "Invalid Notification Date", message: "If you press Yes, notification will not be set.", completion: { isAnswerYes in
-                if isAnswerYes {
-                    self.model.removeNotificationTime()
-                    self.model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
-                    self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
-                    self.navigationController?.popViewController(animated: true)
-                    self.fetchDelegate?.fetchData()
-                    return
-                } else {
-                    return
-                }
-            })
-            
-        } else {
-            model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+        let isSuccess = model.createNewItem(taskName: taskName, taskDescription: description, taskCategory: category)
+        if isSuccess {
             self.updateTaskDetailVDMDelegate?.updateTaskDetailVDM()
             self.navigationController?.popViewController(animated: true)
             self.fetchDelegate?.fetchData()
         }
-        
     }
     
     @objc func pickDateButtonTapped() {
