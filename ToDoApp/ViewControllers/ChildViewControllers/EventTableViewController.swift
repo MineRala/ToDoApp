@@ -63,10 +63,9 @@ extension EventTableViewController {
             .bottomAnchor(margin: 0)
 
         eventTableView.register(TaskCell.self, forCellReuseIdentifier: "TaskCell")
-        eventTableView.register(HeaderTaskCell.self, forCellReuseIdentifier: "HeaderTaskCell")
+        eventTableView.register(TaskHeaderView.self, forHeaderFooterViewReuseIdentifier: "TaskHeaderView")
         eventTableView.dataSource = self
         eventTableView.delegate = self
-        
         eventTableView.reloadData()
     }
 }
@@ -79,46 +78,49 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
         vc.fetchDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.dctTaskListData.keys.count
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.arrAllElemetsEventTableView.count
+        let currentKey = Array(viewModel.dctTaskListData.keys)[section]
+        let arrTaskList = viewModel.dctTaskListData[currentKey] ?? []
+        return arrTaskList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if type(of: viewModel.arrAllElemetsEventTableView[indexPath.row]) == TaskListVDMArrayElement.self {
-            let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath) as! TaskCell
-            let taskListVDMArrayElement = (viewModel.arrAllElemetsEventTableView[indexPath.row] as? TaskListVDMArrayElement)!
-            let model = taskListVDMArrayElement.taskListVDM
-            cell.updateCell(model: model, delegate: self, index: taskListVDMArrayElement.indexAt)
-            return cell
-        } else {
-            let headerCell = eventTableView.dequeueReusableCell(withIdentifier: "HeaderTaskCell", for: indexPath) as! HeaderTaskCell
-            let currentElement = viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMHeaderArrayElement
-            headerCell.updateHeaderCell(title: currentElement.getCellDateTitle() , date: currentElement.taskDate, indexPath: indexPath)
-            
-           return headerCell
-        }
+        let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath) as! TaskCell
+        let currentKey = Array(viewModel.dctTaskListData.keys)[indexPath.section]
+        let arrTaskList = viewModel.dctTaskListData[currentKey] ?? []
+        let taskVDM = arrTaskList[indexPath.row]
+        cell.updateCell(model: taskVDM , delegate: self)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let currentKey = Array(viewModel.dctTaskListData.keys)[section]
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "TaskHeaderView") as! TaskHeaderView
+        headerView.updateHeaderCell(title: currentKey.toString(with: "dd/MM/yyyy"), date: currentKey)
+      //  headerView.isUserInteractionEnabled = false
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-
-    func tableView(_ tableView: UITableView,
-                       trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-       
-        if type(of:viewModel.arrAllElemetsEventTableView[indexPath.row]) == TaskListVDMHeaderArrayElement.self{
-            return nil
-        }
-        
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    
         let trash = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completionHandler) in
             guard let self = self else {
                 completionHandler(false)
                 return
             }
-            
-            let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
-            self.handleTrash(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
+            let currentKey = Array(self.viewModel.dctTaskListData.keys)[indexPath.section]
+            let arrTaskList = self.viewModel.dctTaskListData[currentKey] ?? []
+            let taskVDM = arrTaskList[indexPath.row]
+            self.handleTrash(toDoItem: taskVDM.toDoItem)
             completionHandler(true)
         }
         trash.backgroundColor =  C.BackgroundColor.trashBackgroundColor
@@ -131,24 +133,21 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if type(of:viewModel.arrAllElemetsEventTableView[indexPath.row]) == TaskListVDMHeaderArrayElement.self{
-            return nil
-        }
-        
-        let index = (self.viewModel.arrAllElemetsEventTableView[indexPath.row] as! TaskListVDMArrayElement).indexAt
+        let currentKey = Array(self.viewModel.dctTaskListData.keys)[indexPath.section]
+        let arrTaskList = self.viewModel.dctTaskListData[currentKey] ?? []
+        let taskVDM = arrTaskList[indexPath.row]
         
         let done = UIContextualAction(style: .normal,title: nil) { [weak self] (action, view, completionHandler) in
-            guard let self = self else{
+            guard let self = self else {
                 completionHandler(false)
                 return
             }
-       
-            self.handleDone(toDoItem: self.viewModel.arrTaskListData[index].toDoItem)
+            self.handleDone(toDoItem: taskVDM.toDoItem)
             completionHandler(true)
         }
         done.backgroundColor = C.BackgroundColor.doneBackgroundColor
-      
-        if self.viewModel.arrTaskListData[index].isTaskCompleted {
+
+        if taskVDM.isTaskCompleted {
             done.image = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 31)).image { _ in
                 C.ImageIcon.undoIcon.draw(in: CGRect(x: 0, y: 0, width: 24, height: 24))
             }
@@ -190,7 +189,7 @@ extension EventTableViewController {
         Alerts.showAlertDelete(controller: self,NSLocalizedString("Are you sure you want to delete the task?", comment: ""), deletion: {
             self.viewModel.removedElement(toDoItem: toDoItem)
             self.fetchDelegate?.fetchData()
-            self.viewModel.initializeArrAllElemetsEventTableView()
+            
             self.eventTableView.reloadData()
         })
     }
@@ -208,19 +207,8 @@ extension EventTableViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                self.viewModel.initializeArrAllElemetsEventTableView()
+               
                 self.eventTableView.reloadData()
-                self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
-        
-        }.store(in: &cancellables)
-        
-        viewModel.shouldUpdateAllDateWithFilter
-            .receive(on: DispatchQueue.main)
-            .sink { filterKeyword in
-                self.viewModel.initializeArrAllElementsWithFilter(with: filterKeyword)
-                self.eventTableView.reloadData()
-              //  self.changeScrollOffset(to: self.viewModel.selectedDate ?? Date())
-        
         }.store(in: &cancellables)
         
         viewModel.shouldChangeScrollOffsetOfEventsTable

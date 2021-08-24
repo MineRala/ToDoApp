@@ -18,6 +18,7 @@
 "Cancel" = "Cancel";
 "OK" = "OK";
 "Are you sure you want to delete the task?" =  "Are you sure you want to delete the task?";
+"Loading" = "Loading";
 
 "AM" = "AM";
 "PM" = "PM";

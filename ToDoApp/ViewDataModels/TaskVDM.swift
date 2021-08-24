@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskListVDM {
+struct TaskListVDM: Hashable {
     let toDoItem: ToDoItem
     let taskName: String
     let taskCategory: String

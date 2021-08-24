@@ -17,6 +17,7 @@
 "Cancel" = "İptal";
 "OK" = "Tamam";
 "Are you sure you want to delete the task?" =  "Görevi silmek istediğinizden emin misiniz?";
+"Loading" = "Yükleniyor";
 
 "AM" = "ÖÖ";
 "PM" = "ÖS";

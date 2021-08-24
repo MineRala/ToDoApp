@@ -66,7 +66,7 @@ extension HomeViewController {
             self.updateHomeViewControllerType(homeViewControllerType!)
         }
         
-        hud.textLabel.text = "Loading"
+        hud.textLabel.text = NSLocalizedString("Loading", comment: "")
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,10 +134,7 @@ extension HomeViewController {
 //MARK: - Fetch Data Protocol Delegate
 extension HomeViewController: FetchDelegate {
     func fetchData() {
-        searchVC.isViewLoadding.send(true)
         viewModel.fetchEventsData()
-        eventVC.reloadData()
-        searchVC.isViewLoadding.send(false)
     }
 }
 
@@ -163,10 +160,10 @@ extension HomeViewController {
 // MARK: - Listeners (Combine)
 extension HomeViewController {
     private func addListeners() {
-        self.searchVC.isSearchTextFieldInEditingMode
+        self.viewModel.currentSearchMode
             .receive(on: DispatchQueue.main)
-            .sink { shouldShow in
-                shouldShow ?
+            .sink { currentMode in
+                currentMode == .defaultMode ?
                     self.changeCalendarViewHeightConstraint(to: self.itemsContainerView.frame.size.height * self.calendarViewHeightRatio) :
                     self.changeCalendarViewHeightConstraint(to: 0)
         }.store(in: &cancellables)
@@ -181,26 +178,20 @@ extension HomeViewController {
             .sink { _ in
             }.store(in: &cancellables)
         
-        viewModel.shouldUpdateAllDateWithFilter
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-            }.store(in: &cancellables)
-        
+     
         calendarVC.selectedDate
             .receive(on: DispatchQueue.main)
             .sink { date in
                 self.viewModel.updateSelectedDate(date)
             }.store(in: &cancellables)
         
-        searchVC.isViewLoadding
+        viewModel.currentLoadingMode
             .receive(on: DispatchQueue.main)
-            .sink { isSpinning in
-                if isSpinning {
-                    self.hud.show(in: self.view)
-                } else {
+            .sink { mode in
+                mode == .loading ?
+                    self.hud.show(in: self.view) :
                     self.hud.dismiss()
-                }
-            }.store(in: &cancellables)
+        }.store(in: &cancellables)
 
     }
 }

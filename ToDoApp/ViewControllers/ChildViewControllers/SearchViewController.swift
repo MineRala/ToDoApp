@@ -8,18 +8,16 @@
 import Foundation
 import UIKit
 import Combine
-import JGProgressHUD
+//import JGProgressHUD
 
 class SearchViewController : UIViewController {
-    private(set) var isSearchTextFieldInEditingMode = CurrentValueSubject<Bool, Never>(true)
-    private(set) var isViewLoadding = CurrentValueSubject<Bool, Never>(false)
-    
+   
     private let viewModel: HomeViewModel
     private var cancellables = Set<AnyCancellable>()
     private var cancelBtnWidthConstraint: NSLayoutConstraint?
     private var searchBtnWidthConstraint: NSLayoutConstraint?
         
-    private let hud = JGProgressHUD()
+   // private let hud = JGProgressHUD()
     
     private let searchView : UIView = {
         let sw = UIView(frame: .zero)
@@ -80,7 +78,6 @@ extension SearchViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
-        hud.textLabel.text = "Loading"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -136,6 +133,12 @@ extension SearchViewController{
 
 //MARK: - Change Constraint
 extension SearchViewController {
+//    isSearchTextFieldEditingMode ?
+//        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0) :
+//        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
+//    isSearchTextFieldEditingMode ?
+//        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30) :
+//        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
     private func changeConstraint(viewConstraint constaint: NSLayoutConstraint?, to value: CGFloat) {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
             constaint!.constant = value
@@ -148,64 +151,36 @@ extension SearchViewController {
 // MARK: - Listeners (Combine)
 extension SearchViewController {
     private func addListeners() {
-        self.isSearchTextFieldInEditingMode
-            .receive(on: DispatchQueue.main)
-            .sink { isSearchTextFieldEditingMode in
-                isSearchTextFieldEditingMode ?
-                    self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0) :
-                    self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
-                isSearchTextFieldEditingMode ?
-                    self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30) :
-                    self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
-        }.store(in: &cancellables)
+       
     }
 }
 
-//MARK: - Actions
+//MARK: - Textfield Delegates
 extension SearchViewController : UITextFieldDelegate {
   
     @objc private func searchTextDidChange(){
-        if searchTextField.text == "" {
-            self.viewModel.removeFilterKeyword()
-        }
-        isViewLoadding.send(true)
-        self.viewModel.shouldUpdateAllDateWithFilter.send(searchTextField.text)
-        isViewLoadding.send(false)
+        // set viewModel.searchKeyword
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // set viewModel.searchKeyword
+        self.view.endEditing(true)
+        return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        NSLog("Did Begin")
-        isViewLoadding.send(true)
-        self.isSearchTextFieldInEditingMode.send(false)
-        isViewLoadding.send(false)
+        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
+        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        NSLog("Did End")
-        self.isSearchTextFieldInEditingMode.send(true)
-        self.viewModel.shouldUpdateAllDateWithFilter.send(searchTextField.text)
+        self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0)
+        self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30)
     }
     
     @objc private func cancelBtnTapped() {
         NSLog("Cancel Button Tapped")
         self.searchTextField.text = ""
         self.searchTextField.endEditing(true)
-        self.isSearchTextFieldInEditingMode.send(true)
-        self.viewModel.removeFilterKeyword()
-        self.viewModel.shouldUpdateAllData.send()
     }
-}
- 
-//MARK: - Keyboard Search UIButton
-extension SearchViewController {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-     if textField.text?.count == 0 {
-            textField.resignFirstResponder()
-        }
-     else{
-        textField.resignFirstResponder()
-        self.isSearchTextFieldInEditingMode.send(false)
-     }
-        return true
-    }    
 }
