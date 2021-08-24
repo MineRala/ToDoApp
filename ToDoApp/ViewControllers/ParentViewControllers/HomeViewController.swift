@@ -163,7 +163,7 @@ extension HomeViewController {
         self.viewModel.currentSearchMode
             .receive(on: DispatchQueue.main)
             .sink { currentMode in
-                currentMode == .defaultMode ?
+                currentMode == .idle ?
                     self.changeCalendarViewHeightConstraint(to: self.itemsContainerView.frame.size.height * self.calendarViewHeightRatio) :
                     self.changeCalendarViewHeightConstraint(to: 0)
         }.store(in: &cancellables)
@@ -176,7 +176,7 @@ extension HomeViewController {
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-                self.viewModel.fetchEventsData()
+                //self.viewModel.fetchEventsData()
                 self.eventVC.reloadData()
             }.store(in: &cancellables)
         

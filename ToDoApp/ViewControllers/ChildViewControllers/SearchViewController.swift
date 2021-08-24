@@ -79,11 +79,12 @@ extension SearchViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
+        addListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addListeners()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -146,7 +147,11 @@ extension SearchViewController {
 // MARK: - Listeners (Combine)
 extension SearchViewController {
     private func addListeners() {
-       
+        viewModel.shouldUpdateAllData
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+            
+        }.store(in: &cancellables)
     }
 }
 
@@ -164,14 +169,17 @@ extension SearchViewController : UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        viewModel.updateSearchEditingMode(.searching)
         self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 0)
         self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 60)
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        viewModel.updateSearchEditingMode(.idle)
         self.changeConstraint(viewConstraint: self.cancelBtnWidthConstraint, to: 0)
         self.changeConstraint(viewConstraint: self.searchBtnWidthConstraint, to: 30)
-        self.viewModel.updateSearchKeyword(with: nil)
+       // self.viewModel.updateSearchKeyword(with: nil)
     }
     
     @objc private func cancelBtnTapped() {

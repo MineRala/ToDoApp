@@ -24,6 +24,7 @@ class EventTableViewController : UIViewController {
         return etv
     }()
     
+    private var sortedKeys: [Date] = []
     
     init(homeViewModel: HomeViewModel) {
         super.init(nibName: nil, bundle: nil)
@@ -80,26 +81,29 @@ extension EventTableViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.dctTaskListData.keys.count
+        return sortedKeys.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let currentKey = Array(viewModel.dctTaskListData.keys)[section]
+        let currentKey = sortedKeys[section]
         let arrTaskList = viewModel.dctTaskListData[currentKey] ?? []
         return arrTaskList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = eventTableView.dequeueReusableCell(withIdentifier: "TaskCell",for: indexPath) as! TaskCell
-        let currentKey = Array(viewModel.dctTaskListData.keys)[indexPath.section]
+        let currentKey = sortedKeys[indexPath.section]
         let arrTaskList = viewModel.dctTaskListData[currentKey] ?? []
-        let taskVDM = arrTaskList[indexPath.row]
-        cell.updateCell(model: taskVDM , delegate: self)
+        if indexPath.row < arrTaskList.count {
+            let taskVDM =  arrTaskList[indexPath.row]
+            cell.updateCell(model: taskVDM , delegate: self)
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let currentKey = Array(viewModel.dctTaskListData.keys)[section]
+        let currentKey = sortedKeys[section]
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "TaskHeaderView") as! TaskHeaderView
         headerView.updateHeaderCell(title: currentKey.toString(with: "dd/MM/yyyy"), date: currentKey)
       //  headerView.isUserInteractionEnabled = false
@@ -204,10 +208,30 @@ extension EventTableViewController {
 // MARK: - Listeners
 extension EventTableViewController {
     private func addListeners() {
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillShowNotification)
+            .compactMap { $0.userInfo }
+            .receive(on: DispatchQueue.main)
+            .sink { userInfo in
+                guard let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+                let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height , right: 0.0)
+                self.eventTableView.contentInset = contentInsets
+                self.eventTableView.scrollIndicatorInsets = contentInsets
+            }.store(in: &cancellables)
+        
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillHideNotification)
+            .compactMap { $0.userInfo }
+            .receive(on: DispatchQueue.main)
+            .sink { userInfo in
+                self.eventTableView.contentInset = .zero
+                self.eventTableView.scrollIndicatorInsets = .zero
+        }.store(in: &cancellables)
+        
         viewModel.shouldUpdateAllData
             .receive(on: DispatchQueue.main)
             .sink { _ in
-               
+                self.sortedKeys = self.viewModel.dctTaskListData.map { $0.key }.sorted()
                 self.eventTableView.reloadData()
         }.store(in: &cancellables)
         
@@ -222,7 +246,9 @@ extension EventTableViewController {
 // MARK: - Scroll Offset Update
 extension EventTableViewController {
     private func changeScrollOffset(to date: Date) {
-        guard let indexPath = viewModel.findClosestIndexPath(for: date) else { return }
+        guard let closestDate = viewModel.findClosestDate(for: date, from: self.sortedKeys) else { return }
+        guard let index = sortedKeys.firstIndex(of: closestDate) else { return }
+        let indexPath = IndexPath(row: 0, section: Int(index))
         eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
     

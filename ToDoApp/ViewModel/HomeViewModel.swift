@@ -9,12 +9,12 @@ import Foundation
 import Combine
 
 enum SearchMode {
-    case defaultMode
+    case idle
     case searching
 }
 
 enum LoadingMode {
-    case notLoading
+    case idle
     case loading
 }
 
@@ -23,20 +23,18 @@ class HomeViewModel {
     var isNeededToReloadData: Bool = false
     private let coreDataLayer = CoreDataLayer()
     private var filterKeyword: String?
-    private var dctHeaderCells: [Date: IndexPath] = [:]
     
-    
-// private(set) var arrTaskListData: [TaskListVDM] = []
+    private var dctAllTaskListData: [Date: [TaskListVDM]] = [:]
     private(set) var dctTaskListData: [Date: [TaskListVDM]] = [:]
    // private(set) var arrAllElemetsEventTableView : [TaskListEventTableViewItem] = []
     private(set) var selectedDate: Date?
     private(set) var minimumVisibleDate: Date?
     private(set) var maximumVisibleDate: Date?
 
-    private(set) var currentLoadingMode = CurrentValueSubject<LoadingMode, Never>(.notLoading)
-    private(set) var currentSearchMode = CurrentValueSubject<SearchMode, Never>(.defaultMode)
+    private(set) var currentLoadingMode = CurrentValueSubject<LoadingMode, Never>(.idle)
+    private(set) var currentSearchMode = CurrentValueSubject<SearchMode, Never>(.idle)
     private(set) var shouldUpdateAllData = PassthroughSubject<Void, Never>()
-    private(set) var didStartedUpdatingData = PassthroughSubject<Void, Never>()
+   
     private(set) var shouldChangeScrollOffsetOfEventsTable = PassthroughSubject<Void, Never>()
     
     private var cancellables = Set<AnyCancellable>()
@@ -79,27 +77,33 @@ extension HomeViewModel {
 //MARK: - Fetch Event Data
 extension HomeViewModel {
     func fetchEventsData() {
-        self.didStartedUpdatingData.send()
+        self.currentLoadingMode.send(LoadingMode.loading)
         let readTodosPublisher: AnyPublisher<CoreDataResponse<ToDoItem>, Never> = self.coreDataLayer.read(filterPredicate: nil)
         let taskListVDMsPublisher = readTodosPublisher.flatMap { response -> AnyPublisher<[TaskListVDM], Never> in
-            guard self.showErrorIfNeeded(from: response) == false else {
-                return Just([]).eraseToAnyPublisher()
-            }
+            guard self.showErrorIfNeeded(from: response) == false else { return Just([]).eraseToAnyPublisher() }
             return self.convertTodoItemsToVDMs(response.items)
         }.eraseToAnyPublisher()
 
-        taskListVDMsPublisher.sink { taskListVDMs in
-//            self.arrTaskListData = taskListVDMs
-//            self.initializeArrAllElementsWithFilter(with: self.filterKeyword)
-            self.initializeArrAllElemetsEventTableView(taskListArr: taskListVDMs)
+        let initializerPublisher = taskListVDMsPublisher.flatMap { taskListVDMs -> AnyPublisher<[Date: [TaskListVDM]], Never> in
+            return self.initializeArrAllElemetsEventTableView(allTaskListVDM: taskListVDMs)
+        }.flatMap { dct -> AnyPublisher<[Date: [TaskListVDM]], Never> in
+            return self.filterDictionary(with: self.filterKeyword, allElementsDct: dct)
+        }
+        
+        initializerPublisher.sink { taskListVDMDct in
+            self.dctTaskListData = taskListVDMDct
+            self.shouldUpdateAllData.send()
+            self.currentLoadingMode.send(LoadingMode.idle)
+            self.shouldChangeScrollOffsetOfEventsTable.send()
+            
+           // self.addSampleData(count: 10000000)
         }.store(in: &cancellables)
     }
-
 }
 
 //MARK: - Initialize Array All Element
 extension HomeViewModel {
-    private func findClosestDate(for date: Date, from arrDates: [Date]) -> Date {
+    func findClosestDate(for date: Date, from arrDates: [Date]) -> Date? {
         var minDate: Date?
         var timeInterval: TimeInterval = TimeInterval(Int.max)
         for index in 0 ..< arrDates.count {
@@ -110,115 +114,55 @@ extension HomeViewModel {
                 minDate = currentDate
             }
         }
-        return minDate!
+        return minDate
     }
     
-    func findClosestIndexPath(for date: Date) -> IndexPath? {
-        guard self.dctHeaderCells.keys.count > 0 else { return nil }
-        let arrDates = dctHeaderCells.compactMap { (key, element) -> Date in
-            return key
-        }
-        let minDate = self.findClosestDate(for: date, from: arrDates)
-        NSLog("Min Date: \(minDate)")
-        let indexPath = dctHeaderCells[minDate]!
-        return indexPath
+    func initializeArrAllElemetsEventTableView(allTaskListVDM: [TaskListVDM]) -> AnyPublisher<[Date: [TaskListVDM]], Never>  {
+        return Future { promise in
+            DispatchQueue.global(qos: .background).async {
+                let dct: [Date: [TaskListVDM]] = Dictionary(grouping: allTaskListVDM) {
+                    let day = Int($0.taskDate.day)
+                    let month = Int($0.taskDate.month)
+                    let year = Int($0.taskDate.year)
+                    let date = Date(year: year, month: month, day: day, hour: 0, minute: 0, second: 0)
+                    return date!
+                }
+                
+                DispatchQueue.main.async {
+                    self.dctAllTaskListData = dct
+                    promise(.success(dct))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
-    
-    func initializeArrAllElemetsEventTableView(allTaskListVDM: [TaskListVDM]?)  {
-        
-        self.dctTaskListData.removeAll()
-        
-//        var allTaskListVDM : [TaskListVDM] = []
-//
-//        if taskListArr == nil {
-//            if self.dctTaskListData.isEmpty {
-//                return
-//            }
-//            allTaskListVDM = self.dctTaskListData.values.flatMap({ (element: [TaskListVDM]) -> [TaskListVDM] in
-//                return element
-//            })
-//        } else {
-//            allTaskListVDM = taskListArr!
-//        }
-        
-        let filteredTaskListArr = self.filterKeyword == nil || self.filterKeyword == "" ?
-            allTaskListVDM! :
-            allTaskListVDM!.filter({ $0.taskName.contains(self.filterKeyword!)})
-        
-        let dct: [Date: [TaskListVDM]] = Dictionary(grouping: filteredTaskListArr) {
-            let day = Int($0.taskDate.day)
-            let month = Int($0.taskDate.month)
-            let year = Int($0.taskDate.year)
-            let date = Date(year: year, month: month, day: day, hour: 0, minute: 0, second: 0)
-            return date!
+}
+
+// MARK: - Filter
+extension HomeViewModel {
+    private func filterDictionary(with filterKeyword: String?, allElementsDct: [Date: [TaskListVDM]]) -> AnyPublisher<[Date: [TaskListVDM]], Never> {
+        guard let keyword = filterKeyword, keyword.count > 0 else {
+            return Just(self.dctAllTaskListData).eraseToAnyPublisher()
         }
         
-        let keysArr = dct.keys.map { $0 }.sorted()
-        self.dctTaskListData = [:]
-        keysArr.forEach {
-            self.dctTaskListData[$0] = dct[$0]
-        }
-        
-//        if self.arrAllElemetsEventTableView.count > 0 {
-//            self.arrAllElemetsEventTableView.removeAll()
-//        }
-//        dctHeaderCells = [:]
-//        for index in 0 ..< arrTaskListData.count {
-//            if index == 0 || self.arrTaskListData[index-1].day != self.arrTaskListData[index].day {
-//                // Append TitleCell
-//                let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day , date: self.arrTaskListData[index].taskDate)
-//                self.arrAllElemetsEventTableView.append(titleCell)
-//                dctHeaderCells[self.arrTaskListData[index].taskDate] = IndexPath(row: self.arrAllElemetsEventTableView.count - 1, section: 0)
-//                // Append TaskCell
-//                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
-//                self.arrAllElemetsEventTableView.append(taskCell)
-//                continue
-//            } else {
-//                // Append TaskCell
-//                let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
-//                self.arrAllElemetsEventTableView.append(taskCell)
-//            }
-//        }
-//
-//        print("CountElements: \(self.arrAllElemetsEventTableView.count)" )
+        return Future { promise in
+            DispatchQueue.global(qos: .background).async {
+                let keywordSearchable = keyword.lowercased()
+                var dct: [Date: [TaskListVDM]] = [:]
+                allElementsDct.forEach { (key, value) in
+                    let filteredArr = value.filter { taskVDM -> Bool in
+                        return taskVDM.taskName.lowercased().contains(keywordSearchable) || taskVDM.taskCategory.lowercased() == keywordSearchable
+                    }
+                    
+                    if filteredArr.count > 0 {
+                        dct[key] = filteredArr
+                    }
+                }
+                DispatchQueue.main.async {
+                    promise(.success(dct))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
-    
-//    func initializeArrAllElementsWithFilter(with filterKeyword: String? = nil) {
-//        if self.arrAllElemetsEventTableView.count > 0 {
-//            self.arrAllElemetsEventTableView.removeAll()
-//        }
-//
-//        guard let filterWord = filterKeyword, filterKeyword != "" else {
-//            if self.filterKeyword == nil {
-//                self.initializeArrAllElemetsEventTableView()
-//                return
-//            } else {
-//                self.initializeArrAllElementsWithFilter(with: self.filterKeyword)
-//                return
-//            }
-//        }
-//
-//        self.filterKeyword = filterWord
-//
-//        var indexOfLastAddedItem : Int = -1
-//
-//        for (index, taskListVDM) in arrTaskListData.enumerated() {
-//            if taskListVDM.taskName.lowercased().contains(filterWord.lowercased()) {
-//                if self.arrAllElemetsEventTableView.count == 0 || self.arrTaskListData[indexOfLastAddedItem].day != self.arrTaskListData[index].day{
-//                    let titleCell = TaskListVDMHeaderArrayElement(cellDateTitle: self.arrTaskListData[index].day , date: self.arrTaskListData[index].taskDate)
-//                    self.arrAllElemetsEventTableView.append(titleCell)
-//
-//                    let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
-//                    self.arrAllElemetsEventTableView.append(taskCell)
-//
-//                } else {
-//                    let taskCell = TaskListVDMArrayElement(taskListVDM: self.arrTaskListData[index], indexAt: index)
-//                    self.arrAllElemetsEventTableView.append(taskCell)
-//                }
-//                indexOfLastAddedItem = index
-//            }
-//        }
-//    }
 }
 
 //MARK: - Show Error
@@ -264,10 +208,19 @@ extension HomeViewModel {
 
 // MARK: - Public
 extension HomeViewModel {
+    func updateSearchEditingMode(_ mode: SearchMode) {
+        self.currentSearchMode.send(mode)
+    }
+    
     func updateSearchKeyword(with text: String?) {
+      //  self.currentLoadingMode.send(.loading)
         self.filterKeyword = text
-        self.shouldUpdateAllData.send()
-        // TODO: Initialize table view content.
+        let filterPublisher = self.filterDictionary(with: self.filterKeyword, allElementsDct: dctAllTaskListData)
+        filterPublisher.sink { dctTaskListDatas in
+            self.dctTaskListData = dctTaskListDatas
+            self.currentLoadingMode.send(.idle)
+            self.shouldUpdateAllData.send()
+        }.store(in: &cancellables)
     }
     
     func removedElement(toDoItem: ToDoItem){
@@ -301,12 +254,58 @@ extension HomeViewModel {
         }
         
         return nil
-        
-//        for taskEditVDM in arrTaskListData {
-//            if taskEditVDM.toDoItem.notificationID != "" && taskEditVDM.toDoItem.notificationID == notificationID {
-//                return taskEditVDM.toDoItem
-//            }
-//        }
-//        return nil
     }
 }
+
+
+extension HomeViewModel {
+    func randomString(of length: Int) -> String {
+         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+         var s = ""
+         for _ in 0 ..< length {
+             s.append(letters.randomElement()!)
+         }
+         return s
+    }
+    
+    private func addSampleData(count: Int) {
+        for index in 0 ..< count {
+            let rndTime = Int.random(in: (-365*60*60*24) ..< (365*60*60*24))
+            let toDoItem = ToDoItem(context: ManagedObjectContext)
+            //print("\(toDoItem.id)")
+        
+            toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 100))
+            toDoItem.taskCategory = "Official"
+            toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+            toDoItem.taskId = UUID().uuidString
+            toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 1500))
+            toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+            toDoItem.isTaskCompleted = false
+            coreDataLayer.create(toDoItem).sink { _ in
+                NSLog("Created: \(toDoItem.taskId)")
+            }.store(in: &cancellables)
+        }
+    }
+}
+
+//
+ // TODO
+//private func addSampleData(count: Int) {
+//    for index in 0 ..< count {
+//        let rndTime = Int.random(in: (-10*60*60*24) ..< (10*60*60*24))
+//        let toDoItem = ToDoItem(context: ManagedObjectContext)
+//        print("\(toDoItem.id)")
+//
+//        toDoItem.taskName = randomString(of: Int.random(in: 3 ..< 50))
+//        toDoItem.taskCategory = "Official"
+//        toDoItem.taskDate = Date().addingTimeInterval(TimeInterval(rndTime))
+//        toDoItem.taskId = UUID().uuidString
+//        toDoItem.taskDescription = randomString(of: Int.random(in: 10 ..< 500))
+//        toDoItem.notificationDate = toDoItem.taskDate?.addingTimeInterval(-1*10*60)
+//        toDoItem.isTaskCompleted = false
+//        coreDataLayer.create(toDoItem).sink { _ in
+//
+//        }.store(in: &cancellables)
+//    }
+//}
+
